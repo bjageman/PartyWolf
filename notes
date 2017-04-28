@@ -1,0 +1,15 @@
+Pages:
+
+Login/Signup
+Create Room -> Add Settings -> Waiting Room
+Join Game -> Random Assign/Enter Code -> Waiting Room
+Waiting Room -> (Assign Roles) -> Night
+Night: Werewolves vote who to kill, Seer selects person to reveal
+Day: Announce Deaths (if any) -> Voting Phase
+
+Day/Night - Votes for both day and night are done during the "day". While villagers
+vote on who to hang, the werewolves/seer will get a second panel to vote 
+on who to choose*.
+
+If WW don't make a consensus before a vote is made, a random pick out of 
+their current choices will be made.

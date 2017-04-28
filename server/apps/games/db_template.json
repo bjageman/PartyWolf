@@ -1,0 +1,72 @@
+{"games":[
+    {
+      "id":1,
+      "room_code":"ABCDEF",
+      "closed":true,
+      "winner": "WW",
+      "history":{
+        "latest_turn":3,
+        "deaths":[
+          {
+            "player_id": 100,
+            "killed_by": "WW",
+            "turn": 1,
+          },
+          {
+            "player_id": 150,
+            "killed_by": "Villagers",
+            "turn": 2,
+          }
+        ]
+      },
+      "players":[
+        {
+          "id":100,
+          "username":"FirstUser",
+          "role":{
+            "id":1,
+            "class":"Villager",
+            "villian": false,
+            "ability": null,
+            "alive":false,
+          }
+        },
+        {
+          "id":101,
+          "username":"SecondUser",
+          "role":{
+            "id":1,
+            "class":"Villager",
+            "villian": true,
+            "ability": null,
+            "alive":false,
+          }
+        },
+        {
+          "id":103,
+          "username":"ThirdUser",
+          "role":{
+            "id":1,
+            "class":"Villager",
+            "villian": true,
+            "ability": null,
+            "alive":true,
+          }
+        },
+        {
+          "id":150,
+          "username":"BadUser",
+          "role":{
+            "id":2,
+            "class":"Werewolf",
+            "villian": false,
+            "ability": "WW",
+            "alive":true,
+          }
+        },
+      ],
+
+
+    }
+  ]
+}
