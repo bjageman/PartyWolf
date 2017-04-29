@@ -8,9 +8,6 @@ import { connect } from 'react-redux';
 import { mapStateToProps, mapDispatchToProps } from '../utils'
 import { Actions } from 'react-native-router-flux';
 
-//Custom components
-import RouteButton from './toolkit/RouteButton'
-
 class PlaceHolderTitle extends Component {
   constructor(props){
       super(props);
@@ -20,21 +17,10 @@ class PlaceHolderTitle extends Component {
     const username = this.props.username || ""
     return (
       <View style={styles.outerContainer}>
-        <Text style={styles.introHeader} h3>Werewolf</Text>
-        <RouteButton
+        <Text h3>PlaceHolder Template</Text>
+        <Button
             title="Login"
-            backgroundColor="green"
-            route={() => Actions.login()}
-            />
-        <RouteButton
-            title="Create Game"
-            backgroundColor="blue"
-            route={() => Actions.createGame()}
-            />
-        <RouteButton
-            title="Join Game"
-            backgroundColor="cyan"
-            route={() => Actions.joinGame()}
+            onPress={() => Actions.home}
             />
       </View>
     )
@@ -42,15 +28,11 @@ class PlaceHolderTitle extends Component {
 }
 
 const styles = StyleSheet.create({
-  introHeader: {
-      marginBottom: 30,
-  },
   outerContainer: {
     flex: 1,
-    flexDirection: 'column',
-    justifyContent: 'center',
     alignItems: 'center',
-},
+    justifyContent: 'center',
+  }
 })
 
 
