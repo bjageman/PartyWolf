@@ -3,10 +3,16 @@ import {
   View,
   StyleSheet
 } from 'react-native'
-import { Text, Button } from 'react-native-elements'
+import { Text, Button, List } from 'react-native-elements'
 import { connect } from 'react-redux';
 import { mapStateToProps, mapDispatchToProps } from '../../utils'
 import { Actions } from 'react-native-router-flux';
+
+import PlayerList from '../toolkit/PlayerList'
+import RouteButton from '../toolkit/RouteButton'
+
+//Temporary Placeholder Data
+import { players } from '../dataPlaceholder.js'
 
 class WaitingRoom extends Component {
   constructor(props){
@@ -14,13 +20,17 @@ class WaitingRoom extends Component {
   }
 
   render() {
-    const username = this.props.username || ""
+
     return (
       <View style={styles.outerContainer}>
         <Text h3>Waiting For Players...</Text>
-        <Button
+        <PlayerList
+            players={players}
+            />
+        <RouteButton
             title="Start Game"
-            onPress={() => Actions.roleAssign()}
+            backgroundColor="green"
+            route={() => Actions.roleAssign()}
             />
       </View>
     )
@@ -30,7 +40,7 @@ class WaitingRoom extends Component {
 const styles = StyleSheet.create({
   outerContainer: {
     flex: 1,
-    alignItems: 'center',
+    marginTop:50,
     justifyContent: 'center',
   }
 })

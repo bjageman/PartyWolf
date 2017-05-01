@@ -8,7 +8,7 @@ alias deactivate 'test $?_OLD_VIRTUAL_PATH != 0 && setenv PATH "$_OLD_VIRTUAL_PA
 # Unset irrelavent variables.
 deactivate nondestructive
 
-setenv VIRTUAL_ENV "/home/neurobomber/workspace/apps/werewolf/WereWolf/server/env"
+setenv VIRTUAL_ENV "/home/neurobomber/workspace/apps/WereWolf/server/env"
 
 set _OLD_VIRTUAL_PATH="$PATH"
 setenv PATH "$VIRTUAL_ENV/bin:$PATH"

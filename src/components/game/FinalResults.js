@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import {
   View,
+  Image,
   StyleSheet
 } from 'react-native'
 import { Text, Button } from 'react-native-elements'
@@ -18,6 +19,10 @@ class FinalResults extends Component {
     return (
       <View style={styles.outerContainer}>
         <Text h3>Werewolves win!</Text>
+        <Image
+          style={{width: 300, height: 400}}
+          source={{uri: 'https://placekitten.com/g/300/400'}}
+        />
         <Button
             title="Start a new game"
             onPress={() => Actions.home()}

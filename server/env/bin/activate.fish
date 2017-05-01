@@ -32,7 +32,7 @@ end
 # unset irrelavent variables
 deactivate nondestructive
 
-set -gx VIRTUAL_ENV "/home/neurobomber/workspace/apps/werewolf/WereWolf/server/env"
+set -gx VIRTUAL_ENV "/home/neurobomber/workspace/apps/WereWolf/server/env"
 
 set -gx _OLD_VIRTUAL_PATH $PATH
 set -gx PATH "$VIRTUAL_ENV/bin" $PATH

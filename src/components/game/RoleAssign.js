@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import {
   View,
+  Image,
   StyleSheet
 } from 'react-native'
 import { Text, Button } from 'react-native-elements'
@@ -18,10 +19,14 @@ class RoleAssign extends Component {
     return (
       <View style={styles.outerContainer}>
         <Text h4>You are a...</Text>
+        <Image
+          style={{width: 300, height: 400}}
+          source={{uri: 'https://placekitten.com/g/300/400'}}
+        />
         <Text h3>Werewolf!</Text>
         <Button
             title="Go to sleep..."
-            onPress={() => Actions.dayMenu()}
+            onPress={() => Actions.menu()}
             />
       </View>
     )

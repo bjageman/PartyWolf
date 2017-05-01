@@ -1,4 +1,4 @@
-#!/home/neurobomber/workspace/apps/werewolf/WereWolf/server/env/bin/python3.5
+#!/home/neurobomber/workspace/apps/WereWolf/server/env/bin/python3.5
 
 # -*- coding: utf-8 -*-
 import re

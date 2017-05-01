@@ -9,7 +9,7 @@ import { mapStateToProps, mapDispatchToProps } from '../../utils'
 import { Actions } from 'react-native-router-flux';
 
 import CreateGameInput from './create/CreateGameInput'
-
+import RouteButton from '../toolkit/RouteButton'
 class CreateGame extends Component {
   constructor(props){
       super(props);
@@ -21,9 +21,10 @@ class CreateGame extends Component {
       <View style={styles.outerContainer}>
         <Text h3>Create Game</Text>
         <CreateGameInput />
-        <Button
+        <RouteButton
             title="Create"
-            onPress={() => Actions.waitingRoom()}
+            backgroundColor="green"
+            route={() => Actions.waitingRoom()}
             />
       </View>
     )
@@ -33,6 +34,8 @@ class CreateGame extends Component {
 const styles = StyleSheet.create({
   outerContainer: {
     marginTop:60,
+    justifyContent: 'center',
+    alignItems: 'center',
   }
 })
 

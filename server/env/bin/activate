@@ -37,7 +37,7 @@ deactivate () {
 # unset irrelavent variables
 deactivate nondestructive
 
-VIRTUAL_ENV="/home/neurobomber/workspace/apps/werewolf/WereWolf/server/env"
+VIRTUAL_ENV="/home/neurobomber/workspace/apps/WereWolf/server/env"
 export VIRTUAL_ENV
 
 _OLD_VIRTUAL_PATH="$PATH"
