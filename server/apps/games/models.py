@@ -14,6 +14,8 @@ class Game(db.Model):
     public = db.Column(db.Boolean,default=False)
     closed = db.Column(db.Boolean,default=False)
     winner = db.Column(db.String(32))
+    creator_id = db.Column(db.Integer, db.ForeignKey('user.id'))
+    creator = db.relationship('User', backref=db.backref('games', lazy='dynamic'))
 
 class Player(db.Model):
     __tablename__ = 'player'

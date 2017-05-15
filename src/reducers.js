@@ -35,8 +35,8 @@ const users = createReducer({
   }
 }, initial.users);
 
-const messages = createReducer({
-  [newMessage]: (state, payload) => {
+const votes = createReducer({
+  [newVote]: (state, payload) => {
     const { message } = payload;
     return {
       ...state,
@@ -47,5 +47,5 @@ const messages = createReducer({
 }, initial.messages);
 
 export default combineReducers(
-  { app, users, messages }
+  { app, users, votes }
 );
