@@ -8,6 +8,9 @@ import { connect } from 'react-redux';
 import { mapStateToProps, mapDispatchToProps } from '../../utils'
 import { Actions } from 'react-native-router-flux';
 
+import RegisterInput from './input/RegisterInput'
+
+
 class Registration extends Component {
   constructor(props){
       super(props);
@@ -17,9 +20,10 @@ class Registration extends Component {
     const username = this.props.username || ""
     return (
       <View style={styles.outerContainer}>
-        <Text h3>PlaceHolder Template</Text>
+        <Text h3>Registration</Text>
+        <RegisterInput />
         <Button
-            title="Login"
+            title="Register"
             onPress={() => Actions.home}
             />
       </View>

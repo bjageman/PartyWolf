@@ -1,7 +1,6 @@
 from flask_socketio import SocketIO, emit, send, join_room, leave_room, \
     close_room, rooms, disconnect
-from flask import Flask, abort, request, jsonify, make_response, session
-from flask_jwt import jwt_required, current_identity
+from flask import Flask
 
 from random import shuffle, SystemRandom
 import string
@@ -9,6 +8,7 @@ import string
 from . import games
 from apps.games.models import Game, Player, Role, History
 from apps.users.models import User
+from apps.users.views import parse_user
 from apps.database import *
 
 from apps import socketio, db
@@ -23,12 +23,6 @@ def create_deck(deck_size):
     deck = [villager] * (deck_size - 3) + [werewolf] * 2 + [seer] * 1
     shuffle(deck)
     return deck
-
-def parse_user(user):
-    return ({
-        "id": user.id,
-        "username": user.username
-    })
 
 def parse_game(game):
     return ({
@@ -62,17 +56,20 @@ def createPlayer(game, user):
     db.session.commit()
     return new_player
 
-@socketio.on('connect', namespace='/games')
+@socketio.on('connect')
 def on_connect():
+    print("CONNECTED")
     send('connected')
 
-@socketio.on('games_test', namespace='/games')
+
+@socketio.on('games_test')
 def test_game(data):
     emit('games_response',
          {'data': data['data']})
 
-@socketio.on('create_game', namespace='/games')
+@socketio.on('create_game')
 def create_game(data):
+    print("DEBUG: CREATE GAME")
     user_id = data['user_id']
     creator = User.query.get(user_id)
     public = True
@@ -81,20 +78,27 @@ def create_game(data):
     game = Game(code=randomCode(), creator=creator, public=public)
     db.session.add(game)
     createPlayer(game, creator)
+    join_room(game.code)
+    print("DEBUG: ALL GOOD")
     emit('create_game_response',{
         "game": parse_game(game),
-    })
+    }, room=game.code)
 
-@socketio.on('add_player', namespace='/games')
+@socketio.on('add_player')
 def add_player(data):
+    print("ADDING PLAYER")
     game = Game.query.get(data['game_id'])
     user = User.query.get(data['user_id'])
+    print("JOINING ROOM")
+    join_room(game.code)
+    print("CREATING PLAYER")
     createPlayer(game, user)
-    emit('add_player_response',{
-         'players': parse_players(game.players)
-         })
+    print("ALL DONE")
+    emit('add_player_success',{
+         "game": parse_game(game),
+         }, room=game.code)
 
-@socketio.on('assign_roles', namespace='/games')
+@socketio.on('assign_roles')
 def assign_roles(data):
     game = Game.query.get(data['game_id'])
     size = len(game.players.all())
@@ -106,7 +110,7 @@ def assign_roles(data):
          'players': parse_players(game.players)
          })
 
-@socketio.on('make_vote', namespace='/games')
+@socketio.on('make_vote')
 def set_vote(data):
     voter = Player.query.get(data['voter_id'])
     choice = Player.query.get(data['choice_id'])
@@ -119,3 +123,7 @@ def set_vote(data):
          'voter_id': voter.id,
          'voter_username': voter.user.username,
          })
+
+@socketio.on_error()        # Handles the default namespace
+def error_handler(e):
+    emit('error', {'error': e})

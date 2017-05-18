@@ -1,51 +1,41 @@
 import { combineReducers } from 'redux';
 import { createReducer } from 'redux-act';
 import {
-  login, logout, addUser, removeUser, newMessage
+  login, loginSuccess, logout, addUser, createGame, createGameSuccess, addPlayerSuccess, startGame, removeUser, newVote
 } from './actions';
 
 const initial = {
-  app: {
+  user: {
     username: null
   },
-  users: {},
-  messages: {
-    list: [],
-    entities: {}
-  },
+  game:{},
 };
 
-const app = createReducer({
+const user = createReducer({
   [login]: (state, payload) => {
-    return { ...state, username: payload.username };
+    return { ...state, username: payload.username, password: payload.password };
+  },
+  [loginSuccess]: (state, payload) => {
+    return { ...state, username: payload.user.username, user_id: payload.user.id };
   },
   [logout]: (state, payload) => {
     return { ...state, username: null };
   },
-}, initial.app);
+}, initial.user);
 
-const users = createReducer({
-  [addUser]: (state, payload) => {
-    return { ...state, [payload.username]: true };
+const game = createReducer({
+  [createGame]: (state, payload) => {
+    return { ...state, user_id: payload.user_id, public: payload.public };
   },
-  [removeUser]: (state, payload) => {
-    const newState = { ...state };
-    delete newState[payload.username];
-    return newState;
-  }
-}, initial.users);
+  [createGameSuccess]: (state, payload) => {
+    return { ...state, data: payload.game };
+  },
+  [addPlayerSuccess]: (state, payload) => {
+    return { ...state, data: payload.game };
+  },
+}, initial.game);
 
-const votes = createReducer({
-  [newVote]: (state, payload) => {
-    const { message } = payload;
-    return {
-      ...state,
-      list: [ ...state.list, message.id ],
-      entities: { ...state.entities, [message.id]: message }
-    };
-  }
-}, initial.messages);
 
 export default combineReducers(
-  { app, users, votes }
+  { user, game }
 );

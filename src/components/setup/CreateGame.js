@@ -10,24 +10,34 @@ import { Actions } from 'react-native-router-flux';
 
 import CreateGameInput from './create/CreateGameInput'
 import RouteButton from '../toolkit/RouteButton'
+
+
 class CreateGame extends Component {
   constructor(props){
       super(props);
   }
 
   render() {
-    const username = this.props.username || ""
-    return (
-      <View style={styles.outerContainer}>
-        <Text h3>Create Game</Text>
-        <CreateGameInput />
-        <RouteButton
-            title="Create"
-            backgroundColor="green"
-            route={() => Actions.waitingRoom()}
-            />
-      </View>
-    )
+    code = this.props.game ? this.props.game.code : null
+    if (this.props.user.username != null){
+        return (
+          <View style={styles.outerContainer}>
+            <Text h3>Create Game</Text>
+            <Text>{this.props.user.username}</Text>
+            <Text>CODE: {code}</Text>
+            <CreateGameInput />
+          </View>
+    )}else{
+        return(
+        <View style={styles.outerContainer}>
+            <Text h2>You must be logged in</Text>
+            <RouteButton
+                title="Login"
+                backgroundColor="green"
+                route={() => Actions.login()}
+                />
+        </View>
+    )}
   }
 }
 

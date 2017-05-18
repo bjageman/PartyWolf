@@ -6,7 +6,7 @@ from apps import app, db, socketio
 from apps.users.models import User
 from apps.games.models import Game, Player, Role, History
 
-from apps.config import DATABASE_TEST
+from apps.config import DATABASE
 
 from flask_socketio import SocketIO, SocketIOTestClient
 
@@ -47,7 +47,7 @@ class TestingBase(unittest.TestCase):
         self.app = app.test_client()
         self.db = db
         self.db.create_all()
-        self.socketio = SocketIOTestClient(app, socketio, namespace='/games')
+        self.socketio = SocketIOTestClient(app, socketio)
         self.initDB()
 
 

@@ -17,7 +17,6 @@ class RouteButton extends Component {
           raised
           backgroundColor={backgroundColor}
           borderRadius={10}
-
           />
     )
   }

@@ -11,8 +11,6 @@ import { Actions } from 'react-native-router-flux';
 import PlayerList from '../toolkit/PlayerList'
 import RouteButton from '../toolkit/RouteButton'
 
-//Temporary Placeholder Data
-import { players } from '../dataPlaceholder.js'
 
 class WaitingRoom extends Component {
   constructor(props){
@@ -20,12 +18,13 @@ class WaitingRoom extends Component {
   }
 
   render() {
-
+    const players = this.props.game ? this.props.game.players : []
     return (
       <View style={styles.outerContainer}>
         <Text h3>Waiting For Players...</Text>
+        <Text>ID: {this.props.game.id} Code:{this.props.game.code}</Text>
         <PlayerList
-            players={players}
+            players = {players}
             />
         <RouteButton
             title="Start Game"
