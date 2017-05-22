@@ -13,8 +13,8 @@ class PlayerList extends Component {
       this.handleVote = this.handleVote.bind(this)
   }
 
-  handleVote(id, name){
-      console.log("Vote for: " + id + ") " + name)
+  handleVote(player){
+      console.log(player)
   }
 
   render() {
@@ -30,7 +30,7 @@ class PlayerList extends Component {
               key={player.id}
               title={player.user.username}
               hideChevron
-              onPress={voting ? () => this.handleVote(player.id, player.user.username): null}
+              onPress={voting ? () => this.handleVote(player): null}
             />
           ))
         }

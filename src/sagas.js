@@ -2,7 +2,12 @@ import io from 'socket.io-client';
 import { eventChannel } from 'redux-saga';
 import { fork, take, call, put, cancel } from 'redux-saga/effects';
 import {
-  login, loginSuccess, logout, addUser, removeUser, createGame, createGameSuccess, addPlayerSuccess, makeVote
+  login, loginSuccess, logout,
+  addUser, removeUser, getUser, getUserSuccess,
+  createGame, createGameSuccess,
+  addPlayerSuccess,
+  assignRoles, assignRolesSuccess,
+  setVote, setVoteSuccess
 } from './actions';
 import {Actions} from 'react-native-router-flux'
 
@@ -20,14 +25,21 @@ function subscribe(socket) {
   return eventChannel(emit => {
     socket.on('user_login_success', ({ user }) => {
       emit(loginSuccess({ user }));
-      Actions['home']()
+      Actions['home']({type: 'reset'})
     });
-    socket.on('create_game_response', ({ game }) => {
+    socket.on('get_user_success', ({ user }) => {
+      emit(getUserSuccess({ user }));
+    });
+    socket.on('create_game_success', ({ game }) => {
       emit(createGameSuccess({ game }));
       Actions['waitingRoom']()
     });
     socket.on('add_player_success', ({ game }) => {
       emit(addPlayerSuccess({ game }));
+    });
+    socket.on('assign_roles_success', ({ game }) => {
+      emit(assignRolesSuccess({ game }));
+      Actions['roleAssign']()
     });
     socket.on('disconnect', e => {
       // TODO: handle
@@ -44,16 +56,31 @@ function* read(socket) {
   }
 }
 
-function* write(socket) {
+function* createGameEmit(socket) {
   while (true) {
     const { payload } = yield take(`${createGame}`);
     socket.emit('create_game', payload);
   }
 }
 
+function* assignRolesEmit(socket) {
+  while (true) {
+    const { payload } = yield take(`${assignRoles}`);
+    socket.emit('assign_roles', payload);
+  }
+}
+
+function* setVoteEmit(socket) {
+  while (true) {
+    const { payload } = yield take(`${setVote}`);
+    socket.emit('set_vote', payload);
+  }
+}
+
 function* handleIO(socket) {
   yield fork(read, socket);
-  yield fork(write, socket);
+  yield fork(createGameEmit, socket);
+  yield fork(assignRolesEmit, socket);
 }
 
 function* flow() {

@@ -28,10 +28,8 @@ class LoginInput extends Component {
 
 
   render() {
-    username = this.props.user.username || null
     return (
     <View>
-      { username ? <Text>You are logged in as: {username} - {this.props.user.user_id} </Text> : null }
       <FormLabel>Username</FormLabel>
       <FormInput
           name='username'

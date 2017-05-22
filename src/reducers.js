@@ -1,7 +1,12 @@
 import { combineReducers } from 'redux';
 import { createReducer } from 'redux-act';
 import {
-  login, loginSuccess, logout, addUser, createGame, createGameSuccess, addPlayerSuccess, startGame, removeUser, newVote
+  login, loginSuccess, logout, addUser,
+  getUser, getUserSuccess,
+  createGame, createGameSuccess,
+  addPlayerSuccess, assignRoles, assignRolesSuccess,
+  startGame, removeUser,
+  setVote, setVoteSuccess
 } from './actions';
 
 const initial = {
@@ -16,10 +21,16 @@ const user = createReducer({
     return { ...state, username: payload.username, password: payload.password };
   },
   [loginSuccess]: (state, payload) => {
-    return { ...state, username: payload.user.username, user_id: payload.user.id };
+    return { ...state, data: payload.user };
   },
   [logout]: (state, payload) => {
-    return { ...state, username: null };
+    return { ...state, data: null };
+  },
+  [getUser]: (state, payload) => {
+    return { ...state, user_id: payload.user_id, game_id: payload.game_id };
+  },
+  [getUserSuccess]: (state, payload) => {
+    return { ...state, data: payload.user };
   },
 }, initial.user);
 
@@ -31,6 +42,18 @@ const game = createReducer({
     return { ...state, data: payload.game };
   },
   [addPlayerSuccess]: (state, payload) => {
+    return { ...state, data: payload.game };
+  },
+  [assignRoles]: (state, payload) => {
+    return { ...state, game_id: payload.game_id };
+  },
+  [assignRolesSuccess]: (state, payload) => {
+    return { ...state, data: payload.game };
+  },
+  [setVote]: (state, payload) => {
+    return { ...state, voter_id: payload.voter_id, choice_id: payload.choice_id };
+  },
+  [setVoteSuccess]: (state, payload) => {
     return { ...state, data: payload.game };
   },
 }, initial.game);

@@ -8,7 +8,7 @@ import string
 from . import games
 from apps.games.models import Game, Player, Role, History
 from apps.users.models import User
-from apps.users.views import parse_user
+from apps.parsers import *
 from apps.database import *
 
 from apps import socketio, db
@@ -17,6 +17,7 @@ def randomCode(size=10):
     return ''.join(SystemRandom().choice(string.ascii_uppercase + string.digits) for _ in range(10))
 
 def create_deck(deck_size):
+    print("Creating Deck", deck_size)
     villager = Role.query.filter_by(name="Villager").first()
     werewolf = Role.query.filter_by(name="Werewolf").first()
     seer = Role.query.filter_by(name="Seer").first()
@@ -24,33 +25,7 @@ def create_deck(deck_size):
     shuffle(deck)
     return deck
 
-def parse_game(game):
-    return ({
-        "id": game.id,
-        "code": game.code,
-        "public": game.public,
-        "creator": parse_user(game.creator),
-        "players": parse_players(game.players)
-    })
-
-def parse_player(player):
-    if player.role is not None:
-        role = player.role.name
-    else:
-        role = None
-    return ({
-        "id": player.id,
-        "user": parse_user(player.user),
-        "role": role
-    })
-
-def parse_players(players):
-    parsedPlayers = []
-    for player in players:
-        parsedPlayers.append(parse_player(player))
-    return parsedPlayers
-
-def createPlayer(game, user):
+def create_player(game, user):
     new_player = Player(game=game, user=user)
     db.session.add(new_player)
     db.session.commit()
@@ -64,7 +39,7 @@ def on_connect():
 
 @socketio.on('games_test')
 def test_game(data):
-    emit('games_response',
+    emit('games_success',
          {'data': data['data']})
 
 @socketio.on('create_game')
@@ -77,10 +52,10 @@ def create_game(data):
         public = data['public']
     game = Game(code=randomCode(), creator=creator, public=public)
     db.session.add(game)
-    createPlayer(game, creator)
+    create_player(game, creator)
     join_room(game.code)
     print("DEBUG: ALL GOOD")
-    emit('create_game_response',{
+    emit('create_game_success',{
         "game": parse_game(game),
     }, room=game.code)
 
@@ -92,7 +67,7 @@ def add_player(data):
     print("JOINING ROOM")
     join_room(game.code)
     print("CREATING PLAYER")
-    createPlayer(game, user)
+    create_player(game, user)
     print("ALL DONE")
     emit('add_player_success',{
          "game": parse_game(game),
@@ -100,14 +75,17 @@ def add_player(data):
 
 @socketio.on('assign_roles')
 def assign_roles(data):
+    print("ASSIGN ROLES")
     game = Game.query.get(data['game_id'])
     size = len(game.players.all())
     deck = create_deck(size)
     for player in game.players:
         player.role = deck.pop()
-    emit('assign_roles_response',
+        db.session.add(player)
+    db.session.commit()
+    emit('assign_roles_success',
          {
-         'players': parse_players(game.players)
+         "game": parse_game(game),
          })
 
 @socketio.on('make_vote')
@@ -116,12 +94,9 @@ def set_vote(data):
     choice = Player.query.get(data['choice_id'])
     voter.current_vote = choice
     db.session.commit()
-    emit('vote_response',
+    emit('vote_success',
          {
-         'choice_username': choice.user.username,
-         'choice_id': choice.id,
-         'voter_id': voter.id,
-         'voter_username': voter.user.username,
+         "game": parse_game(game),
          })
 
 @socketio.on_error()        # Handles the default namespace

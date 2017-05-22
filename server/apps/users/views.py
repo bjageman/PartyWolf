@@ -9,12 +9,32 @@ from apps.users.models import User, authenticate
 from apps.database import *
 
 from apps import socketio, db
+from apps.games.models import Game
 
-def parse_user(user):
-    return ({
-        "id": user.id,
-        "username": user.username
-    })
+from apps.parsers import parse_user, parse_player
+
+def get_users_player(user, game):
+    for player in game.players:
+        if player.user.id == user.id:
+            return player
+
+@socketio.on('get_user')
+def get_user(data):
+    user = User.query.get(data['user_id'])
+    player = None
+    if 'game_id' in data:
+        game = Game.query.get(data['game_id'])
+        player = get_users_player(user, game)
+    print(player)
+    if user is not None:
+        emit('get_user_success',{
+            "user": parse_user(user, player),
+        })
+    else:
+        emit('get_user_fail',{
+            "error": None,
+        })
+
 
 @socketio.on('login')
 def login(data):

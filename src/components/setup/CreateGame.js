@@ -19,7 +19,7 @@ class CreateGame extends Component {
 
   render() {
     code = this.props.game ? this.props.game.code : null
-    if (this.props.user.username != null){
+    if (this.props.user != null){
         return (
           <View style={styles.outerContainer}>
             <Text h3>Create Game</Text>

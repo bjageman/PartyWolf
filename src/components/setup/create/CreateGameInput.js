@@ -20,10 +20,8 @@ class CreateGameInput extends Component {
 
   handleSubmit(e){
       e.preventDefault();
-      console.log(this.state.gameName)
       this.props.createGame({
-          user_id: this.props.user.user_id,
-          //name: this.state.gameName,
+         user_id: this.props.user.id,
          public: this.state.public
       })
   }
@@ -32,7 +30,7 @@ class CreateGameInput extends Component {
   render() {
     return (
         <View>
-          <Text>{this.props.user.username} {this.props.user.user_id}</Text>
+          <Text>{this.props.user.username} {this.props.user.id}</Text>
           <FormLabel>Game Name {this.state.gameName}</FormLabel>
           <FormInput
               name='gameName'
