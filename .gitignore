@@ -1,4 +1,6 @@
+*.pyc
 quickstart.sh
+__pycache__
 
 # OSX
 #

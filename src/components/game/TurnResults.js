@@ -9,7 +9,7 @@ import { connect } from 'react-redux';
 import { mapStateToProps, mapDispatchToProps } from '../../utils'
 import { Actions } from 'react-native-router-flux';
 
-import { hanged_player, murdered_player } from '../dataPlaceholder'
+import { murdered_player } from '../dataPlaceholder'
 
 class TurnResults extends Component {
   constructor(props){
@@ -17,15 +17,15 @@ class TurnResults extends Component {
   }
 
   render() {
-    const username = this.props.username || ""
+    const hanged_player = this.props.votes_result
+    const dead_players = this.props.game.players.filter(function(player){return player.alive == false;})
     return (
       <View style={styles.outerContainer}>
         <ScrollView>
             <Card title='Player(s) Hanged in the Day'>
                 <ListItem
                     roundAvatar
-                    avatar={{uri:hanged_player.avatar_url}}
-                    title={hanged_player.name}
+                    title={hanged_player.user.username}
                     hideChevron
                     />
             </Card>
@@ -37,10 +37,23 @@ class TurnResults extends Component {
                     hideChevron
                     />
             </Card>
+            <Card title='Death Toll'>
+            {
+              dead_players.map((player, i) => (
+                     <ListItem
+                         roundAvatar
+                         key={player.id}
+                         title={player.user.username}
+                         hideChevron
+                         />
+                 )
+              )
+            }
+            </Card>
         </ScrollView>
         <Button
             title="Continue..."
-            onPress={() => Actions.villagerVote({title: "Next Turn"})}
+            onPress={() => Actions.menu({title: "Next Turn"})}
             />
         <Button
             title="End Game"

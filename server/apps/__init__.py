@@ -5,6 +5,7 @@ from flask_socketio import SocketIO
 from datetime import timedelta
 
 import apps.config
+from . import config
 
 app = Flask(__name__)
 app.debug = True

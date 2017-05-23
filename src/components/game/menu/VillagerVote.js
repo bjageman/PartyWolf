@@ -11,17 +11,27 @@ import { Actions } from 'react-native-router-flux';
 import PlayerList from '../../toolkit/PlayerList'
 import RouteButton from '../../toolkit/RouteButton'
 
-//Temporary Placeholder Data
-import { players } from '../../dataPlaceholder.js'
-
 class VillagerVote extends Component {
+
+  renderDebug(){
+      const result = this.props.votes_result || null
+
+      return(
+          <Text>Voted:{result ? result.user.username : null}</Text>
+      )
+  }
+
   render() {
+    const players = this.props.game ? this.props.game.players : []
     const username = this.props.username || ""
+
     return (
       <View style={styles.outerContainer}>
         <Text h4>Vote on the culprit!</Text>
+        {this.renderDebug()}
         <PlayerList
             players={players}
+            aliveOnly={true}
             voting={true}
             />
       </View>

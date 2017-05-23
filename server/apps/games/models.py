@@ -10,6 +10,7 @@ from apps.users.models import User
 class Game(db.Model):
     __tablename__ = 'game'
     id = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.String(32))
     code = db.Column(db.String(32))
     public = db.Column(db.Boolean,default=False)
     closed = db.Column(db.Boolean,default=False)
@@ -39,6 +40,7 @@ class Role(db.Model):
     name = db.Column(db.String(32))
     team = db.Column(db.String(32))
     ability = db.Column(db.String(32))
+    #evil = db.Column(db.Boolean, default=False)
 
 class History(db.Model):
     __tablename__ = 'history'
