@@ -104,10 +104,16 @@ def set_vote(data):
     if len(get_votes_left(game.players)) == 0:
         villager_vote = get_villager_vote(game.players)
         if villager_vote is not None:
-            if handle_turn(game, villager_vote):
+            result = handle_turn(game, villager_vote)
+            if result == "NEXT_TURN":
                 emit('vote_final',
                      {
                      "result": parse_player(villager_vote),
+                     }, room=game.code)
+            if result == "Werewolves" or result == "Villagers":
+                emit('game_final',
+                     {
+                     "result": result,
                      }, room=game.code)
     emit('vote_success',
          {
@@ -118,11 +124,18 @@ def set_vote(data):
 def handle_turn(game, villager_vote, ww_vote = None):
     villager_vote.alive = False
     db.session.add(villager_vote)
+    bad_guys = game.players.filter_by(alive=True).join(Role).filter(Role.team == "W").all()
+    good_guys = game.players.filter_by(alive=True).join(Role).filter(Role.team == "V").all()
+    print(len(good_guys), len(bad_guys))
+    if len(bad_guys) == 0:
+        return "Villagers"
+    if len(bad_guys) >= len(good_guys):
+        return "Werewolves"
     for player in game.players:
         player.current_vote = None
         db.session.add(player)
     db.session.commit()
-    return True
+    return "NEXT_TURN"
 
 def get_villager_vote(players):
     vote_count = []

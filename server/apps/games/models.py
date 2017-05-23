@@ -40,6 +40,7 @@ class Role(db.Model):
     name = db.Column(db.String(32))
     team = db.Column(db.String(32))
     ability = db.Column(db.String(32))
+    #evil = db.Column(db.Boolean, default=False)
 
 class History(db.Model):
     __tablename__ = 'history'

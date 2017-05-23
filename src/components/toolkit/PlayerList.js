@@ -23,7 +23,7 @@ class PlayerList extends Component {
 
   renderDebug(player){
       return(
-          <Text>ID: {player.id} / {player.alive ? 'ALIVE' : 'DEAD'}</Text>
+          <Text>ID: {player.id} / {player.alive ? 'ALIVE' : 'DEAD'} / {player.role ? player.role.name : null}</Text>
       )
   }
 
