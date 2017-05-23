@@ -8,6 +8,10 @@ import { connect } from 'react-redux';
 import { mapStateToProps, mapDispatchToProps } from '../../utils'
 import { Actions } from 'react-native-router-flux';
 
+import LoginInput from './input/LoginInput'
+import RouteButton from '../toolkit/RouteButton'
+
+
 class Login extends Component {
   constructor(props){
       super(props);
@@ -18,9 +22,11 @@ class Login extends Component {
     return (
       <View style={styles.outerContainer}>
         <Text h3>Login Page</Text>
-        <Button
-            title="Login"
-            onPress={() => Actions.home()}
+        <LoginInput />
+        <RouteButton
+            title="Registration"
+            backgroundColor="red"
+            route={() => Actions.registration()}
             />
       </View>
     )

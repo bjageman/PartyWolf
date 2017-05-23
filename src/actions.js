@@ -2,7 +2,26 @@ import { createAction } from 'redux-act';
 export const login = createAction('login');
 export const logout = createAction('logout');
 
+export const loginSuccess = createAction('login succeeded');
+
+export const getUser = createAction('get the latest user info')
+export const getUserSuccess = createAction('user info update succeeded')
+
+export const createGame = createAction('create a new game');
+export const createGameSuccess = createAction('successfully created a new game')
+
 export const addUser = createAction('add user');
 export const removeUser = createAction('remove user');
 
-export const makeVote = createAction('make a vote');
+export const addPlayerSuccess = createAction('a player is added to the game')
+
+export const assignRoles = createAction('assign roles to all players')
+export const assignRolesSuccess = createAction('Roles were succesfully assigned')
+
+export const startGame = createAction('start a game after players have joined');
+
+export const setVote = createAction('make a vote');
+export const setVoteSuccess = createAction('succesfully made a vote');
+export const voteFinished = createAction('the votes are all tallied and a person is chosen')
+
+export const gameFinished = createAction('the game is finished!')

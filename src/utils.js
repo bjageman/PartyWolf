@@ -3,10 +3,17 @@ import { bindActionCreators } from 'redux';
 
 export function mapStateToProps(state) {
   props = {
-    username: state.app.username,
-    app: state.app,
-    messages: state.messages,
-    users: state.users,
+    user: state.user.data,
+    game: state.game.data,
+    votes_result: state.game.votes_result,
+    winner: state.game.winner,
+  }
+  if (props.game != null && props.user != null) {
+    var player = props.game.players.find(function(player){return player.user.id === props.user.id;});
+    if (player != null) {
+      props.user.player = player
+    }
+
   }
   return props
 }

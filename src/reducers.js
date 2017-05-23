@@ -1,51 +1,70 @@
 import { combineReducers } from 'redux';
 import { createReducer } from 'redux-act';
 import {
-  login, logout, addUser, removeUser, newMessage
+  login, loginSuccess, logout, addUser,
+  getUser, getUserSuccess,
+  createGame, createGameSuccess,
+  addPlayerSuccess, assignRoles, assignRolesSuccess,
+  startGame, removeUser,
+  setVote, setVoteSuccess, voteFinished, gameFinished
 } from './actions';
 
 const initial = {
-  app: {
+  user: {
     username: null
   },
-  users: {},
-  messages: {
-    list: [],
-    entities: {}
-  },
+  game:{},
 };
 
-const app = createReducer({
+const user = createReducer({
   [login]: (state, payload) => {
-    return { ...state, username: payload.username };
+    return { ...state, username: payload.username, password: payload.password };
+  },
+  [loginSuccess]: (state, payload) => {
+    return { ...state, data: payload.user };
   },
   [logout]: (state, payload) => {
-    return { ...state, username: null };
+    return { ...state, data: null };
   },
-}, initial.app);
-
-const users = createReducer({
-  [addUser]: (state, payload) => {
-    return { ...state, [payload.username]: true };
+  [getUser]: (state, payload) => {
+    return { ...state, user_id: payload.user_id, game_id: payload.game_id };
   },
-  [removeUser]: (state, payload) => {
-    const newState = { ...state };
-    delete newState[payload.username];
-    return newState;
-  }
-}, initial.users);
+  [getUserSuccess]: (state, payload) => {
+    return { ...state, data: payload.user };
+  },
+}, initial.user);
 
-const votes = createReducer({
-  [newVote]: (state, payload) => {
-    const { message } = payload;
-    return {
-      ...state,
-      list: [ ...state.list, message.id ],
-      entities: { ...state.entities, [message.id]: message }
-    };
-  }
-}, initial.messages);
+const game = createReducer({
+  [createGame]: (state, payload) => {
+    return { ...state, user_id: payload.user_id, public: payload.public };
+  },
+  [createGameSuccess]: (state, payload) => {
+    return { ...state, data: payload.game };
+  },
+  [addPlayerSuccess]: (state, payload) => {
+    return { ...state, data: payload.game };
+  },
+  [assignRoles]: (state, payload) => {
+    return { ...state, game_id: payload.game_id };
+  },
+  [assignRolesSuccess]: (state, payload) => {
+    return { ...state, data: payload.game };
+  },
+  [setVote]: (state, payload) => {
+    return { ...state, voter_id: payload.voter_id, choice_id: payload.choice_id };
+  },
+  [setVoteSuccess]: (state, payload) => {
+    return { ...state, data: payload.game };
+  },
+  [voteFinished]: (state, payload) => {
+    return { ...state, votes_result: payload.result };
+  },
+  [gameFinished]: (state, payload) => {
+    return { ...state, winner: payload.result };
+  },
+}, initial.game);
+
 
 export default combineReducers(
-  { app, users, votes }
+  { user, game }
 );

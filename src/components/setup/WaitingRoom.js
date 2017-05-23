@@ -9,28 +9,35 @@ import { mapStateToProps, mapDispatchToProps } from '../../utils'
 import { Actions } from 'react-native-router-flux';
 
 import PlayerList from '../toolkit/PlayerList'
-import RouteButton from '../toolkit/RouteButton'
+import Debug from '../toolkit/Debug'
 
-//Temporary Placeholder Data
-import { players } from '../dataPlaceholder.js'
 
 class WaitingRoom extends Component {
   constructor(props){
       super(props);
+      this.handleSubmit = this.handleSubmit.bind(this)
+  }
+
+  handleSubmit(e){
+      e.preventDefault();
+      this.props.assignRoles({
+          game_id: this.props.game.id
+      })
   }
 
   render() {
-
+    const players = this.props.game ? this.props.game.players : []
     return (
       <View style={styles.outerContainer}>
         <Text h3>Waiting For Players...</Text>
+        <Debug />
         <PlayerList
-            players={players}
+            players = {players}
             />
-        <RouteButton
+        <Button
             title="Start Game"
             backgroundColor="green"
-            route={() => Actions.roleAssign()}
+            onPress={this.handleSubmit}
             />
       </View>
     )

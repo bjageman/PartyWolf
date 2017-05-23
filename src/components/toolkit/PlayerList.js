@@ -1,6 +1,9 @@
 import React, { Component } from 'react';
 import { ScrollView, StyleSheet } from 'react-native'
-import { List, ListItem } from 'react-native-elements'
+import { List, ListItem, Text } from 'react-native-elements'
+import { connect } from 'react-redux';
+
+import { mapStateToProps, mapDispatchToProps } from '../../utils';
 
 
 
@@ -10,25 +13,36 @@ class PlayerList extends Component {
       this.handleVote = this.handleVote.bind(this)
   }
 
-  handleVote(id, name){
-      console.log("Vote for: " + id + ") " + name)
+  handleVote(player){
+      console.log(player)
+      this.props.setVote({
+          voter_id: this.props.user.player.id,
+          choice_id: player.id
+      })
   }
-  
+
+  renderDebug(player){
+      return(
+          <Text>ID: {player.id} / {player.alive ? 'ALIVE' : 'DEAD'} / {player.role ? player.role.name : null}</Text>
+      )
+  }
+
   render() {
-    const players = this.props.players || []
+    const players = this.props.aliveOnly ? this.props.game.players.filter(function(player){return player.alive;}) :this.props.players
     const voting = this.props.voting || false
     return (
       <ScrollView>
       <List containerStyle={{marginBottom: 20}}>
         {
-          players.map((l, i) => (
+          players.map((player, i) => (
             <ListItem
               roundAvatar
-              avatar={{uri:l.avatar_url}}
-              key={i}
-              title={l.name}
+              key={player.id}
+              title={player.user.username}
+              subtitle={this.renderDebug(player)}
+              badge={ voting ? { value: player.votes } : null }
               hideChevron
-              onPress={voting ? () => this.handleVote(i, l.name): null}
+              onPress={voting ? () => this.handleVote(player): null}
             />
           ))
         }
@@ -46,4 +60,7 @@ const styles = StyleSheet.create({
   }
 })
 
-export default PlayerList
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(PlayerList)

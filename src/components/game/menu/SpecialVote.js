@@ -11,11 +11,10 @@ import { Actions } from 'react-native-router-flux';
 import PlayerList from '../../toolkit/PlayerList'
 import RouteButton from '../../toolkit/RouteButton'
 
-//Temporary Placeholder Data
-import { players } from '../../dataPlaceholder.js'
 
 class SpecialVote extends Component {
   render() {
+    const players = this.props.game ? this.props.game.players : []
     const username = this.props.username || ""
     return (
       <View style={styles.outerContainer}>

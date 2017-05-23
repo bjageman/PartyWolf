@@ -1,32 +1,58 @@
 import React, { Component } from 'react';
 import { View, StyleSheet } from 'react-native'
-import { FormLabel, FormInput, FormValidationMessage, CheckBox } from 'react-native-elements'
+import { FormLabel, FormInput, FormValidationMessage, CheckBox, Text, Button } from 'react-native-elements'
+import { connect } from 'react-redux';
+
+import { mapStateToProps, mapDispatchToProps } from '../../../utils';
+
+import RouteButton from '../../toolkit/RouteButton'
+
 
 class CreateGameInput extends Component {
   constructor(props){
       super(props)
+      this.handleSubmit = this.handleSubmit.bind(this);
       this.state = {
-          private: false,
+          gameName: "",
+          public: false,
       }
+  }
+
+  handleSubmit(e){
+      e.preventDefault();
+      this.props.createGame({
+         user_id: this.props.user.id,
+         public: this.state.public
+      })
   }
 
 
   render() {
     return (
-    <View>
-      <FormLabel>Name</FormLabel>
-      <FormInput />
-      <FormValidationMessage>required</FormValidationMessage>
-      <CheckBox
-          center
-          title='Make Private'
-          iconType='material'
-          checkedIcon='clear'
-          uncheckedIcon='add'
-          onPress={() => this.setState({private: !this.state.private})}
-          checked={this.state.private}
-          />
-    </View>
+        <View>
+          <Text>{this.props.user.username} {this.props.user.id}</Text>
+          <FormLabel>Game Name {this.state.gameName}</FormLabel>
+          <FormInput
+              name='gameName'
+              onChangeText={(gameName) => this.setState({gameName})}
+              value={this.state.gameName}
+              />
+          <FormValidationMessage>required</FormValidationMessage>
+          <CheckBox
+              center
+              title='Make Private'
+              iconType='material'
+              checkedIcon='clear'
+              uncheckedIcon='add'
+              onPress={() => this.setState({public: !this.state.public})}
+              checked={this.state.public}
+              />
+          <Button
+              title="Create"
+              backgroundColor="green"
+              onPress={this.handleSubmit}
+              />
+        </View>
     )
   }
 }
@@ -39,4 +65,7 @@ const styles = StyleSheet.create({
   }
 })
 
-export default CreateGameInput
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(CreateGameInput)
