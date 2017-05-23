@@ -95,31 +95,42 @@ def set_vote(data):
     voter = Player.query.get(data['voter_id'])
     game = voter.game
     join_room(game.code)
-    choice = Player.query.get(data['choice_id'])
-    voter.current_vote = choice
-    db.session.add(voter)
-    db.session.commit()
-    vote_result = None
+    if voter.alive:
+        choice = Player.query.get(data['choice_id'])
+        voter.current_vote = choice
+        db.session.add(voter)
+        db.session.commit()
+    villager_vote = None
     if len(get_votes_left(game.players)) == 0:
-        vote_result = get_vote_result(game.players)
-        if vote_result is not None:
-            emit('vote_final',
-                 {
-                 "result": parse_player(vote_result),
-                 }, room=game.code)
+        villager_vote = get_villager_vote(game.players)
+        if villager_vote is not None:
+            if handle_turn(game, villager_vote):
+                emit('vote_final',
+                     {
+                     "result": parse_player(villager_vote),
+                     }, room=game.code)
     emit('vote_success',
          {
          "game": parse_game(game),
-         "votes_result": parse_player(vote_result),
+         "votes_result": parse_player(villager_vote),
          }, room=game.code)
 
-def get_vote_result(players):
+def handle_turn(game, villager_vote, ww_vote = None):
+    villager_vote.alive = False
+    db.session.add(villager_vote)
+    for player in game.players:
+        player.current_vote = None
+        db.session.add(player)
+    db.session.commit()
+    return True
+
+def get_villager_vote(players):
     vote_count = []
     living_players_voted = players.filter_by(alive=True).filter(Player.current_vote != None).all()
     for player in living_players_voted:
         vote_count.append(player.current_vote)
     tally = Counter(vote_count).most_common(2)
-    if tally[0][1] > tally[1][1]:
+    if len(tally) < 2 or tally[0][1] > tally[1][1]:
         return tally[0][0]
     else:
         return None

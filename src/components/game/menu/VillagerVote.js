@@ -31,6 +31,7 @@ class VillagerVote extends Component {
         {this.renderDebug()}
         <PlayerList
             players={players}
+            aliveOnly={true}
             voting={true}
             />
       </View>

@@ -39,14 +39,14 @@ function subscribe(socket) {
     });
     socket.on('assign_roles_success', ({ game }) => {
       emit(assignRolesSuccess({ game }));
-      Actions['roleAssign']()
+      Actions['roleAssign']({type: 'reset'})
     });
     socket.on('vote_success', ({ game}) => {
       emit(setVoteSuccess({ game }));
     });
     socket.on('vote_final', ({ result }) => {
       emit(voteFinished({ result }));
-      Actions['finalResults']()
+      Actions['turnResults']({type: 'reset'})
     });
     socket.on('disconnect', e => {
       // TODO: handle

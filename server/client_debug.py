@@ -92,14 +92,14 @@ if __name__ == '__main__':
             if join_user is not None:
                 joinUser(game_id, join_user)
                 if add_set is not None:
-                    for i in range(add_set):
-                        joinUser(game_id, join_user + i)
+                    for i in range(add_set - 1):
+                        joinUser(game_id, join_user + 1 + i)
         if player_id is not None:
             if vote_id is not None:
                 votePlayer(player_id, vote_id)
                 if add_set is not None:
-                    for i in range(add_set):
-                        votePlayer(player_id + i, vote_id)
+                    for i in range(add_set - 1):
+                        votePlayer(player_id + 1 + i, vote_id)
 
         socketIO.wait(seconds=1)
         socketIO.on('disconnect', on_disconnect)

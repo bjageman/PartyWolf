@@ -28,7 +28,7 @@ class PlayerList extends Component {
   }
 
   render() {
-    const players = this.props.players
+    const players = this.props.aliveOnly ? this.props.game.players.filter(function(player){return player.alive;}) :this.props.players
     const voting = this.props.voting || false
     return (
       <ScrollView>
