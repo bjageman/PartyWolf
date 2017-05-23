@@ -3,6 +3,7 @@ from flask_socketio import SocketIO, emit, send, join_room, leave_room, \
 from flask import Flask
 
 from random import shuffle, SystemRandom
+from collections import Counter
 import string
 
 from . import games
@@ -57,7 +58,7 @@ def create_game(data):
     print("DEBUG: ALL GOOD")
     emit('create_game_success',{
         "game": parse_game(game),
-    }, room=game.code)
+    }, room=game.code) #Won't need this for create_game
 
 @socketio.on('add_player')
 def add_player(data):
@@ -77,6 +78,7 @@ def add_player(data):
 def assign_roles(data):
     print("ASSIGN ROLES")
     game = Game.query.get(data['game_id'])
+    join_room(game.code)
     size = len(game.players.all())
     deck = create_deck(size)
     for player in game.players:
@@ -86,18 +88,47 @@ def assign_roles(data):
     emit('assign_roles_success',
          {
          "game": parse_game(game),
-         })
+         }, room=game.code)
 
-@socketio.on('make_vote')
+@socketio.on('set_vote')
 def set_vote(data):
     voter = Player.query.get(data['voter_id'])
+    game = voter.game
+    join_room(game.code)
     choice = Player.query.get(data['choice_id'])
     voter.current_vote = choice
+    db.session.add(voter)
     db.session.commit()
+    vote_result = None
+    if len(get_votes_left(game.players)) == 0:
+        vote_result = get_vote_result(game.players)
+        if vote_result is not None:
+            emit('vote_final',
+                 {
+                 "result": parse_player(vote_result),
+                 }, room=game.code)
     emit('vote_success',
          {
          "game": parse_game(game),
-         })
+         "votes_result": parse_player(vote_result),
+         }, room=game.code)
+
+def get_vote_result(players):
+    vote_count = []
+    living_players_voted = players.filter_by(alive=True).filter(Player.current_vote != None).all()
+    for player in living_players_voted:
+        vote_count.append(player.current_vote)
+    tally = Counter(vote_count).most_common(2)
+    if tally[0][1] > tally[1][1]:
+        return tally[0][0]
+    else:
+        return None
+    return living_players_voted
+
+
+def get_votes_left(players):
+    living_voting_players_left = players.filter_by(alive=True).filter_by(current_vote = None).all()
+    return living_voting_players_left
 
 @socketio.on_error()        # Handles the default namespace
 def error_handler(e):

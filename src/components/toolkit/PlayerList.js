@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { ScrollView, StyleSheet } from 'react-native'
-import { List, ListItem } from 'react-native-elements'
+import { List, ListItem, Text } from 'react-native-elements'
 import { connect } from 'react-redux';
 
 import { mapStateToProps, mapDispatchToProps } from '../../utils';
@@ -15,6 +15,16 @@ class PlayerList extends Component {
 
   handleVote(player){
       console.log(player)
+      this.props.setVote({
+          voter_id: this.props.user.player.id,
+          choice_id: player.id
+      })
+  }
+
+  renderDebug(player){
+      return(
+          <Text>ID: {player.id} / {player.alive ? 'ALIVE' : 'DEAD'}</Text>
+      )
   }
 
   render() {
@@ -29,6 +39,8 @@ class PlayerList extends Component {
               roundAvatar
               key={player.id}
               title={player.user.username}
+              subtitle={this.renderDebug(player)}
+              badge={ voting ? { value: player.votes } : null }
               hideChevron
               onPress={voting ? () => this.handleVote(player): null}
             />

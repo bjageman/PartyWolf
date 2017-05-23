@@ -46,6 +46,7 @@ class App extends Component {
                 <Scene key="specialVote" component={SpecialVote} title="Vote on 'Culprit'" iname="stars" icon={TabIcon} />
                 <Scene key="previousTurnResults" component={PreviousTurnResults} title="Death Toll" iname="sentiment-very-dissatisfied" icon={TabIcon} />
             </Scene>
+            <Scene key="turnResults" component={TurnResults} title="Results"/>
             <Scene key="finalResults" component={FinalResults} title="Game Over!"/>
 
             <Scene key="roleAssign" component={RoleAssign} title="Your Role"  />

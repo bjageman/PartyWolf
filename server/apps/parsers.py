@@ -28,7 +28,9 @@ def parse_player(player):
         return ({
             "id": player.id,
             "user": parse_user(player.user),
-            "role": parse_role(player.role)
+            "role": parse_role(player.role),
+            "votes": len(player.votes),
+            "alive": player.alive,
         })
     return None
 

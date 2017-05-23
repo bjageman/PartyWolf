@@ -21,4 +21,5 @@ export const assignRolesSuccess = createAction('Roles were succesfully assigned'
 export const startGame = createAction('start a game after players have joined');
 
 export const setVote = createAction('make a vote');
-export const countVotes = createAction('tally up votes');
+export const setVoteSuccess = createAction('succesfully made a vote');
+export const voteFinished = createAction('the votes are all tallied and a person is chosen')

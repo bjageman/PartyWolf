@@ -7,7 +7,7 @@ import {
   createGame, createGameSuccess,
   addPlayerSuccess,
   assignRoles, assignRolesSuccess,
-  setVote, setVoteSuccess
+  setVote, setVoteSuccess, voteFinished
 } from './actions';
 import {Actions} from 'react-native-router-flux'
 
@@ -40,6 +40,13 @@ function subscribe(socket) {
     socket.on('assign_roles_success', ({ game }) => {
       emit(assignRolesSuccess({ game }));
       Actions['roleAssign']()
+    });
+    socket.on('vote_success', ({ game}) => {
+      emit(setVoteSuccess({ game }));
+    });
+    socket.on('vote_final', ({ result }) => {
+      emit(voteFinished({ result }));
+      Actions['finalResults']()
     });
     socket.on('disconnect', e => {
       // TODO: handle
@@ -81,6 +88,7 @@ function* handleIO(socket) {
   yield fork(read, socket);
   yield fork(createGameEmit, socket);
   yield fork(assignRolesEmit, socket);
+  yield fork(setVoteEmit, socket);
 }
 
 function* flow() {

@@ -2,10 +2,10 @@ import * as actionCreators from './actions';
 import { bindActionCreators } from 'redux';
 
 export function mapStateToProps(state) {
-  console.log(state)
   props = {
     user: state.user.data,
     game: state.game.data,
+    votes_result: state.game.votes_result
   }
   if (props.game != null && props.user != null) {
     var player = props.game.players.find(function(player){return player.user.id === props.user.id;});
