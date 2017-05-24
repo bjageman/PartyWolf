@@ -19,6 +19,7 @@ export const createGameSuccess = createAction('successfully created a new game')
 export const addPlayer = createAction('add player to a game');
 export const removePlayer = createAction('remove player from a game');
 
+export const joinGameSuccess = createAction('the specific user has successfully joined a game (not a global call)')
 export const addPlayerSuccess = createAction('a player is added to the game')
 
 export const assignRoles = createAction('assign roles to all players')

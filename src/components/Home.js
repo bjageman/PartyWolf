@@ -35,28 +35,41 @@ class PlaceHolderTitle extends Component {
   }
 
   render() {
-    const username = this.props.username || ""
-    return (
-      <View style={styles.outerContainer}>
-        <Text style={styles.introHeader} h3>Werewolf</Text>
-        {this.renderDebug()}
-        <RouteButton
-            title="Login"
-            backgroundColor="green"
-            route={() => Actions.login()}
-            />
-        <RouteButton
-            title="Create Game"
-            backgroundColor="blue"
-            route={() => Actions.createGame()}
-            />
-        <RouteButton
-            title="Join Game"
-            backgroundColor="cyan"
-            route={() => Actions.joinGame()}
-            />
-      </View>
-    )
+    if (this.props.user){
+        return (
+          <View style={styles.outerContainer}>
+            <Text style={styles.introHeader} h3>Werewolf</Text>
+            {this.renderDebug()}
+            <RouteButton
+                title="Create Game"
+                backgroundColor="blue"
+                route={() => Actions.createGame()}
+                />
+            <RouteButton
+                title="Join Game"
+                backgroundColor="cyan"
+                route={() => Actions.joinGame()}
+                />
+          </View>
+        )
+    }else{
+        return (
+          <View style={styles.outerContainer}>
+            <Text style={styles.introHeader} h3>Werewolf</Text>
+            <RouteButton
+                title="Login"
+                backgroundColor="green"
+                route={() => Actions.login()}
+                />
+            <RouteButton
+                title="Register"
+                backgroundColor="red"
+                route={() => Actions.registration()}
+                />
+          </View>
+        )
+    }
+
   }
 }
 

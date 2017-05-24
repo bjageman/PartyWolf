@@ -80,6 +80,9 @@ def add_player(data):
     print("CREATING PLAYER")
     create_player(game, user)
     print("ALL DONE")
+    emit('join_game_success',{
+         "game": parse_game(game),
+         })
     emit('add_player_success',{
          "game": parse_game(game),
          }, room=game.code)

@@ -8,7 +8,7 @@ import {
   getUser, getUserSuccess,
   getGames, getGamesSuccess,
   createGame, createGameSuccess,
-  addPlayerSuccess,
+  addPlayerSuccess, joinGameSuccess,
   assignRoles, assignRolesSuccess,
   setVote, setVoteSuccess, voteFinished, gameFinished
 } from './actions';
@@ -44,6 +44,10 @@ function subscribe(socket) {
     });
     socket.on('add_player_success', ({ game }) => {
       emit(addPlayerSuccess({ game }));
+    });
+    socket.on('join_game_success', ({game}) => {
+      emit(joinGameSuccess({ game }));
+      Actions['waitingRoom']()
     });
     socket.on('assign_roles_success', ({ game }) => {
       emit(assignRolesSuccess({ game }));

@@ -3,7 +3,7 @@ import { createReducer } from 'redux-act';
 import {
   register, registerSuccess,
   login, loginSuccess, logout,
-  addPlayer, removePlayer,
+  addPlayer, removePlayer, joinGameSuccess,
   getUser, getUserSuccess,
   getGames, getGamesSuccess,
   createGame, createGameSuccess,
@@ -56,7 +56,13 @@ const game = createReducer({
   [createGameSuccess]: (state, payload) => {
     return { ...state, data: payload.game };
   },
+  [addPlayer]: (state, payload) => {
+    return { ...state, game_id: payload.game_id, user_id: payload.user_id };
+  },
   [addPlayerSuccess]: (state, payload) => {
+    return { ...state, data: payload.game };
+  },
+  [joinGameSuccess]: (state, payload) => {
     return { ...state, data: payload.game };
   },
   [assignRoles]: (state, payload) => {

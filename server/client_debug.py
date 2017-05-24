@@ -93,6 +93,9 @@ if __name__ == '__main__':
     player_id = options.player_id
 
     if options.setup:
+        print("Creating Database...")
+        db.create_all()
+        print("Database Created")
         print("Creating Roles...")
         for role in roles:
             new_role = Role(name=role['name'], avatar=role['avatar'], evil=role['evil'])
