@@ -12,7 +12,7 @@ class Game(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(32))
     code = db.Column(db.String(32))
-    public = db.Column(db.Boolean,default=False)
+    public = db.Column(db.Boolean,default=True)
     closed = db.Column(db.Boolean,default=False)
     winner = db.Column(db.String(32))
     creator_id = db.Column(db.Integer, db.ForeignKey('user.id'))
@@ -38,9 +38,9 @@ class Role(db.Model):
     __tablename__ = 'role'
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(32))
-    team = db.Column(db.String(32))
+    avatar = db.Column(db.String(256))
     ability = db.Column(db.String(32))
-    #evil = db.Column(db.Boolean, default=False)
+    evil = db.Column(db.Boolean, default=False)
 
 class History(db.Model):
     __tablename__ = 'history'

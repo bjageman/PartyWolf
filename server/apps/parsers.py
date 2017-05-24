@@ -19,7 +19,8 @@ def parse_role(role):
         return ({
             "id": role.id,
             "name": role.name,
-            "team": role.team
+            "avatar": role.avatar,
+            "evil": role.evil,
         })
     return None
 
@@ -39,3 +40,9 @@ def parse_players(players):
     for player in players:
         parsedPlayers.append(parse_player(player))
     return parsedPlayers
+
+def parse_games(games):
+    parsedGames = []
+    for game in games:
+        parsedGames.append(parse_game(game))
+    return parsedGames

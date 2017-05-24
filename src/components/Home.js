@@ -14,6 +14,24 @@ import RouteButton from './toolkit/RouteButton'
 class PlaceHolderTitle extends Component {
   constructor(props){
       super(props);
+      this.renderDebug = this.renderDebug.bind(this)
+      this.handleJoinGame = this.handleJoinGame.bind(this)
+  }
+
+  renderDebug(){
+      if (this.props.user != null){
+          return(
+              <View>
+              <Text>{this.props.user.username}</Text>
+              <Text>{this.props.public_listing ? this.props.public_listing[0].code : "NO GAME"}</Text>
+              </View>
+          )
+      }
+  }
+
+  handleJoinGame(){
+      console.log("CLICK JOIN")
+      this.props.getGames({})
   }
 
   render() {
@@ -21,6 +39,7 @@ class PlaceHolderTitle extends Component {
     return (
       <View style={styles.outerContainer}>
         <Text style={styles.introHeader} h3>Werewolf</Text>
+        {this.renderDebug()}
         <RouteButton
             title="Login"
             backgroundColor="green"

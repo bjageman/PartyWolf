@@ -43,6 +43,15 @@ def test_game(data):
     emit('games_success',
          {'data': data['data']})
 
+@socketio.on('get_games')
+def get_games(data):
+    games = Game.query.filter_by(public=True).filter(Game.closed != True).all()
+    print(games)
+    emit('get_games_success',{
+        "games": parse_games(games),
+    })
+
+
 @socketio.on('create_game')
 def create_game(data):
     print("DEBUG: CREATE GAME")
@@ -51,6 +60,7 @@ def create_game(data):
     public = True
     if 'public' in data:
         public = data['public']
+    print(public)
     game = Game(code=randomCode(), creator=creator, public=public)
     db.session.add(game)
     create_player(game, creator)
@@ -97,9 +107,10 @@ def set_vote(data):
     join_room(game.code)
     if voter.alive:
         choice = Player.query.get(data['choice_id'])
-        voter.current_vote = choice
-        db.session.add(voter)
-        db.session.commit()
+        if choice.alive:
+            voter.current_vote = choice
+            db.session.add(voter)
+            db.session.commit()
     villager_vote = None
     if len(get_votes_left(game.players)) == 0:
         villager_vote = get_villager_vote(game.players)
@@ -124,8 +135,8 @@ def set_vote(data):
 def handle_turn(game, villager_vote, ww_vote = None):
     villager_vote.alive = False
     db.session.add(villager_vote)
-    bad_guys = game.players.filter_by(alive=True).join(Role).filter(Role.team == "W").all()
-    good_guys = game.players.filter_by(alive=True).join(Role).filter(Role.team == "V").all()
+    bad_guys = game.players.filter_by(alive=True).join(Role).filter(Role.evil == True).all()
+    good_guys = game.players.filter_by(alive=True).join(Role).filter(Role.evil == False).all()
     print(len(good_guys), len(bad_guys))
     if len(bad_guys) == 0:
         return "Villagers"

@@ -2,14 +2,19 @@ import io from 'socket.io-client';
 import { eventChannel } from 'redux-saga';
 import { fork, take, call, put, cancel } from 'redux-saga/effects';
 import {
+  register, registerSuccess,
   login, loginSuccess, logout,
-  addUser, removeUser, getUser, getUserSuccess,
+  addPlayer, removePlayer,
+  getUser, getUserSuccess,
+  getGames, getGamesSuccess,
   createGame, createGameSuccess,
   addPlayerSuccess,
   assignRoles, assignRolesSuccess,
   setVote, setVoteSuccess, voteFinished, gameFinished
 } from './actions';
 import {Actions} from 'react-native-router-flux'
+import { postDataApi, fetchDataApi, verifyData } from './api'
+
 
 function connect() {
   const socket = io('http://10.0.2.2:5000');
@@ -29,6 +34,9 @@ function subscribe(socket) {
     });
     socket.on('get_user_success', ({ user }) => {
       emit(getUserSuccess({ user }));
+    });
+    socket.on('get_games_success', ({ games }) => {
+      emit(getGamesSuccess({ games }));
     });
     socket.on('create_game_success', ({ game }) => {
       emit(createGameSuccess({ game }));
@@ -67,10 +75,24 @@ function* read(socket) {
   }
 }
 
+function* getGamesEmit(socket) {
+  while (true) {
+    const { payload } = yield take(`${getGames}`);
+    socket.emit('get_games', payload);
+  }
+}
+
 function* createGameEmit(socket) {
   while (true) {
     const { payload } = yield take(`${createGame}`);
     socket.emit('create_game', payload);
+  }
+}
+
+function* addPlayerEmit(socket) {
+  while (true) {
+    const { payload } = yield take(`${addPlayer}`);
+    socket.emit('add_player', payload);
   }
 }
 
@@ -90,7 +112,9 @@ function* setVoteEmit(socket) {
 
 function* handleIO(socket) {
   yield fork(read, socket);
+  yield fork(getGamesEmit, socket);
   yield fork(createGameEmit, socket);
+  yield fork(addPlayerEmit, socket);
   yield fork(assignRolesEmit, socket);
   yield fork(setVoteEmit, socket);
 }
@@ -109,6 +133,23 @@ function* flow() {
   }
 }
 
+function* registerUser() {
+    while (true) {
+        try{
+          let { payload } = yield take(`${register}`);
+          let data = {"username": payload.username, "password": payload.password }
+          const response = yield call(postDataApi, 'users', data);
+          if (verifyData(response)) {
+              registerSuccess(response.data)
+              Actions['home']()
+            }
+          }catch(err){
+            console.log("ERROR: " + err.message)
+          }
+    }
+}
+
 export default function* rootSaga() {
   yield fork(flow);
+  yield fork(registerUser)
 }

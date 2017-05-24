@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { ScrollView, StyleSheet } from 'react-native'
+import { ScrollView, StyleSheet, View } from 'react-native'
 import { List, ListItem, Text } from 'react-native-elements'
 import { connect } from 'react-redux';
 
@@ -23,7 +23,10 @@ class PlayerList extends Component {
 
   renderDebug(player){
       return(
-          <Text>ID: {player.id} / {player.alive ? 'ALIVE' : 'DEAD'} / {player.role ? player.role.name : null}</Text>
+        <View>
+          <Text>ID: {player.id} / {player.alive ? 'ALIVE' : 'DEAD'}</Text>
+          <Text>{player.role && player.role.name + " / " + player.role.avatar } / { player.role && player.role.evil ? "EVIL" : "GOOD" } </Text>
+        </View>
       )
   }
 
