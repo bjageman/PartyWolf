@@ -3,7 +3,7 @@ from optparse import OptionParser
 
 from apps import app, db, socketio
 from apps.users.models import User
-from apps.games.models import Game, Player, Role, History
+from apps.games.models import Game, Player, Role, Vote
 
 from apps.config import DATABASE
 
@@ -28,7 +28,7 @@ parser.add_option("--set", dest="add_set", type="int",
                   help="Adds X extra people after first user (requires --join-user)", metavar="NUM_PLAYERS")
 parser.add_option("-p", "--player", dest="player_id", type="int",
                   help="set the current player", metavar="PLAYER_ID")
-parser.add_option("-r", "--register-user", dest="register_user", type="int",
+parser.add_option("-r", "--register-user", dest="register_user",
                   help="creates a new user with the password 'password'", metavar="USERNAME")
 parser.add_option("-u", "--user", dest="user_id", type="int",
                   help="set the current user", metavar="USER_ID")

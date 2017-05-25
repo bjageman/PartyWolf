@@ -44,7 +44,6 @@ def login(data):
     password = data['password']
     user = authenticate(username, password)
     if user is not None:
-        print("LOGIN PASS")
         emit('user_login_success',{
             "user": parse_user(user),
         })

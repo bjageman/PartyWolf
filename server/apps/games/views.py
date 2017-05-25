@@ -7,7 +7,7 @@ from collections import Counter
 import string
 
 from . import games
-from apps.games.models import Game, Player, Role, History
+from apps.games.models import Game, Player, Role, Vote
 from apps.users.models import User
 from apps.parsers import *
 from apps.database import *
@@ -18,7 +18,6 @@ def randomCode(size=10):
     return ''.join(SystemRandom().choice(string.ascii_uppercase + string.digits) for _ in range(10))
 
 def create_deck(deck_size):
-    print("Creating Deck", deck_size)
     villager = Role.query.filter_by(name="Villager").first()
     werewolf = Role.query.filter_by(name="Werewolf").first()
     seer = Role.query.filter_by(name="Seer").first()
@@ -34,7 +33,6 @@ def create_player(game, user):
 
 @socketio.on('connect')
 def on_connect():
-    print("CONNECTED")
     send('connected')
 
 
@@ -46,7 +44,6 @@ def test_game(data):
 @socketio.on('get_games')
 def get_games(data):
     games = Game.query.filter_by(public=True).filter(Game.closed != True).all()
-    print(games)
     emit('get_games_success',{
         "games": parse_games(games),
     })
@@ -54,42 +51,36 @@ def get_games(data):
 
 @socketio.on('create_game')
 def create_game(data):
-    print("DEBUG: CREATE GAME")
     user_id = data['user_id']
     creator = User.query.get(user_id)
-    public = True
-    if 'public' in data:
-        public = data['public']
-    print(public)
-    game = Game(code=randomCode(), creator=creator, public=public)
-    db.session.add(game)
-    create_player(game, creator)
-    join_room(game.code)
-    print("DEBUG: ALL GOOD")
-    emit('create_game_success',{
-        "game": parse_game(game),
-    }, room=game.code) #Won't need this for create_game
+    if creator is not None:
+        public = True
+        if 'public' in data:
+            public = data['public']
+        game = Game(code=randomCode(), creator=creator, public=public)
+        db.session.add(game)
+        create_player(game, creator)
+        join_room(game.code)
+        emit('create_game_success',{
+            "game": parse_game(game),
+        }, room=game.code) #Won't need this for create_game
 
 @socketio.on('add_player')
 def add_player(data):
-    print("ADDING PLAYER")
     game = Game.query.get(data['game_id'])
     user = User.query.get(data['user_id'])
-    print("JOINING ROOM")
-    join_room(game.code)
-    print("CREATING PLAYER")
-    create_player(game, user)
-    print("ALL DONE")
-    emit('join_game_success',{
-         "game": parse_game(game),
-         })
-    emit('add_player_success',{
-         "game": parse_game(game),
-         }, room=game.code)
+    if game is not None and user is not None:
+        join_room(game.code)
+        create_player(game, user)
+        emit('join_game_success',{
+             "game": parse_game(game),
+             })
+        emit('add_player_success',{
+             "game": parse_game(game),
+             }, room=game.code)
 
 @socketio.on('assign_roles')
 def assign_roles(data):
-    print("ASSIGN ROLES")
     game = Game.query.get(data['game_id'])
     join_room(game.code)
     size = len(game.players.all())
@@ -106,34 +97,72 @@ def assign_roles(data):
 @socketio.on('set_vote')
 def set_vote(data):
     voter = Player.query.get(data['voter_id'])
+    choice = Player.query.get(data['choice_id'])
     game = voter.game
-    join_room(game.code)
+    turn = 1 #data['turn']
+    results = {}
+    if verify_vote(voter, choice, turn):
+        save_vote(voter, choice, turn)
+        join_room(voter.game.code)
+        if verify_everyone_voted(game, turn):
+            votes = game.votes.filter_by(turn = turn)
+            vote_roles = []
+            for vote in votes.all():
+                if vote.role is not None:
+                    vote_roles.append(vote.role)
+            roles = Role.query.all()
+            living_roles = [role for role in roles if role in vote_roles]
+            for role in living_roles:
+                results[role] = parse_player(get_vote_result(votes, turn, role).choice)
+            results['default'] = parse_player(get_vote_result(votes, turn).choice)
+            print(results)
+        emit('vote_success',
+            {
+            "game": parse_game(game),
+            "results": results,
+            }, room=game.code)
+
+
+def get_vote_result(votes, turn, role=None):
+    result = votes.filter(Vote.role == role)
+    tally = Counter(result).most_common(2)
+    #Ensure that a tie is not made
+    if len(tally) < 2 or tally[0][1] > tally[1][1]:
+        return tally[0][0]
+    else:
+        return None
+
+def verify_vote(voter, choice, turn, role = None):
+    game = voter.game
     if voter.alive:
-        choice = Player.query.get(data['choice_id'])
         if choice.alive:
-            voter.current_vote = choice
-            db.session.add(voter)
-            db.session.commit()
-    villager_vote = None
-    if len(get_votes_left(game.players)) == 0:
-        villager_vote = get_villager_vote(game.players)
-        if villager_vote is not None:
-            result = handle_turn(game, villager_vote)
-            if result == "NEXT_TURN":
-                emit('vote_final',
-                     {
-                     "result": parse_player(villager_vote),
-                     }, room=game.code)
-            if result == "Werewolves" or result == "Villagers":
-                emit('game_final',
-                     {
-                     "result": result,
-                     }, room=game.code)
-    emit('vote_success',
-         {
-         "game": parse_game(game),
-         "votes_result": parse_player(villager_vote),
-         }, room=game.code)
+            return True
+    return False
+
+def save_vote(voter, choice, turn, role = None):
+    game = voter.game
+    vote = Vote.query.filter_by(voter=voter).filter_by(turn=turn).first()
+    if vote is None:
+        vote = Vote(turn=turn, choice=choice, voter=voter, game=game, role=role)
+    else:
+        vote.choice=choice
+    db.session.add(vote)
+    db.session.commit()
+
+## Counts up the votes and returns True if all votes are tallied
+def verify_everyone_voted(game, turn):
+    living_players = game.players.filter_by(alive=True)
+    living_players_special = living_players.join(Role).filter(Role.name != "Villager")
+    player_votes_count = len(living_players.all()) + len(living_players_special.all())
+    votes = game.votes.filter_by(turn = turn).all()
+    print("Living Players:", player_votes_count, "Votes so far: ", len(votes))
+    if player_votes_count == len(votes):
+        return 1
+    elif player_votes_count < len(votes):
+        return 2 #Something went wrong
+    else:
+        return 0
+
 
 def handle_turn(game, villager_vote, ww_vote = None):
     villager_vote.alive = False
@@ -145,8 +174,8 @@ def handle_turn(game, villager_vote, ww_vote = None):
         return "Villagers"
     if len(bad_guys) >= len(good_guys):
         return "Werewolves"
-    for player in game.players:
-        player.current_vote = None
+    # for player in game.players:
+    #     player.current_vote = None
         db.session.add(player)
     db.session.commit()
     return "NEXT_TURN"
@@ -162,11 +191,6 @@ def get_villager_vote(players):
     else:
         return None
     return living_players_voted
-
-
-def get_votes_left(players):
-    living_voting_players_left = players.filter_by(alive=True).filter_by(current_vote = None).all()
-    return living_voting_players_left
 
 @socketio.on_error()        # Handles the default namespace
 def error_handler(e):

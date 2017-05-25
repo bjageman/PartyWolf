@@ -1,16 +1,23 @@
 def parse_user(user, player=None):
-    return ({
-        "id": user.id,
-        "username": user.username,
-        "player": parse_player(player)
-    })
+    try:
+        return ({
+            "id": user.id,
+            "username": user.username,
+            "player": parse_player(player)
+        })
+    except AttributeError:
+        return None
+
 
 def parse_game(game):
+    creator = None
+    if game.creator is not None:
+        creator = parse_user(game.creator)
     return ({
         "id": game.id,
         "code": game.code,
         "public": game.public,
-        "creator": parse_user(game.creator),
+        "creator": creator,
         "players": parse_players(game.players)
     })
 
@@ -30,7 +37,7 @@ def parse_player(player):
             "id": player.id,
             "user": parse_user(player.user),
             "role": parse_role(player.role),
-            "votes": len(player.votes),
+            "votes": len(player.voted_on),
             "alive": player.alive,
         })
     return None
