@@ -1,8 +1,11 @@
 import { combineReducers } from 'redux';
 import { createReducer } from 'redux-act';
 import {
-  login, loginSuccess, logout, addUser,
+  register, registerSuccess,
+  login, loginSuccess, logout,
+  addPlayer, removePlayer, joinGameSuccess,
   getUser, getUserSuccess,
+  getGames, getGamesSuccess,
   createGame, createGameSuccess,
   addPlayerSuccess, assignRoles, assignRolesSuccess,
   startGame, removeUser,
@@ -17,6 +20,12 @@ const initial = {
 };
 
 const user = createReducer({
+  [register]: (state, payload) => {
+    return { ...state, username: payload.username, password: payload.password };
+  },
+  [registerSuccess]: (state, payload) => {
+    return { ...state, data: payload.user };
+  },
   [login]: (state, payload) => {
     return { ...state, username: payload.username, password: payload.password };
   },
@@ -35,13 +44,25 @@ const user = createReducer({
 }, initial.user);
 
 const game = createReducer({
+  [getGames]: (state, payload) => {
+    return { ...state}
+  },
+  [getGamesSuccess]: (state, payload) => {
+    return { ...state, public_listing: payload.games };
+  },
   [createGame]: (state, payload) => {
     return { ...state, user_id: payload.user_id, public: payload.public };
   },
   [createGameSuccess]: (state, payload) => {
     return { ...state, data: payload.game };
   },
+  [addPlayer]: (state, payload) => {
+    return { ...state, game_id: payload.game_id, user_id: payload.user_id };
+  },
   [addPlayerSuccess]: (state, payload) => {
+    return { ...state, data: payload.game };
+  },
+  [joinGameSuccess]: (state, payload) => {
     return { ...state, data: payload.game };
   },
   [assignRoles]: (state, payload) => {
@@ -57,7 +78,7 @@ const game = createReducer({
     return { ...state, data: payload.game };
   },
   [voteFinished]: (state, payload) => {
-    return { ...state, votes_result: payload.result };
+    return { ...state, votes_result: payload.results, data: payload.game };
   },
   [gameFinished]: (state, payload) => {
     return { ...state, winner: payload.result };

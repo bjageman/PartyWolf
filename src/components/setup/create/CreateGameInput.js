@@ -14,7 +14,7 @@ class CreateGameInput extends Component {
       this.handleSubmit = this.handleSubmit.bind(this);
       this.state = {
           gameName: "",
-          public: false,
+          public: true,
       }
   }
 
@@ -45,7 +45,7 @@ class CreateGameInput extends Component {
               checkedIcon='clear'
               uncheckedIcon='add'
               onPress={() => this.setState({public: !this.state.public})}
-              checked={this.state.public}
+              checked={!this.state.public}
               />
           <Button
               title="Create"

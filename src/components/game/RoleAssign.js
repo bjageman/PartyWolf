@@ -25,7 +25,7 @@ class RoleAssign extends Component {
         <Debug />
         <Image
           style={{width: 300, height: 400}}
-          source={{uri: 'https://placekitten.com/g/300/400'}}
+          source={{uri: this.props.user.player.role.avatar }}
         />
     <Text h3>{this.props.user.player.role.name}!</Text>
         <Button

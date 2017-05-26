@@ -1,9 +1,8 @@
 import React, { Component } from 'react';
 import { View, StyleSheet } from 'react-native'
 import { FormLabel, FormInput, FormValidationMessage, CheckBox, Button, Text } from 'react-native-elements'
-import { connect } from 'react-redux';
 
-import { login } from '../../../actions';
+import { connect } from 'react-redux';
 import { mapStateToProps, mapDispatchToProps } from '../../../utils';
 
 

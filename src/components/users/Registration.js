@@ -22,10 +22,6 @@ class Registration extends Component {
       <View style={styles.outerContainer}>
         <Text h3>Registration</Text>
         <RegisterInput />
-        <Button
-            title="Register"
-            onPress={() => Actions.home}
-            />
       </View>
     )
   }
