@@ -1,4 +1,5 @@
 import sys
+import requests, json
 from optparse import OptionParser
 
 from apps import app, db, socketio
@@ -60,13 +61,10 @@ def on_disconnect():
 def on_connect():
     print('connect')
 
-def registerPlayer(register_user, password = "password"):
-    socketIO.on('user_registration_success', on_register_response)
-    socketIO.on('user_registration_fail', on_register_response)
-    socketIO.emit('register', {
-             "username": register_user,
-             "password": password,
-             }, on_register_response)
+def registerPlayer(username, password = "password"):
+    payload = {'username':username, 'password': password}
+    r = requests.post('http://localhost:5000/users', json=payload)
+    print(r.text)
 
 def joinUser(game_id, user_id):
     socketIO.on('add_player_success', on_add_player_response)

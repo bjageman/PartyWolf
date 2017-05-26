@@ -18,7 +18,8 @@ def parse_game(game):
         "code": game.code,
         "public": game.public,
         "creator": creator,
-        "players": parse_players(game.players)
+        "players": parse_players(game.players),
+        "current_turn": game.current_turn,
     })
 
 def parse_role(role):
@@ -31,8 +32,17 @@ def parse_role(role):
         })
     return None
 
-def parse_votes_count(votes):
+def get_votes_by_turn(votes, turn):
+    votes_filtered = []
+    vote_gen = (vote for vote in votes if vote.turn == turn)
+    for vote in vote_gen:
+        votes_filtered.append(vote)
+    return votes_filtered
+
+def parse_votes_count(votes, turn = None):
     vote_count = {}
+    if turn != None:
+        votes = get_votes_by_turn(votes, turn)
     for vote in votes:
         if vote.role is None:
             role = 'default'
@@ -45,11 +55,12 @@ def parse_votes_count(votes):
 
 def parse_player(player):
     if player is not None:
+        current_turn = player.game.current_turn
         return ({
             "id": player.id,
             "user": parse_user(player.user),
             "role": parse_role(player.role),
-            "votes": parse_votes_count(player.voted_on),
+            "votes": parse_votes_count(player.voted_on, current_turn),
             "alive": player.alive,
         })
     return None

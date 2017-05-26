@@ -17,49 +17,48 @@ class TurnResults extends Component {
   }
 
   render() {
-    const hanged_player = this.props.votes_result
+    const results = this.props.votes_result
     const dead_players = this.props.game.players.filter(function(player){return player.alive == false;})
     return (
       <View style={styles.outerContainer}>
-        <ScrollView>
-            <Card title='Player(s) Hanged in the Day'>
-                <ListItem
-                    roundAvatar
-                    title={hanged_player.user.username}
-                    hideChevron
-                    />
-            </Card>
-            <Card title='Player(s) Murdered in the Night'>
-                <ListItem
-                    roundAvatar
-                    avatar={{uri:murdered_player.avatar_url}}
-                    title={murdered_player.name}
-                    hideChevron
-                    />
-            </Card>
-            <Card title='Death Toll'>
-            {
-              dead_players.map((player, i) => (
-                     <ListItem
-                         roundAvatar
-                         key={player.id}
-                         title={player.user.username}
-                         hideChevron
-                         />
-                 )
-              )
-            }
-            </Card>
-        </ScrollView>
-        <Button
-            title="Continue..."
-            onPress={() => Actions.menu({title: "Next Turn"})}
-            />
-        <Button
-            title="End Game"
-            onPress={() => Actions.finalResults()}
-            />
-      </View>
+  <ScrollView>
+      <Card title='Player(s) Hanged in the Day'>
+          <ListItem
+              roundAvatar
+              title={results.default.user.username}
+              hideChevron
+              />
+      </Card>
+      <Card title='Player(s) Murdered in the Night'>
+          <ListItem
+              roundAvatar
+              title={results.Werewolf ? results.Werewolf.user.username : null}
+              hideChevron
+              />
+      </Card>
+      <Card title='Death Toll'>
+      {
+        dead_players.map((player, i) => (
+               <ListItem
+                   roundAvatar
+                   key={player.id}
+                   title={player.user.username}
+                   hideChevron
+                   />
+           )
+        )
+      }
+      </Card>
+  </ScrollView>
+  <Button
+      title="Continue..."
+      onPress={() => Actions.menu({title: "Next Turn"})}
+      />
+  <Button
+      title="End Game"
+      onPress={() => Actions.finalResults()}
+      />
+</View>
     )
   }
 }

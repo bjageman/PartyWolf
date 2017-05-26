@@ -57,7 +57,7 @@ def create_game(data):
         public = True
         if 'public' in data:
             public = data['public']
-        game = Game(code=randomCode(), creator=creator, public=public)
+        game = Game(code=randomCode(), creator=creator, public=public, current_turn=1)
         db.session.add(game)
         create_player(game, creator)
         join_room(game.code)
@@ -69,7 +69,7 @@ def create_game(data):
 def add_player(data):
     game = Game.query.get(data['game_id'])
     user = User.query.get(data['user_id'])
-    if game is not None and user is not None:
+    if game is not None and user is not None and game.closed is not True:
         join_room(game.code)
         create_player(game, user)
         emit('join_game_success',{
@@ -88,6 +88,8 @@ def assign_roles(data):
     for player in game.players:
         player.role = deck.pop()
         db.session.add(player)
+    game.closed = True
+    db.session.add(game)
     db.session.commit()
     emit('assign_roles_success',
          {
@@ -103,7 +105,8 @@ def set_vote(data):
     except KeyError:
         role = None
     game = voter.game
-    turn = 1 #data['turn']
+    turn = game.current_turn
+    print(turn)
     results = {}
     if verify_vote(voter, choice, turn, role):
         save_vote(voter, choice, turn, role)
@@ -113,26 +116,73 @@ def set_vote(data):
             "game": parse_game(game),
             }, room=game.code)
         if verify_everyone_voted(game, turn):
-            votes = game.votes.filter_by(turn = turn)
-            vote_roles = []
-            for vote in votes.all():
-                if vote.role is not None:
-                    vote_roles.append(vote.role)
-            roles = Role.query.all()
-            living_roles = [role for role in roles if role in vote_roles]
-            for role in living_roles:
-                result = get_vote_result(votes, turn, role)
-                if result is not None:
-                    results[role.name] = parse_player(result)
-            result = get_vote_result(votes, turn)
-            if result is not None:
-                results['default'] = parse_player(result)
-            if len(results) == (len(living_roles) + 1):
+            results, num_roles = tally_all_votes(game, turn)
+            if len(results) == num_roles:
                 print("Emit final")
+                if 'default' in results:
+                    kill_player(results['default'])
+                if 'Werewolf' in results:
+                    kill_player(results['Werewolf'])
+                set_next_turn(game)
                 emit('vote_final',
                     {
+                    "game": parse_game(game),
                     "results": results,
                     }, room=game.code)
+                winner = determine_winner(game)
+                if winner is not None:
+                    emit('game_final',
+                        {
+                        "result": winner,
+                        }, room=game.code)
+
+
+def determine_winner(game):
+    living_players = game.players.filter_by(alive=True)
+    evil_players = living_players.join(Role).filter(Role.evil == True).all()
+    good_players = living_players.join(Role).filter(Role.evil == False).all()
+    if len(good_players) <= len(evil_players):
+        game.winner = "evil"
+        db.session.add(game)
+        return "evil"
+    if len(evil_players) == 0:
+        game.winner = "good"
+        db.session.add(game)
+        return "good"
+    return None
+
+def set_next_turn(game):
+    print("Going to next turn")
+    game.current_turn = game.current_turn + 1
+    db.session.add(game)
+    db.session.commit()
+    return True
+
+def kill_player(player):
+    print("Killing",player['id'])
+    player = Player.query.get(player['id'])
+    player.alive = False
+    db.session.add(player)
+    db.session.commit()
+    return True
+
+def tally_all_votes(game, turn):
+    results = {}
+    votes = game.votes.filter_by(turn = turn)
+    vote_roles = []
+    for vote in votes.all():
+        if vote.role is not None:
+            vote_roles.append(vote.role.id)
+    roles = Role.query.all()
+    living_roles = [role for role in roles if role.id in vote_roles]
+    for role in living_roles:
+        result = get_vote_result(votes, turn, role)
+        if result is not None:
+            results[role.name] = parse_player(result)
+    result = get_vote_result(votes, turn)
+    if result is not None:
+        results['default'] = parse_player(result)
+    return results, len(living_roles) + 1
 
 def vote_objects_to_ids(votes):
     results = []
@@ -158,6 +208,7 @@ def verify_vote(voter, choice, turn, role = None):
                 if voter.role == role:
                     return True
                 else:
+                    print("Roles don't match", voter.role.name)
                     return False
             else:
                 return True
@@ -165,61 +216,31 @@ def verify_vote(voter, choice, turn, role = None):
 
 def save_vote(voter, choice, turn, role = None):
     game = voter.game
-    if role is None:
-        vote = Vote.query.filter_by(voter=voter).filter_by(turn=turn).first()
-    else:
-        vote = Vote.query.filter_by(voter=voter).filter_by(turn=turn).filter_by(role=role).first()
+    vote = Vote.query.filter_by(voter=voter).filter_by(turn=turn).filter_by(role=role).first()
     if vote is None:
-        role_name = None
-        if role is not None:
-            role_name = role.name
         vote = Vote(turn=turn, choice=choice, voter=voter, game=game, role=role)
     else:
         vote.choice=choice
+    print("Voter:", vote.voter.id, "Choice: ", vote.choice.id, "Role: ", role)
     db.session.add(vote)
     db.session.commit()
 
 ## Counts up the votes and returns True if all votes are tallied
 def verify_everyone_voted(game, turn):
+    print("Did Everyone vote?")
     living_players = game.players.filter(Player.alive == True)
     living_players_special = living_players.join(Role).filter(Role.name != "Villager")
     player_votes_count = len(living_players.all()) + len(living_players_special.all())
     votes = game.votes.filter_by(turn = turn).all()
     if player_votes_count == len(votes):
+        print("Yes")
         return 1
     elif player_votes_count < len(votes):
+        print("Something went wrong")
         return 2 #Something went wrong
     else:
+        print("No")
         return 0
-
-
-def handle_turn(game, villager_vote, ww_vote = None):
-    villager_vote.alive = False
-    db.session.add(villager_vote)
-    bad_guys = game.players.filter_by(alive=True).join(Role).filter(Role.evil == True).all()
-    good_guys = game.players.filter_by(alive=True).join(Role).filter(Role.evil == False).all()
-    print(len(good_guys), len(bad_guys))
-    if len(bad_guys) == 0:
-        return "Villagers"
-    if len(bad_guys) >= len(good_guys):
-        return "Werewolves"
-    # for player in game.players:
-    #     player.current_vote = None
-        db.session.add(player)
-    db.session.commit()
-    return "NEXT_TURN"
-
-def get_villager_vote(players):
-    vote_count = []
-    living_players_voted = players.filter_by(alive=True).filter(Player.current_vote != None).all()
-    for player in living_players_voted:
-        vote_count.append(player.current_vote)
-    tally = Counter(vote_count).most_common(2)
-    if len(tally) < 2 or tally[0][1] > tally[1][1]:
-        return tally[0][0]
-    else:
-        return None
-    return living_players_voted
 
 @socketio.on_error()        # Handles the default namespace
 def error_handler(e):

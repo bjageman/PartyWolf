@@ -29,6 +29,6 @@ export const startGame = createAction('start a game after players have joined');
 
 export const setVote = createAction('make a vote');
 export const setVoteSuccess = createAction('succesfully made a vote');
-export const voteFinished = createAction('the votes are all tallied and a person is chosen')
 
+export const voteFinished = createAction('the votes are all tallied and a person is chosen')
 export const gameFinished = createAction('the game is finished!')

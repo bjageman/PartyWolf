@@ -34,8 +34,9 @@ class PlayerList extends Component {
       return(
         <View>
           <Text>ID: {player.id} / {player.alive ? 'ALIVE' : 'DEAD'}</Text>
-          <Text>{player.role && player.role.name+ "( " + player.role.id + " ) / " + player.role.avatar } / { player.role && player.role.evil ? "EVIL" : "GOOD" } </Text>
-        </View>
+          <Text>{player.role && player.role.name+ "( " + player.role.id + " ) / " + player.role.avatar } / { player.role && player.role.evil ? "EVIL" : "GOOD" }</Text>
+          <Text>{player.votes.default} / {player.votes.Werewolf} / {player.votes.Seer}</Text>
+    </View>
       )
   }
 

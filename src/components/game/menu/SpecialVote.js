@@ -13,14 +13,6 @@ import RouteButton from '../../toolkit/RouteButton'
 
 class SpecialVote extends Component {
 
-  renderDebug(){
-      const result = this.props.votes_result || null
-
-      return(
-          <Text>Voted:{result ? result.user.username : null}</Text>
-      )
-  }
-
   render() {
     const players = this.props.game ? this.props.game.players : []
     const role = this.props.user.player.role
@@ -28,7 +20,6 @@ class SpecialVote extends Component {
         return (
           <View style={styles.outerContainer}>
             <Text h4>{role.name} Vote!</Text>
-            {this.renderDebug()}
             <PlayerList
                 players={players}
                 aliveOnly={true}

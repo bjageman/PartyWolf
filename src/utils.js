@@ -2,6 +2,7 @@ import * as actionCreators from './actions';
 import { bindActionCreators } from 'redux';
 
 export function mapStateToProps(state) {
+  console.log("mapping props")
   props = {
     user: state.user.data,
     game: state.game.data,
@@ -9,6 +10,7 @@ export function mapStateToProps(state) {
     votes_result: state.game.votes_result,
     winner: state.game.winner,
   }
+  console.log("props mapped")
   if (props.game != null && props.user != null) {
     var player = props.game.players.find(function(player){return player.user.id === props.user.id;});
     if (player != null) {
@@ -16,6 +18,8 @@ export function mapStateToProps(state) {
     }
 
   }
+  console.log("returning props")
+
   return props
 }
 

@@ -53,12 +53,15 @@ function subscribe(socket) {
       emit(assignRolesSuccess({ game }));
       Actions['roleAssign']({type: 'reset'})
     });
-    socket.on('vote_success', ({ game}) => {
+    socket.on('vote_success', ({ game }) => {
       emit(setVoteSuccess({ game }));
     });
-    socket.on('vote_final', ({ results }) => {
-      emit(voteFinished({ results }));
+    socket.on('vote_final', ({ results, game }) => {
+      console.log("VOTE FINAL!!")
+      emit(voteFinished({ results, game }));
+      console.log("EMITTED!")
       Actions['turnResults']({type: 'reset'})
+      console.log("Changed scene!")
     });
     socket.on('game_final', ({ result }) => {
       emit(gameFinished({ result }));
@@ -71,7 +74,7 @@ function subscribe(socket) {
   });
 }
 
-function* read(socket) {
+function* readSockets(socket) {
   const channel = yield call(subscribe, socket);
   while (true) {
     let action = yield take(channel);
@@ -115,7 +118,7 @@ function* setVoteEmit(socket) {
 }
 
 function* handleIO(socket) {
-  yield fork(read, socket);
+  yield fork(readSockets, socket);
   yield fork(getGamesEmit, socket);
   yield fork(createGameEmit, socket);
   yield fork(addPlayerEmit, socket);

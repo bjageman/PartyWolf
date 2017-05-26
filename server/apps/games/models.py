@@ -17,6 +17,7 @@ class Game(db.Model):
     winner = db.Column(db.String(32))
     creator_id = db.Column(db.Integer, db.ForeignKey('user.id'))
     creator = db.relationship('User', backref=db.backref('games', lazy='dynamic'))
+    current_turn = db.Column(db.Integer, default=1)
 
 class Player(db.Model):
     __tablename__ = 'player'
