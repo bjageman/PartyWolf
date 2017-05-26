@@ -36,7 +36,9 @@ function subscribe(socket) {
       emit(getUserSuccess({ user }));
     });
     socket.on('get_games_success', ({ games }) => {
+      console.log("Got Games")
       emit(getGamesSuccess({ games }));
+      console.log("Emitted")
     });
     socket.on('create_game_success', ({ game }) => {
       emit(createGameSuccess({ game }));
@@ -57,11 +59,8 @@ function subscribe(socket) {
       emit(setVoteSuccess({ game }));
     });
     socket.on('vote_final', ({ results, game }) => {
-      console.log("VOTE FINAL!!")
       emit(voteFinished({ results, game }));
-      console.log("EMITTED!")
       Actions['turnResults']({type: 'reset'})
-      console.log("Changed scene!")
     });
     socket.on('game_final', ({ result }) => {
       emit(gameFinished({ result }));

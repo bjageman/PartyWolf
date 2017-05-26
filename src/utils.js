@@ -6,11 +6,13 @@ export function mapStateToProps(state) {
   props = {
     user: state.user.data,
     game: state.game.data,
-    public_listing: state.game.public_listing,
     votes_result: state.game.votes_result,
     winner: state.game.winner,
   }
-  console.log("props mapped")
+  if (state.game.public_listing && state.game.public_listing.length > 0){
+    props.public_listing = state.game.public_listing
+  }
+
   if (props.game != null && props.user != null) {
     var player = props.game.players.find(function(player){return player.user.id === props.user.id;});
     if (player != null) {

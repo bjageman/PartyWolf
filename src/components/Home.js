@@ -23,7 +23,7 @@ class PlaceHolderTitle extends Component {
           return(
               <View>
                   <Text>{this.props.user.username}</Text>
-                  <Text>{this.props.public_listing ? this.props.public_listing[0].code : "NO GAME"}</Text>
+                  <Text>{this.props.public_listing && this.props.public_listing.length > 0 ? this.props.public_listing[0].code : "NO GAME"}</Text>
               </View>
           )
       }
