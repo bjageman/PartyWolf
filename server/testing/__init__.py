@@ -28,7 +28,7 @@ class TestingBase(unittest.TestCase):
         game = Game(code="TESTCODE")
         self.db.session.add(game)
         for i in roles:
-            role = Role(name=i['name'], evil=i['evil'])
+            role = Role(name=i['name'], avatar=i['avatar'], evil=i['evil'])
             self.db.session.add(role)
         self.db.session.commit()
         for i in range(15):
@@ -37,6 +37,8 @@ class TestingBase(unittest.TestCase):
             self.db.session.add(user)
             if i < 2:
                 role = Role.query.get(1)
+            elif i == 3:
+                role = Role.query.get(3)
             else:
                 role = Role.query.get(2)
             if i < 10:
@@ -58,6 +60,7 @@ class TestingBase(unittest.TestCase):
     def tearDown(self):
         self.socketio.disconnect()
         self.db.session.expunge_all()
+        self.db.session.flush()
         self.db.session.remove()
         self.db.session.close()
         self.db.drop_all()

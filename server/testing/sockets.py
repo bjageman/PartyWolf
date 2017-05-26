@@ -2,6 +2,8 @@ from . import WWTesting
 from apps.games.models import Game, Player, Role, Vote
 from apps.users.models import User
 
+import json
+
 class SocketTests(WWTesting):
 
     def connect(self):
@@ -29,7 +31,7 @@ class SocketTests(WWTesting):
 
         })
         response = self.socketio.get_received()
-        latest_response = response[-1]['args'][0]
+        latest_response = responchoice_idse[-1]['args'][0]
         assert latest_response['game']['creator']['id'] == user_id
         assert len(latest_response['game']['players']) == 1
         assert latest_response['game']['players'][0]['user']['id'] == user_id
@@ -44,11 +46,67 @@ class SocketTests(WWTesting):
             });
         response = self.socketio.get_received()
         latest_response = response[-1]['args'][0]
-        print(latest_response['results'])
-        assert latest_response['game']['players'][4]['id'] == 5
-        assert latest_response['game']['players'][4]['votes'] == 1
-        assert latest_response['game']['players'][3]['votes'] == 0
+        assert latest_response['game']['players'][choice_id - 1]['id'] == choice_id
+        assert latest_response['game']['players'][choice_id -1]['votes']['default'] == 1
+        assert 'werewolf' not in latest_response['game']['players'][4]['votes']
+        assert len(latest_response['game']['players'][3]['votes']) == 0
 
+    def test_special_vote(self):
+        voter_id = 1
+        choice_id = 5
+        role_id = 1
+        role_name = "Werewolf"
+        self.socketio.connect()
+        self.socketio.emit('set_vote',{
+            "voter_id": voter_id,
+            "choice_id": choice_id,
+            "role_id": role_id,
+            });
+        response = self.socketio.get_received()
+        latest_response = response[-1]['args'][0]
+        assert latest_response['game']['players'][choice_id - 1]['id'] == choice_id
+        assert latest_response['game']['players'][choice_id -1]['votes'][role_name] == 1
+        assert 'werewolf' not in latest_response['game']['players'][4]['votes']
+        assert len(latest_response['game']['players'][3]['votes']) == 0
+
+    def vote_full_turn(self):
+        self.socketio.connect()
+        villager_target = 1
+        ww_target = 2
+        seer_target = 5
+        game = self.db.session.query(Game).filter_by(code="TESTCODE").join(Player).first()
+        players = self.db.session.query(Player).filter_by(game=game).join(Role).all()
+        player_set = []
+        for player in players:
+            player_set.append({
+                "voter_id" : player.id,
+                "role_id" : player.role.id,
+                "role_name" : player.role.name
+                })
+        for counter, player in enumerate(player_set):
+            self.socketio.emit('set_vote',{
+                "voter_id": player["voter_id"],
+                "choice_id": villager_target,
+                });
+            if player["role_name"] == "Werewolf":
+                self.socketio.emit('set_vote',{
+                    "voter_id": player["voter_id"],
+                    "choice_id": ww_target,
+                    "role_id": player["role_id"],
+                    });
+            if player["role_name"] == "Seer":
+                self.socketio.emit('set_vote',{
+                    "voter_id": player["voter_id"],
+                    "choice_id": seer_target,
+                    "role_id": player["role_id"],
+                    });
+        response = self.socketio.get_received()
+        # print(json.dumps(response, sort_keys=True, indent=4, separators=(',', ': ')))
+        latest_response = response[-1]['args'][0]
+        print(json.dumps(latest_response, sort_keys=True, indent=4, separators=(',', ': ')))
+        assert latest_response['results']['default']['user']['id'] == villager_target
+        assert latest_response['results']['Werewolf']['user']['id'] == ww_target
+        assert latest_response['results']['Seer']['user']['id'] == seer_target
 
     def add_user(self):
         game_id = 1

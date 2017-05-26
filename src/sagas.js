@@ -56,8 +56,8 @@ function subscribe(socket) {
     socket.on('vote_success', ({ game}) => {
       emit(setVoteSuccess({ game }));
     });
-    socket.on('vote_final', ({ result }) => {
-      emit(voteFinished({ result }));
+    socket.on('vote_final', ({ results }) => {
+      emit(voteFinished({ results }));
       Actions['turnResults']({type: 'reset'})
     });
     socket.on('game_final', ({ result }) => {

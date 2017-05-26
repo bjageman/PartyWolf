@@ -31,13 +31,25 @@ def parse_role(role):
         })
     return None
 
+def parse_votes_count(votes):
+    vote_count = {}
+    for vote in votes:
+        if vote.role is None:
+            role = 'default'
+        else:
+            role = vote.role.name
+        if role not in vote_count:
+            vote_count[role] = 0
+        vote_count[role] = vote_count[role] + 1
+    return vote_count
+
 def parse_player(player):
     if player is not None:
         return ({
             "id": player.id,
             "user": parse_user(player.user),
             "role": parse_role(player.role),
-            "votes": len(player.voted_on),
+            "votes": parse_votes_count(player.voted_on),
             "alive": player.alive,
         })
     return None

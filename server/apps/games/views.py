@@ -98,12 +98,20 @@ def assign_roles(data):
 def set_vote(data):
     voter = Player.query.get(data['voter_id'])
     choice = Player.query.get(data['choice_id'])
+    try:
+        role = Role.query.get(data['role_id'])
+    except KeyError:
+        role = None
     game = voter.game
     turn = 1 #data['turn']
     results = {}
-    if verify_vote(voter, choice, turn):
-        save_vote(voter, choice, turn)
+    if verify_vote(voter, choice, turn, role):
+        save_vote(voter, choice, turn, role)
         join_room(voter.game.code)
+        emit('vote_success',
+            {
+            "game": parse_game(game),
+            }, room=game.code)
         if verify_everyone_voted(game, turn):
             votes = game.votes.filter_by(turn = turn)
             vote_roles = []
@@ -113,22 +121,32 @@ def set_vote(data):
             roles = Role.query.all()
             living_roles = [role for role in roles if role in vote_roles]
             for role in living_roles:
-                results[role] = parse_player(get_vote_result(votes, turn, role).choice)
-            results['default'] = parse_player(get_vote_result(votes, turn).choice)
-            print(results)
-        emit('vote_success',
-            {
-            "game": parse_game(game),
-            "results": results,
-            }, room=game.code)
+                result = get_vote_result(votes, turn, role)
+                if result is not None:
+                    results[role.name] = parse_player(result)
+            result = get_vote_result(votes, turn)
+            if result is not None:
+                results['default'] = parse_player(result)
+            if len(results) == (len(living_roles) + 1):
+                print("Emit final")
+                emit('vote_final',
+                    {
+                    "results": results,
+                    }, room=game.code)
 
+def vote_objects_to_ids(votes):
+    results = []
+    for vote in votes:
+        results.append(vote.choice.id)
+    return results
 
 def get_vote_result(votes, turn, role=None):
-    result = votes.filter(Vote.role == role)
+    result = vote_objects_to_ids(votes.filter(Vote.role == role).all())
     tally = Counter(result).most_common(2)
     #Ensure that a tie is not made
     if len(tally) < 2 or tally[0][1] > tally[1][1]:
-        return tally[0][0]
+        choice = Player.query.get(tally[0][0])
+        return choice
     else:
         return None
 
@@ -136,13 +154,25 @@ def verify_vote(voter, choice, turn, role = None):
     game = voter.game
     if voter.alive:
         if choice.alive:
-            return True
+            if role is not None:
+                if voter.role == role:
+                    return True
+                else:
+                    return False
+            else:
+                return True
     return False
 
 def save_vote(voter, choice, turn, role = None):
     game = voter.game
-    vote = Vote.query.filter_by(voter=voter).filter_by(turn=turn).first()
+    if role is None:
+        vote = Vote.query.filter_by(voter=voter).filter_by(turn=turn).first()
+    else:
+        vote = Vote.query.filter_by(voter=voter).filter_by(turn=turn).filter_by(role=role).first()
     if vote is None:
+        role_name = None
+        if role is not None:
+            role_name = role.name
         vote = Vote(turn=turn, choice=choice, voter=voter, game=game, role=role)
     else:
         vote.choice=choice
@@ -151,11 +181,10 @@ def save_vote(voter, choice, turn, role = None):
 
 ## Counts up the votes and returns True if all votes are tallied
 def verify_everyone_voted(game, turn):
-    living_players = game.players.filter_by(alive=True)
+    living_players = game.players.filter(Player.alive == True)
     living_players_special = living_players.join(Role).filter(Role.name != "Villager")
     player_votes_count = len(living_players.all()) + len(living_players_special.all())
     votes = game.votes.filter_by(turn = turn).all()
-    print("Living Players:", player_votes_count, "Votes so far: ", len(votes))
     if player_votes_count == len(votes):
         return 1
     elif player_votes_count < len(votes):

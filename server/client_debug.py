@@ -28,6 +28,8 @@ parser.add_option("--set", dest="add_set", type="int",
                   help="Adds X extra people after first user (requires --join-user)", metavar="NUM_PLAYERS")
 parser.add_option("-p", "--player", dest="player_id", type="int",
                   help="set the current player", metavar="PLAYER_ID")
+parser.add_option("--role", dest="role_id", type="int",
+                  help="set a special role (e.g. werewolf, seer) by ID", metavar="ROLE_ID")
 parser.add_option("-r", "--register-user", dest="register_user",
                   help="creates a new user with the password 'password'", metavar="USERNAME")
 parser.add_option("-u", "--user", dest="user_id", type="int",
@@ -73,12 +75,20 @@ def joinUser(game_id, user_id):
         "user_id": str(user_id),
         }, on_add_player_response)
 
-def votePlayer(voter_id, choice_id):
+def votePlayer(voter_id, choice_id, role_id = None):
     socketIO.on('vote_success', on_vote_success)
-    socketIO.emit('set_vote', {
-        "voter_id": voter_id,
-        "choice_id": choice_id
-    })
+    if role_id is None:
+        socketIO.emit('set_vote', {
+            "voter_id": voter_id,
+            "choice_id": choice_id,
+        })
+    else:
+        socketIO.emit('set_vote', {
+            "voter_id": voter_id,
+            "choice_id": choice_id,
+            "role_id": role_id,
+        })
+
 
 if __name__ == '__main__':
     app.config['SQLALCHEMY_DATABASE_URI'] = DATABASE
@@ -91,7 +101,7 @@ if __name__ == '__main__':
     register_user = options.register_user
     vote_id = options.vote_id
     player_id = options.player_id
-
+    role_id = options.role_id
     if options.setup:
         print("Creating Database...")
         db.create_all()
@@ -116,10 +126,10 @@ if __name__ == '__main__':
                         joinUser(game_id, join_user + 1 + i)
         if player_id is not None:
             if vote_id is not None:
-                votePlayer(player_id, vote_id)
+                votePlayer(player_id, vote_id, role_id)
                 if add_set is not None:
                     for i in range(add_set - 1):
-                        votePlayer(player_id + 1 + i, vote_id)
+                        votePlayer(player_id + 1 + i, vote_id, role_id)
 
         socketIO.wait(seconds=1)
         socketIO.on('disconnect', on_disconnect)

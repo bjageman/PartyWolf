@@ -33,6 +33,7 @@ class VillagerVote extends Component {
             players={players}
             aliveOnly={true}
             voting={true}
+            voteType='default'
             />
       </View>
     )
