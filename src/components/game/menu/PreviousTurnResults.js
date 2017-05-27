@@ -17,37 +17,48 @@ class PreviousTurnResults extends Component {
   }
 
   render() {
-    const username = this.props.username || ""
-    return (
-      <View style={styles.outerContainer}>
-        <ScrollView>
-            <Card title='Player(s) Hanged in the Day'>
-                <ListItem
-                    roundAvatar
-                    avatar={{uri:hanged_player.avatar_url}}
-                    title={hanged_player.name}
-                    hideChevron
-                    />
-            </Card>
-            <Card title='Player(s) Murdered in the Night'>
-                <ListItem
-                    roundAvatar
-                    avatar={{uri:murdered_player.avatar_url}}
-                    title={murdered_player.name}
-                    hideChevron
-                    />
-            </Card>
-        </ScrollView>
-        <Button
-            title="Continue..."
-            onPress={() => Actions.villagerVote({title: "Next Turn"})}
-            />
-        <Button
-            title="End Game"
-            onPress={() => Actions.finalResults()}
-            />
-      </View>
-    )
+    const results = this.props.votes_result
+    const dead_players = this.props.game.players.filter(function(player){return player.alive == false;})
+    if (results){
+        return (
+            <View style={styles.outerContainer}>
+                <ScrollView>
+                    <Card title='Player(s) Hanged in the Day'>
+                        <ListItem
+                            roundAvatar
+                            title={results.default.user.username}
+                            hideChevron
+                            />
+                    </Card>
+                    <Card title='Player(s) Murdered in the Night'>
+                        <ListItem
+                            roundAvatar
+                            title={results.Werewolf ? results.Werewolf.user.username : null}
+                            hideChevron
+                            />
+                    </Card>
+                    <Card title='Death Toll'>
+                    {
+                      dead_players.map((player, i) => (
+                             <ListItem
+                                 roundAvatar
+                                 key={player.id}
+                                 title={player.user.username}
+                                 hideChevron
+                                 />
+                         )
+                      )
+                    }
+                    </Card>
+                </ScrollView>
+            </View>
+        )
+    }else{
+        return(
+            <Text h4>No one's dead yet! Come back later</Text>
+        )
+    }
+
   }
 }
 

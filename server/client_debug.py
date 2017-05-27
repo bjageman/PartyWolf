@@ -112,7 +112,7 @@ if __name__ == '__main__':
         print(len(roles), "roles successfully created")
 
     #Run socket commands
-    with SocketIO('localhost', 5000) as socketIO:
+    with SocketIO('0.0.0.0', 5000) as socketIO:
         socketIO.on('connect', on_connect)
         if register_user is not None:
             registerPlayer(register_user)

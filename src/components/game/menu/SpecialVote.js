@@ -20,6 +20,7 @@ class SpecialVote extends Component {
         return (
           <View style={styles.outerContainer}>
             <Text h4>{role.name} Vote!</Text>
+            {role.name == "Seer" ? <Text>"SEER SIGHT"</Text>: null}
             <PlayerList
                 players={players}
                 aliveOnly={true}
