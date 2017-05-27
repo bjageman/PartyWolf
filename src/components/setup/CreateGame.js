@@ -11,6 +11,8 @@ import { Actions } from 'react-native-router-flux';
 import CreateGameInput from './create/CreateGameInput'
 import RouteButton from '../toolkit/RouteButton'
 
+import Config from 'react-native-config'
+
 
 class CreateGame extends Component {
   constructor(props){

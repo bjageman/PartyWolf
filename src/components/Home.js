@@ -8,6 +8,8 @@ import { connect } from 'react-redux';
 import { mapStateToProps, mapDispatchToProps } from '../utils'
 import { Actions } from 'react-native-router-flux';
 
+import Config from 'react-native-config'
+
 //Custom components
 import RouteButton from './toolkit/RouteButton'
 
@@ -56,6 +58,7 @@ class PlaceHolderTitle extends Component {
         return (
           <View style={styles.outerContainer}>
             <Text style={styles.introHeader} h3>Werewolf</Text>
+            <Text>VERSION: {Config.VERSION}</Text>
             <RouteButton
                 title="Login"
                 backgroundColor="green"

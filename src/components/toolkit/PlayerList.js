@@ -5,6 +5,7 @@ import { connect } from 'react-redux';
 
 import { mapStateToProps, mapDispatchToProps } from '../../utils';
 
+import Config from 'react-native-config'
 
 
 class PlayerList extends Component {
@@ -53,7 +54,7 @@ class PlayerList extends Component {
               roundAvatar
               key={player.id}
               title={player.user.username}
-              subtitle={this.renderDebug(player)}
+              subtitle={Config.DEBUG_OUTPUT == "true" && this.renderDebug(player)}
               badge={ voting ? { value: player.votes[this.props.voteType]} : null }
               hideChevron
               onPress={voting ? () => this.handleVote(player, role_id): null}
