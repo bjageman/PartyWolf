@@ -17,7 +17,7 @@ import { postDataApi, fetchDataApi, verifyData } from './api'
 
 
 function connect() {
-  const socket = io('http://10.0.2.2:5000');
+  const socket = io('http://192.168.1.111:5000');
   return new Promise(resolve => {
     socket.on('connect', () => {
       resolve(socket);
