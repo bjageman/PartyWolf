@@ -32,13 +32,21 @@ class PlayerList extends Component {
   }
 
   renderDebug(player){
-      return(
-        <View>
-          <Text>ID: {player.id} / {player.alive ? 'ALIVE' : 'DEAD'}</Text>
-          <Text>{player.role && player.role.name+ "( " + player.role.id + " ) / " + player.role.avatar } / { player.role && player.role.evil ? "EVIL" : "GOOD" }</Text>
-          <Text>{player.votes.default} / {player.votes.Werewolf} / {player.votes.Seer}</Text>
-    </View>
-      )
+      if (Config.DEBUG_OUTPUT == "true") {
+          return(
+            <View>
+              <Text>ID: {player.id} / {player.alive ? 'ALIVE' : 'DEAD'}</Text>
+              <Text>{player.role && player.role.name+ "( " + player.role.id + " ) / " + player.role.avatar } / { player.role && player.role.evil ? "EVIL" : "GOOD" }</Text>
+              <Text>{player.votes.default} / {player.votes.Werewolf} / {player.votes.Seer}</Text>
+            </View>
+          )
+      }else{
+          return(
+            <View>
+            </View>
+          )
+      }
+
   }
 
   render() {
@@ -54,7 +62,7 @@ class PlayerList extends Component {
               roundAvatar
               key={player.id}
               title={player.user.username}
-              subtitle={Config.DEBUG_OUTPUT == "true" && this.renderDebug(player)}
+              subtitle={this.renderDebug(player)}
               badge={ voting ? { value: player.votes[this.props.voteType]} : null }
               hideChevron
               onPress={voting ? () => this.handleVote(player, role_id): null}

@@ -15,9 +15,11 @@ import {
 import {Actions} from 'react-native-router-flux'
 import { postDataApi, fetchDataApi, verifyData } from './api'
 
+import Config from 'react-native-config'
+
 
 function connect() {
-  const socket = io('http://192.168.1.111:5000');
+  const socket = io(Config.API_URL);
   return new Promise(resolve => {
     socket.on('connect', () => {
       resolve(socket);
@@ -144,6 +146,7 @@ function* registerUser() {
         try{
           let { payload } = yield take(`${register}`);
           let data = {"username": payload.username, "password": payload.password }
+          console.log(data)
           const response = yield call(postDataApi, 'users', data);
           if (verifyData(response)) {
               registerSuccess(response.data)

@@ -21,7 +21,7 @@ class SpecialVote extends Component {
         return (
           <View style={styles.outerContainer}>
             <Text h4>{role.name} Vote!</Text>
-            {role.name == "Seer" ? <Text>SIGHT: {seer_sight.user.username} is a {seer_sight.role.name}</Text>: null}
+            {role.name == "Seer" && seer_sight != null ? <Text>SIGHT: {seer_sight.user.username} is a {seer_sight.role.name}</Text>: null}
             <PlayerList
                 players={players}
                 aliveOnly={true}

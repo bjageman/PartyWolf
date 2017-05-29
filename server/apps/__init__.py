@@ -15,6 +15,7 @@ app.config['SQLALCHEMY_COMMIT_ON_TEARDOWN'] = True
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
 app.config['JWT_EXPIRATION_DELTA'] = timedelta(hours=24)
+
 db = SQLAlchemy(app)
 db.init_app(app)
 #Web Socket
