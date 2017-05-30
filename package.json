@@ -4,17 +4,21 @@
   "private": true,
   "scripts": {
     "start": "node node_modules/react-native/local-cli/cli.js start",
+    "web": "react-scripts start",
     "test": "jest"
   },
   "dependencies": {
     "axios": "^0.16.1",
-    "react": "^15.5.4",
+    "react": "^15",
+    "react-dom": "^15.5.4",
     "react-native": "^0.42.3",
     "react-native-config": "^0.4.2",
     "react-native-elements": "^0.10.3",
     "react-native-router-flux": "3.38.0",
     "react-native-vector-icons": "^4.0.1",
     "react-redux": "^5.0.3",
+    "react-router": "^4.1.1",
+    "react-router-dom": "^4.1.1",
     "redux": "^3.6.0",
     "redux-act": "^1.2.0",
     "redux-logger": "^3.0.1",
@@ -27,7 +31,8 @@
     "babel-preset-stage-3": "^6.24.1",
     "jest": "19.0.2",
     "react-test-renderer": "~15.4.1",
-    "remote-redux-devtools": "^0.5.7"
+    "remote-redux-devtools": "^0.5.7",
+    "react-scripts": "1.0.7"
   },
   "jest": {
     "preset": "react-native"
