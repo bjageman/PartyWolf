@@ -19,6 +19,13 @@ class CreateGame extends Component {
       super(props);
   }
 
+  componentDidUpdate(prevProps, prevState){
+      console.log("prevProps: " + prevProps)
+      if (this.props.game != null) {
+          Actions['waitingRoom']()
+      }
+  }
+
   render() {
     code = this.props.game ? this.props.game.code : null
     if (this.props.user != null){

@@ -17,6 +17,14 @@ class Login extends Component {
       super(props);
   }
 
+  componentDidUpdate(prevProps, prevState){
+      console.log("prevProps: " + prevProps)
+      if (this.props.user != null) {
+          Actions['home']({type: 'reset'})
+      }
+  }
+
+
   render() {
     const username = this.props.username || ""
     return (

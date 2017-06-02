@@ -1,9 +1,12 @@
 import React, { Component } from 'react';
-import { Router, Scene } from 'react-native-router-flux';
-import { connect } from 'react-redux'
+import { Router, Scene, Actions } from 'react-native-router-flux';
+import { connect, dispatch } from 'react-redux'
 import { Icon } from 'react-native-elements'
 
 import { mapStateToProps, mapDispatchToProps } from '../redux/utils'
+
+import store from '../redux/store';
+import { quitGame } from '../redux/actions';
 
 import { default as Home } from './components/Home'
 import { default as Login } from './components/users/Login'
@@ -30,21 +33,30 @@ const TabIcon = ({ selected, title, iname}) => {
     )
 }
 
+
 class App extends Component {
+    cancelGame(){
+        console.log("Exiting game")
+        store.dispatch(quitGame())
+        Actions.home({type:"reset"})
+    }
+
   render() {
     return (
       <Router initial="landing">
         <Scene key="root">
             <Scene key="home" component={Home} title="Werewolf Home" initial={true} />
-            <Scene key="login" component={Login} title="Login" />
-            <Scene key="registration" component={Registration} title="Registration" />
+            <Scene key="users" tabs={true} style={{backgroundColor: "white"}}>
+                <Scene key="login" component={Login} title="Login" />
+                <Scene key="registration" component={Registration} title="Registration" />
+            </Scene>
             <Scene key="createGame" component={CreateGame} title="Create Game" />
             <Scene key="joinGame" component={JoinGame} title="Join Game"  />
-            <Scene key="waitingRoom" component={WaitingRoom} title="Waiting For Players"  />
-            <Scene key="menu" tabs={true} style={{backgroundColor: "white"}}>
-                <Scene key="villagerVote" component={VillagerVote} title="Vote on Culprit" iname="home" icon={TabIcon}  />
-                <Scene key="specialVote" component={SpecialVote} title="Vote on 'Culprit'" iname="stars" icon={TabIcon} />
-                <Scene key="previousTurnResults" component={PreviousTurnResults} title="Death Toll" iname="sentiment-very-dissatisfied" icon={TabIcon} />
+            <Scene key="waitingRoom" component={WaitingRoom} title="Waiting For Players" onBackAndroid={() => this.cancelGame()} onBack={() => this.cancelGame()}  />
+            <Scene key="menu" tabs={true} style={{backgroundColor: "white"}} >
+                <Scene key="villagerVote" component={VillagerVote} title="Vote on Culprit" iname="home" icon={TabIcon} rightTitle="Quit" onRight={() => this.cancelGame()} />
+                <Scene key="specialVote" component={SpecialVote} title="Vote on 'Culprit'" iname="stars" icon={TabIcon} rightTitle="Quit" onRight={() => this.cancelGame()} />
+                <Scene key="previousTurnResults" component={PreviousTurnResults} title="Death Toll" iname="sentiment-very-dissatisfied" icon={TabIcon} rightTitle="Quit" onRight={() => this.cancelGame()} />
             </Scene>
             <Scene key="turnResults" component={TurnResults} title="Results"/>
             <Scene key="finalResults" component={FinalResults} title="Game Over!"/>

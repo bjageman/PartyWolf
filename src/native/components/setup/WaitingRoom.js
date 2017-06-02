@@ -1,7 +1,8 @@
 import React, { Component } from 'react';
 import {
   View,
-  StyleSheet
+  StyleSheet,
+  BackAndroid
 } from 'react-native'
 import { Text, Button, List } from 'react-native-elements'
 import { connect } from 'react-redux';
@@ -16,6 +17,13 @@ class WaitingRoom extends Component {
   constructor(props){
       super(props);
       this.handleSubmit = this.handleSubmit.bind(this)
+  }
+
+  componentDidUpdate(prevProps, prevState){
+      console.log("prevProps: " + prevProps)
+      if (this.props.user.player != null) {
+          Actions['roleAssign']({type: 'reset'})
+      }
   }
 
   handleSubmit(e){

@@ -17,6 +17,13 @@ class JoinGame extends Component {
       this.getGamesListing = this.getGamesListing.bind(this)
   }
 
+  componentDidUpdate(prevProps, prevState){
+      console.log("prevProps: " + prevProps)
+      if (this.props.game != null) {
+          Actions['waitingRoom']()
+      }
+  }
+
   componentDidMount(){
       this.getGamesListing()
   }

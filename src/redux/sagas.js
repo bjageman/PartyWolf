@@ -14,11 +14,10 @@ import {
 } from './actions';
 import { postDataApi, fetchDataApi, verifyData } from './api'
 
-//import Config from 'react-native-config'
-
+url = "http://10.0.2.2:5000"
 
 function connect() {
-  const socket = io("127.0.0.1:5000");
+  const socket = io(url);
   return new Promise(resolve => {
     socket.on('connect', () => {
       resolve(socket);
@@ -31,7 +30,6 @@ function subscribe(socket) {
   return eventChannel(emit => {
     socket.on('user_login_success', ({ user }) => {
       emit(loginSuccess({ user }));
-      //Actions['home']({type: 'reset'})
     });
     socket.on('get_user_success', ({ user }) => {
       emit(getUserSuccess({ user }));
@@ -43,14 +41,12 @@ function subscribe(socket) {
     });
     socket.on('create_game_success', ({ game }) => {
       emit(createGameSuccess({ game }));
-      //Actions['waitingRoom']()
     });
     socket.on('add_player_success', ({ game }) => {
       emit(addPlayerSuccess({ game }));
     });
     socket.on('join_game_success', ({game}) => {
       emit(joinGameSuccess({ game }));
-      //Actions['waitingRoom']()
     });
     socket.on('assign_roles_success', ({ game }) => {
       emit(assignRolesSuccess({ game }));
@@ -75,11 +71,16 @@ function subscribe(socket) {
 }
 
 function* readSockets(socket) {
-  const channel = yield call(subscribe, socket);
-  while (true) {
-    let action = yield take(channel);
-    yield put(action);
+  try{
+    const channel = yield call(subscribe, socket);
+    while (true) {
+      let action = yield take(channel);
+      yield put(action);
+    }
+  }catch(err){
+    console.log("readSockets ERROR: " + err)
   }
+
 }
 
 function* getGamesEmit(socket) {
@@ -148,6 +149,7 @@ function* registerUser() {
           console.log(data)
           const response = yield call(postDataApi, 'users', data);
           if (verifyData(response)) {
+              redirect = "home"
               registerSuccess(response.data)
               //Actions['home']()
             }

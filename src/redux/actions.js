@@ -26,6 +26,8 @@ export const assignRoles = createAction('assign roles to all players')
 export const assignRolesSuccess = createAction('Roles were succesfully assigned')
 
 export const startGame = createAction('start a game after players have joined');
+export const quitGame = createAction('quit the game');
+
 
 export const setVote = createAction('make a vote');
 export const setVoteSuccess = createAction('succesfully made a vote');

@@ -1,7 +1,9 @@
 import axios from 'axios';
 
+url = "http://10.0.2.2:5000"
+
 var axiosRequest = axios.create({
-  baseURL: "127.0.0.1:5000",
+  baseURL: url,
   timeout: 2000,
   headers: {
       'Content-Type': 'application/json',

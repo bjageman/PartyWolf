@@ -13,6 +13,13 @@ import RouteButton from '../../toolkit/RouteButton'
 
 class SpecialVote extends Component {
 
+  componentDidUpdate(prevProps, prevState){
+      console.log("prevProps: " + prevProps)
+      if (this.props.votes_result != null) {
+          Actions['turnResults']({type: 'reset'})
+      }
+  }
+
   render() {
     const players = this.props.game ? this.props.game.players : []
     const role = this.props.user.player.role

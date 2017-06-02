@@ -52,6 +52,11 @@ class PlaceHolderTitle extends Component {
                 backgroundColor="cyan"
                 route={() => Actions.joinGame()}
                 />
+            <Button
+                title="Log Out"
+                backgroundColor="red"
+                onPress = {() => this.props.logout()}
+                />
           </View>
         )
     }else{
@@ -62,7 +67,7 @@ class PlaceHolderTitle extends Component {
             <RouteButton
                 title="Login"
                 backgroundColor="green"
-                route={() => Actions.login()}
+                route={() => Actions.users()}
                 />
             <RouteButton
                 title="Register"

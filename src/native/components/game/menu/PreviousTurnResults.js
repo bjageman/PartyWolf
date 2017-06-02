@@ -14,6 +14,17 @@ class PreviousTurnResults extends Component {
       super(props);
   }
 
+
+  componentDidUpdate(prevProps, prevState){
+      console.log("prevProps: " + prevProps)
+      if (this.props.winner != null){
+          Actions['finalResults']({type: 'reset'})
+      }
+      else if (this.props.votes_result != null) {
+          Actions['turnResults']({type: 'reset'})
+      }
+  }
+
   render() {
     const results = this.props.votes_result
     const dead_players = this.props.game.players.filter(function(player){return player.alive == false;})
