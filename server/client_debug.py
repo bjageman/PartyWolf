@@ -87,6 +87,11 @@ def votePlayer(voter_id, choice_id, role_id = None):
             "role_id": role_id,
         })
 
+def setPlayerRole(player_id, role_id):
+    socketIO.emit('admin_set_role', {
+        "player_id": player_id,
+        "role_id": role_id,
+    })
 
 if __name__ == '__main__':
     app.config['SQLALCHEMY_DATABASE_URI'] = DATABASE

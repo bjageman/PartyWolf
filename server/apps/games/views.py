@@ -125,9 +125,69 @@ def set_vote(data):
                         "result": winner,
                         }, room=game.code)
 
+def delete_game(game):
+    print("Deleting game")
+    game_id = game.id
+    game_code = game.code
+    db.session.delete(game)
+    db.session.commit()
+    emit('delete_game_success',
+    {
+        "deleted": game_id,
+    }, room=game_code)
 
-
+@socketio.on('quit_player')
+def quit_player(data):
+    player = Player.query.get(data['player_id'])
+    game = player.game
+    join_room(game.code)
+    if player.user == game.creator and game.closed is not True:
+        delete_game(game)
+    else:
+        player.alive = False
+        db.session.add(player)
+        db.session.commit()
+        winner = determine_winner(game)
+        emit('quit_player_success',
+        {
+            "game": parse_game(game),
+            "quitter": parse_player(player)
+        }, room=game.code)
+        if winner is not None:
+            emit('game_final',
+                {
+                "result": winner,
+                }, room=game.code)
 
 @socketio.on_error()        # Handles the default namespace
 def error_handler(e):
     emit('error', {'error': e})
+
+
+
+###
+# Admin Tools
+###
+
+#IMPLEMENT LATER
+def is_admin(admin_id, password):
+    user = User.query.get(admin_id)
+    if user.admin and user.verify_password(password):
+        return True
+
+
+@socketio.on('admin_set_role')
+def admin_set_role(data):
+    player = Player.query.get(data['player_id'])
+    if is_admin(data['admin_id'], data['password']):
+        role = Role.query.get(data['role_id'])
+        game = player.game
+        join_room(game.code)
+        player.role = role
+        db.session.add(player)
+        db.session.commit()
+        emit('admin_set_role_success',
+             {
+             "game": parse_game(game),
+             "player": parse_player(player)
+             }, room=game.code)

@@ -34,6 +34,8 @@ class TestingBase(unittest.TestCase):
         for i in range(15):
             user = User(username="TestUser" + str(i))
             user.hash_password("password")
+            if i == 0:
+                user.admin = True
             self.db.session.add(user)
             if i < 2:
                 role = Role.query.get(1)

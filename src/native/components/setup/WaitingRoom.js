@@ -20,8 +20,8 @@ class WaitingRoom extends Component {
   }
 
   componentDidUpdate(prevProps, prevState){
-      console.log("prevProps: " + prevProps)
       if (this.props.user.player != null) {
+          console.log("Go TO roleAssign")
           Actions['roleAssign']({type: 'reset'})
       }
   }

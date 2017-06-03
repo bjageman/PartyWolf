@@ -20,7 +20,6 @@ class CreateGame extends Component {
   }
 
   componentDidUpdate(prevProps, prevState){
-      console.log("prevProps: " + prevProps)
       if (this.props.game != null) {
           Actions['waitingRoom']()
       }

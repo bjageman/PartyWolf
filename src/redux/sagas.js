@@ -10,7 +10,8 @@ import {
   createGame, createGameSuccess,
   addPlayerSuccess, joinGameSuccess,
   assignRoles, assignRolesSuccess,
-  setVote, setVoteSuccess, voteFinished, gameFinished
+  setVote, setVoteSuccess, voteFinished, gameFinished,
+  quitGame, quitGameSuccess
 } from './actions';
 import { postDataApi, fetchDataApi, verifyData } from './api'
 
@@ -97,6 +98,13 @@ function* createGameEmit(socket) {
   }
 }
 
+function* quitGameEmit(socket) {
+  while (true) {
+    const { payload } = yield take(`${quitGame}`);
+    socket.emit('quit_player', payload);
+  }
+}
+
 function* addPlayerEmit(socket) {
   while (true) {
     const { payload } = yield take(`${addPlayer}`);
@@ -122,6 +130,7 @@ function* handleIO(socket) {
   yield fork(readSockets, socket);
   yield fork(getGamesEmit, socket);
   yield fork(createGameEmit, socket);
+  yield fork(quitGameEmit, socket);
   yield fork(addPlayerEmit, socket);
   yield fork(assignRolesEmit, socket);
   yield fork(setVoteEmit, socket);

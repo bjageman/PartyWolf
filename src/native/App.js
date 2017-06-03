@@ -37,8 +37,14 @@ const TabIcon = ({ selected, title, iname}) => {
 class App extends Component {
     cancelGame(){
         console.log("Exiting game")
-        store.dispatch(quitGame())
+        if (this.props.user.player != null) {
+            store.dispatch(quitGame({
+                "player_id": this.props.user.player.id
+            }))
+        }
+
         Actions.home({type:"reset"})
+
     }
 
   render() {
@@ -53,6 +59,7 @@ class App extends Component {
             <Scene key="createGame" component={CreateGame} title="Create Game" />
             <Scene key="joinGame" component={JoinGame} title="Join Game"  />
             <Scene key="waitingRoom" component={WaitingRoom} title="Waiting For Players" onBackAndroid={() => this.cancelGame()} onBack={() => this.cancelGame()}  />
+            <Scene key="roleAssign" component={RoleAssign} title="Your Role"  />
             <Scene key="menu" tabs={true} style={{backgroundColor: "white"}} >
                 <Scene key="villagerVote" component={VillagerVote} title="Vote on Culprit" iname="home" icon={TabIcon} rightTitle="Quit" onRight={() => this.cancelGame()} />
                 <Scene key="specialVote" component={SpecialVote} title="Vote on 'Culprit'" iname="stars" icon={TabIcon} rightTitle="Quit" onRight={() => this.cancelGame()} />
@@ -60,9 +67,6 @@ class App extends Component {
             </Scene>
             <Scene key="turnResults" component={TurnResults} title="Results"/>
             <Scene key="finalResults" component={FinalResults} title="Game Over!"/>
-
-            <Scene key="roleAssign" component={RoleAssign} title="Your Role"  />
-
         </Scene>
       </Router>
     )

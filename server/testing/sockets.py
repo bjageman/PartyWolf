@@ -36,7 +36,7 @@ class SocketTests(WWTesting):
         assert len(latest_response['game']['players']) == 1
         assert latest_response['game']['players'][0]['user']['id'] == user_id
 
-    def test_vote(self):
+    def vote(self):
         voter_id = 1
         choice_id = 5
         self.socketio.connect()
@@ -51,7 +51,7 @@ class SocketTests(WWTesting):
         assert 'werewolf' not in latest_response['game']['players'][4]['votes']
         assert len(latest_response['game']['players'][3]['votes']) == 0
 
-    def test_special_vote(self):
+    def special_vote(self):
         voter_id = 1
         choice_id = 5
         role_id = 1
@@ -130,3 +130,43 @@ class SocketTests(WWTesting):
         latest_response = response[-1]['args'][0]['game']
         #Need more thorough checks
         assert len(latest_response['players']) == 10
+
+    def test_player_quit(self):
+        game_id = 1
+        game = Game.query.get(game_id)
+        player = game.players.first()
+        player_id = player.id
+        self.socketio.connect()
+        self.socketio.emit('quit_player', {"player_id": player_id})
+        response = self.socketio.get_received()
+        quitter = response[-1]['args'][0]['quitter']
+        assert quitter['alive'] is not True
+        assert quitter['id'] == player_id
+
+    def test_admin_set_role(self):
+        admin_id = 1
+        game_id = 1
+        role_id = 3 #Seer
+        game = Game.query.get(game_id)
+        player = game.players.first()
+        player_id = player.id
+        self.socketio.connect()
+        self.socketio.emit('admin_set_role', {
+            "admin_id": admin_id,
+            "password": "password",
+            "player_id": player_id,
+            "role_id": role_id,
+            })
+        response = self.socketio.get_received()
+        player = response[-1]['args'][0]['player']
+        assert player['role']['id'] == role_id
+        new_role_id = 1
+        self.socketio.emit('admin_set_role', {
+            "admin_id": admin_id,
+            "password": "password",
+            "player_id": player_id,
+            "role_id": new_role_id,
+            })
+        response = self.socketio.get_received()
+        player = response[-1]['args'][0]['player']
+        assert player['role']['id'] == new_role_id
