@@ -10,7 +10,8 @@ import {
   addPlayerSuccess, assignRoles, assignRolesSuccess,
   startGame, removeUser,
   setVote, setVoteSuccess, voteFinished,
-  gameFinished, quitGame, quitGameSuccess
+  gameFinished, quitGame, quitGameSuccess,
+  gameUpdated
 } from './actions';
 
 const initial = {
@@ -54,29 +55,14 @@ const game = createReducer({
   [createGame]: (state, payload) => {
     return { ...state, user_id: payload.user_id, public: payload.public };
   },
-  [createGameSuccess]: (state, payload) => {
-    return { ...state, data: payload.game  };
-  },
   [addPlayer]: (state, payload) => {
     return { ...state, game_id: payload.game_id, user_id: payload.user_id };
-  },
-  [addPlayerSuccess]: (state, payload) => {
-    return { ...state, data: payload.game };
-  },
-  [joinGameSuccess]: (state, payload) => {
-    return { ...state, data: payload.game  };
   },
   [assignRoles]: (state, payload) => {
     return { ...state, game_id: payload.game_id };
   },
-  [assignRolesSuccess]: (state, payload) => {
-    return { ...state, data: payload.game  };
-  },
   [setVote]: (state, payload) => {
     return { ...state, voter_id: payload.voter_id, choice_id: payload.choice_id };
-  },
-  [setVoteSuccess]: (state, payload) => {
-    return { ...state, data: payload.game };
   },
   [voteFinished]: (state, payload) => {
     return { ...state, votes_result: payload.results, data: payload.game  };
@@ -86,7 +72,10 @@ const game = createReducer({
   },
   [quitGame]: (state, payload) => {
     return { ...state, data: null, winner: null, votes_result: null, player_id: payload.player_id}
-  }
+  },
+  [gameUpdated]: (state, payload) => {
+    return { ...state, data: payload.game  };
+  },
 }, initial.game);
 
 

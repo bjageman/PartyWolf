@@ -67,7 +67,7 @@ class PlaceHolderTitle extends Component {
             <RouteButton
                 title="Login"
                 backgroundColor="green"
-                route={() => Actions.users()}
+                route={() => Actions.login()}
                 />
             <RouteButton
                 title="Register"

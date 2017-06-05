@@ -14,6 +14,18 @@ from apps import socketio, db
 
 from .utils import *
 
+
+def send_game_update(game, room = None):
+    if room is not None:
+        join_room(game.code)
+        emit('game_updated',{
+            "game": parse_game(game),
+        }, room=room)
+    else:
+        emit('game_updated',{
+            "game": parse_game(game),
+        })
+
 @socketio.on('connect')
 def on_connect():
     send('connected')
@@ -43,10 +55,7 @@ def create_game(data):
         game = Game(code=randomCode(), creator=creator, public=public, current_turn=1)
         db.session.add(game)
         create_player(game, creator)
-        join_room(game.code)
-        emit('create_game_success',{
-            "game": parse_game(game),
-        }, room=game.code) #Won't need this for create_game
+        send_game_update(game, game.code)
 
 @socketio.on('add_player')
 def add_player(data):
@@ -60,12 +69,7 @@ def add_player(data):
         join_room(game.code)
         if user_exists is not True:
             create_player(game, user)
-        emit('join_game_success',{
-             "game": parse_game(game),
-             })
-        emit('add_player_success',{
-             "game": parse_game(game),
-             }, room=game.code)
+        send_game_update(game, game.code)
 
 @socketio.on('assign_roles')
 def assign_roles(data):
@@ -80,10 +84,7 @@ def assign_roles(data):
         db.session.add(game)
         db.session.commit()
         game.closed = True
-        emit('assign_roles_success',
-             {
-             "game": parse_game(game),
-             }, room=game.code)
+        send_game_update(game, game.code)
 
 @socketio.on('set_vote')
 def set_vote(data):
@@ -100,10 +101,7 @@ def set_vote(data):
     if verify_vote(voter, choice, turn, role):
         save_vote(voter, choice, turn, role)
         join_room(voter.game.code)
-        emit('vote_success',
-            {
-            "game": parse_game(game),
-            }, room=game.code)
+        send_game_update(game, game.code)
         if verify_everyone_voted(game, turn):
             results, num_roles = tally_all_votes(game, turn)
             if len(results) == num_roles:
@@ -119,6 +117,7 @@ def set_vote(data):
                     "results": results,
                     }, room=game.code)
                 winner = determine_winner(game)
+                print("Winner: ", winner)
                 if winner is not None:
                     emit('game_final',
                         {
@@ -164,12 +163,10 @@ def error_handler(e):
     emit('error', {'error': e})
 
 
-
 ###
 # Admin Tools
 ###
 
-#IMPLEMENT LATER
 def is_admin(admin_id, password):
     user = User.query.get(admin_id)
     if user.admin and user.verify_password(password):
@@ -186,6 +183,7 @@ def admin_set_role(data):
         player.role = role
         db.session.add(player)
         db.session.commit()
+        send_game_update(game, game.code)
         emit('admin_set_role_success',
              {
              "game": parse_game(game),

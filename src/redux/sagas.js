@@ -5,13 +5,13 @@ import {
   register, registerSuccess,
   login, loginSuccess, logout,
   addPlayer, removePlayer,
-  getUser, getUserSuccess,
-  getGames, getGamesSuccess,
-  createGame, createGameSuccess,
-  addPlayerSuccess, joinGameSuccess,
-  assignRoles, assignRolesSuccess,
-  setVote, setVoteSuccess, voteFinished, gameFinished,
-  quitGame, quitGameSuccess
+  getUser,
+  getGames,
+  createGame,
+  assignRoles, 
+  setVote, voteFinished, gameFinished,
+  quitGame, quitGameSuccess,
+  gameUpdated
 } from './actions';
 import { postDataApi, fetchDataApi, verifyData } from './api'
 
@@ -35,34 +35,14 @@ function subscribe(socket) {
     socket.on('get_user_success', ({ user }) => {
       emit(getUserSuccess({ user }));
     });
-    socket.on('get_games_success', ({ games }) => {
-      console.log("Got Games")
-      emit(getGamesSuccess({ games }));
-      console.log("Emitted")
-    });
-    socket.on('create_game_success', ({ game }) => {
-      emit(createGameSuccess({ game }));
-    });
-    socket.on('add_player_success', ({ game }) => {
-      emit(addPlayerSuccess({ game }));
-    });
-    socket.on('join_game_success', ({game}) => {
-      emit(joinGameSuccess({ game }));
-    });
-    socket.on('assign_roles_success', ({ game }) => {
-      emit(assignRolesSuccess({ game }));
-      //Actions['roleAssign']({type: 'reset'})
-    });
-    socket.on('vote_success', ({ game }) => {
-      emit(setVoteSuccess({ game }));
-    });
     socket.on('vote_final', ({ results, game }) => {
       emit(voteFinished({ results, game }));
-      //Actions['turnResults']({type: 'reset'})
     });
     socket.on('game_final', ({ result }) => {
       emit(gameFinished({ result }));
-      //Actions['finalResults']({type: 'reset'})
+    });
+    socket.on('game_updated', ({ game }) => {
+      emit(gameUpdated({ game }));
     });
     socket.on('disconnect', e => {
       // TODO: handle

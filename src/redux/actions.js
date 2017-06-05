@@ -34,3 +34,5 @@ export const setVoteSuccess = createAction('succesfully made a vote');
 
 export const voteFinished = createAction('the votes are all tallied and a person is chosen')
 export const gameFinished = createAction('the game is finished!')
+
+export const gameUpdated = createAction('the server sent an update for the current game')

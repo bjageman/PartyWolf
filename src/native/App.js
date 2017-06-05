@@ -52,10 +52,8 @@ class App extends Component {
       <Router initial="landing">
         <Scene key="root">
             <Scene key="home" component={Home} title="Werewolf Home" initial={true} />
-            <Scene key="users" tabs={true} style={{backgroundColor: "white"}}>
-                <Scene key="login" component={Login} title="Login" />
-                <Scene key="registration" component={Registration} title="Registration" />
-            </Scene>
+            <Scene key="login" component={Login} title="Login" />
+            <Scene key="registration" component={Registration} title="Registration" />
             <Scene key="createGame" component={CreateGame} title="Create Game" />
             <Scene key="joinGame" component={JoinGame} title="Join Game"  />
             <Scene key="waitingRoom" component={WaitingRoom} title="Waiting For Players" onBackAndroid={() => this.cancelGame()} onBack={() => this.cancelGame()}  />

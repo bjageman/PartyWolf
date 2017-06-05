@@ -14,6 +14,12 @@ class TurnResults extends Component {
       super(props);
   }
 
+  componentDidUpdate(prevProps, prevState){
+      if (this.props.winner != null) {
+          Actions['finalResults']()
+      }
+  }
+
   render() {
     const results = this.props.votes_result
     const dead_players = this.props.game.players.filter(function(player){return player.alive == false;})

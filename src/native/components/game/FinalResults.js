@@ -18,7 +18,7 @@ class FinalResults extends Component {
     const winner = this.props.winner || ""
     return (
       <View style={styles.outerContainer}>
-        <Text h3>{winner} win!</Text>
+        <Text h3>{winner} wins!</Text>
         <Image
           style={{width: 300, height: 400}}
           source={{uri: 'https://placekitten.com/g/300/400'}}
