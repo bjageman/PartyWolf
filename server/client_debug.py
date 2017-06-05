@@ -87,10 +87,13 @@ def votePlayer(voter_id, choice_id, role_id = None):
             "role_id": role_id,
         })
 
-def setPlayerRole(player_id, role_id):
+def setPlayerRole(player_id, role_id, admin_id = 1, password="pass"):
+    print("Setting player",player_id, "to role id", role_id )
     socketIO.emit('admin_set_role', {
         "player_id": player_id,
         "role_id": role_id,
+        "admin_id": admin_id,
+        "password": password
     })
 
 if __name__ == '__main__':
@@ -128,6 +131,8 @@ if __name__ == '__main__':
                     for i in range(add_set - 1):
                         joinUser(game_id, join_user + 1 + i)
         if player_id is not None:
+            if role_id is not None:
+                setPlayerRole(player_id, role_id)
             if vote_id is not None:
                 votePlayer(player_id, vote_id, role_id)
                 if add_set is not None:
