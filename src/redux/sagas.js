@@ -8,7 +8,7 @@ import {
   getUser,
   getGames,
   createGame,
-  assignRoles, 
+  assignRoles,
   setVote, voteFinished, gameFinished,
   quitGame, quitGameSuccess,
   gameUpdated
@@ -41,8 +41,8 @@ function subscribe(socket) {
     socket.on('game_final', ({ result }) => {
       emit(gameFinished({ result }));
     });
-    socket.on('game_updated', ({ game }) => {
-      emit(gameUpdated({ game }));
+    socket.on('game_updated', ({ game, votes, winner }) => {
+      emit(gameUpdated({ game, votes, winner }));
     });
     socket.on('disconnect', e => {
       // TODO: handle

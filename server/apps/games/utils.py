@@ -43,14 +43,12 @@ def determine_winner(game):
     return None
 
 def set_next_turn(game):
-    print("Going to next turn")
     game.current_turn = game.current_turn + 1
     db.session.add(game)
     db.session.commit()
     return True
 
 def kill_player(player):
-    print("Killing",player['id'])
     player = Player.query.get(player['id'])
     player.alive = False
     db.session.add(player)
@@ -112,23 +110,35 @@ def save_vote(voter, choice, turn, role = None):
         vote = Vote(turn=turn, choice=choice, voter=voter, game=game, role=role)
     else:
         vote.choice=choice
-    print("Voter:", vote.voter.id, "Choice: ", vote.choice.id, "Role: ", role)
     db.session.add(vote)
     db.session.commit()
 
 ## Counts up the votes and returns True if all votes are tallied
 def verify_everyone_voted(game, turn):
-    print("Did Everyone vote?")
     living_players = game.players.filter(Player.alive == True)
     living_players_special = living_players.join(Role).filter(Role.name != "Villager")
     player_votes_count = len(living_players.all()) + len(living_players_special.all())
     votes = game.votes.filter_by(turn = turn).all()
     if player_votes_count == len(votes):
-        print("Yes")
         return 1
     elif player_votes_count < len(votes):
         print("Something went wrong")
         return 2 #Something went wrong
     else:
-        print("No")
         return 0
+
+def handle_results(results):
+    if 'default' in results:
+        kill_player(results['default'])
+    if 'Werewolf' in results:
+        kill_player(results['Werewolf'])
+
+def delete_game(game):
+    game_id = game.id
+    game_code = game.code
+    db.session.delete(game)
+    db.session.commit()
+    emit('delete_game_success',
+    {
+        "deleted": game_id,
+    }, room=game_code)

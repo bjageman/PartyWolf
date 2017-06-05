@@ -37,11 +37,11 @@ class TestingBase(unittest.TestCase):
             if i == 0:
                 user.admin = True
             self.db.session.add(user)
-            if i < 2:
+            if i < 2: #Werewolves
                 role = Role.query.get(1)
-            elif i == 3:
+            elif i == 3: #Seer
                 role = Role.query.get(3)
-            else:
+            else: #Villagers
                 role = Role.query.get(2)
             if i < 10:
                 player = Player(game=game, user=user, role=role)

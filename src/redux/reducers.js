@@ -74,7 +74,7 @@ const game = createReducer({
     return { ...state, data: null, winner: null, votes_result: null, player_id: payload.player_id}
   },
   [gameUpdated]: (state, payload) => {
-    return { ...state, data: payload.game  };
+    return { ...state, data: payload.game, votes_result: payload.votes, winner: payload.winner  };
   },
 }, initial.game);
 

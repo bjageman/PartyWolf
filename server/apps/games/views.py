@@ -15,16 +15,10 @@ from apps import socketio, db
 from .utils import *
 
 
-def send_game_update(game, room = None):
-    if room is not None:
-        join_room(game.code)
-        emit('game_updated',{
-            "game": parse_game(game),
-        }, room=room)
-    else:
-        emit('game_updated',{
-            "game": parse_game(game),
-        })
+def send_game_update(game, data = {}):
+    data['game'] = parse_game(game)
+    join_room(game.code)
+    emit('game_updated', data, room=game.code)
 
 @socketio.on('connect')
 def on_connect():
@@ -55,7 +49,7 @@ def create_game(data):
         game = Game(code=randomCode(), creator=creator, public=public, current_turn=1)
         db.session.add(game)
         create_player(game, creator)
-        send_game_update(game, game.code)
+        send_game_update(game)
 
 @socketio.on('add_player')
 def add_player(data):
@@ -69,7 +63,7 @@ def add_player(data):
         join_room(game.code)
         if user_exists is not True:
             create_player(game, user)
-        send_game_update(game, game.code)
+        send_game_update(game)
 
 @socketio.on('assign_roles')
 def assign_roles(data):
@@ -84,7 +78,7 @@ def assign_roles(data):
         db.session.add(game)
         db.session.commit()
         game.closed = True
-        send_game_update(game, game.code)
+        send_game_update(game)
 
 @socketio.on('set_vote')
 def set_vote(data):
@@ -96,44 +90,20 @@ def set_vote(data):
         role = None
     game = voter.game
     turn = game.current_turn
-    print(turn)
-    results = {}
     if verify_vote(voter, choice, turn, role):
         save_vote(voter, choice, turn, role)
         join_room(voter.game.code)
-        send_game_update(game, game.code)
+        send_game_update(game)
         if verify_everyone_voted(game, turn):
             results, num_roles = tally_all_votes(game, turn)
-            if len(results) == num_roles:
-                print("Emit final")
-                if 'default' in results:
-                    kill_player(results['default'])
-                if 'Werewolf' in results:
-                    kill_player(results['Werewolf'])
+            if len(results) == num_roles: #Did all roles handle voting?
+                handle_results(results)
                 set_next_turn(game)
-                emit('vote_final',
-                    {
-                    "game": parse_game(game),
-                    "results": results,
-                    }, room=game.code)
                 winner = determine_winner(game)
-                print("Winner: ", winner)
                 if winner is not None:
-                    emit('game_final',
-                        {
-                        "result": winner,
-                        }, room=game.code)
-
-def delete_game(game):
-    print("Deleting game")
-    game_id = game.id
-    game_code = game.code
-    db.session.delete(game)
-    db.session.commit()
-    emit('delete_game_success',
-    {
-        "deleted": game_id,
-    }, room=game_code)
+                    send_game_update(game, {"winner": winner})
+                else:
+                    send_game_update(game, {"votes": results})
 
 @socketio.on('quit_player')
 def quit_player(data):
@@ -147,16 +117,9 @@ def quit_player(data):
         db.session.add(player)
         db.session.commit()
         winner = determine_winner(game)
-        emit('quit_player_success',
-        {
-            "game": parse_game(game),
-            "quitter": parse_player(player)
-        }, room=game.code)
+        send_game_update(game, {"quitter": parse_player(player)})
         if winner is not None:
-            emit('game_final',
-                {
-                "result": winner,
-                }, room=game.code)
+            send_game_update(game, {"winner": winner})
 
 @socketio.on_error()        # Handles the default namespace
 def error_handler(e):
@@ -183,7 +146,7 @@ def admin_set_role(data):
         player.role = role
         db.session.add(player)
         db.session.commit()
-        send_game_update(game, game.code)
+        send_game_update(game)
         emit('admin_set_role_success',
              {
              "game": parse_game(game),

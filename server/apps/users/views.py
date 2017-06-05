@@ -27,7 +27,6 @@ def get_user(data):
     if 'game_id' in data:
         game = Game.query.get(data['game_id'])
         player = get_users_player(user, game)
-    print(player)
     if user is not None:
         emit('get_user_success',{
             "user": parse_user(user, player),
@@ -43,7 +42,6 @@ def login(data):
     username = data['username']
     password = data['password']
     user = authenticate(username, password)
-    print(user)
     if user is not None:
         emit('user_login_success',{
             "user": parse_user(user),
