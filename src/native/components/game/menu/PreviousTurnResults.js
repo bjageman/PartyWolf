@@ -7,7 +7,7 @@ import {
 import { Text, Button, Card, Avatar, ListItem } from 'react-native-elements'
 import { connect } from 'react-redux';
 import { mapStateToProps, mapDispatchToProps } from '../../../../redux/utils'
-import { Actions } from 'react-native-router-flux';
+import { redirection } from './utils'
 
 class PreviousTurnResults extends Component {
   constructor(props){
@@ -16,13 +16,7 @@ class PreviousTurnResults extends Component {
 
 
   componentDidUpdate(prevProps, prevState){
-      console.log("prevProps: " + prevProps)
-      if (this.props.winner != null){
-          Actions['finalResults']({type: 'reset'})
-      }
-      else if (this.props.votes_result != null) {
-          Actions['turnResults']({type: 'reset'})
-      }
+      redirection(this.props)
   }
 
   render() {
@@ -51,7 +45,7 @@ class PreviousTurnResults extends Component {
                       dead_players.map((player, i) => (
                              <ListItem
                                  roundAvatar
-                                 key={player.id}
+                                 key={i}
                                  title={player.user.username}
                                  hideChevron
                                  />

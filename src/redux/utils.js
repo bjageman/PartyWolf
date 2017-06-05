@@ -7,7 +7,7 @@ export function mapStateToProps(state) {
     props = {
       user: state.user.data,
       game: state.game.data,
-      votes_result: state.game.votes_result,
+      votes_result: state.game.votes_result || [],
       winner: state.game.winner,
     }
     if (state.game.public_listing && state.game.public_listing.length > 0){

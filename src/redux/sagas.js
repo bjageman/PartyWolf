@@ -38,9 +38,6 @@ function subscribe(socket) {
     socket.on('vote_final', ({ results, game }) => {
       emit(voteFinished({ results, game }));
     });
-    socket.on('game_final', ({ result }) => {
-      emit(gameFinished({ result }));
-    });
     socket.on('game_updated', ({ game, votes, winner }) => {
       emit(gameUpdated({ game, votes, winner }));
     });

@@ -32,7 +32,7 @@ class PlayerList extends Component {
   }
 
   renderDebug(player){
-      if (DEBUG) {
+      if (DEBUG == true) {
           return(
             <View>
               <Text>ID: {player.id} / {player.alive ? 'ALIVE' : 'DEAD'}</Text>
@@ -60,7 +60,7 @@ class PlayerList extends Component {
           players.map((player, i) => (
             <ListItem
               roundAvatar
-              key={player.id}
+              key={i}
               title={player.user.username}
               subtitle={this.renderDebug(player)}
               badge={ voting ? { value: player.votes[this.props.voteType]} : null }

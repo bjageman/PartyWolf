@@ -6,7 +6,7 @@ import {
 import { Text, Button } from 'react-native-elements'
 import { connect } from 'react-redux';
 import { mapStateToProps, mapDispatchToProps } from '../../../../redux/utils'
-import { Actions } from 'react-native-router-flux';
+import { redirection } from './utils'
 
 import PlayerList from '../../toolkit/PlayerList'
 import RouteButton from '../../toolkit/RouteButton'
@@ -14,10 +14,7 @@ import RouteButton from '../../toolkit/RouteButton'
 class SpecialVote extends Component {
 
   componentDidUpdate(prevProps, prevState){
-      console.log("prevProps: " + prevProps)
-      if (this.props.votes_result != null) {
-          Actions['turnResults']({type: 'reset'})
-      }
+      redirection(this.props)
   }
 
   render() {

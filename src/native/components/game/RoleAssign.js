@@ -17,24 +17,34 @@ class RoleAssign extends Component {
   }
 
   render() {
-    const username = this.props.username || ""
-    return (
-      <View style={styles.outerContainer}>
+    const user = this.props.user || null
+    const player = user.player || null
+    const role = player.role || null
+    if ( role == null ){
+        return(
+            <View style={styles.outerContainer}>
+                <Text>Errored</Text>
+            </View>
+        )
+    }else{
+        return (
+          <View style={styles.outerContainer}>
 
-        <Text h4>You are a...</Text>
-        <Debug />
-        <Image
-          style={{width: 300, height: 400}}
-          source={{uri: this.props.user.player.role.avatar }}
-        />
-    <Text h3>{this.props.user.player.role.name}!</Text>
-        <Button
-            title="Go to sleep..."
-            onPress={() => Actions.menu()}
+            <Text h4>You are a...</Text>
+            <Debug />
+            <Image
+              style={{width: 300, height: 400}}
+              source={{uri: role.avatar }}
             />
-      </View>
-    )
-  }
+        <Text h3>{role.name}!</Text>
+            <Button
+                title="Go to sleep..."
+                onPress={() => Actions.menu()}
+                />
+          </View>
+        )
+        }
+    }
 }
 
 const styles = StyleSheet.create({

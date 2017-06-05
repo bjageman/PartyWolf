@@ -19,6 +19,8 @@ roles = [
 ]
 
 parser = OptionParser()
+parser.add_option("-a", "--admin", dest="admin_id", type="int",
+                  help="set the admin ID", metavar="ADMIN_ID")
 parser.add_option("-g", "--game", dest="game", type="int",
                   help="set the game id for various functions", metavar="GAME_ID")
 parser.add_option("-j", "--join-user", dest="join_user", type="int",
@@ -29,6 +31,8 @@ parser.add_option("--set", dest="add_set", type="int",
                   help="Adds X extra people after first user (requires --join-user)", metavar="NUM_PLAYERS")
 parser.add_option("-p", "--player", dest="player_id", type="int",
                   help="set the current player", metavar="PLAYER_ID")
+parser.add_option("--pass", dest="password",
+                  help="set a password for the admin", metavar="PASSWORD")
 parser.add_option("--role", dest="role_id", type="int",
                   help="set a special role (e.g. werewolf, seer) by ID", metavar="ROLE_ID")
 parser.add_option("-r", "--register-user", dest="register_user",
@@ -87,7 +91,7 @@ def votePlayer(voter_id, choice_id, role_id = None):
             "role_id": role_id,
         })
 
-def setPlayerRole(player_id, role_id, admin_id = 1, password="pass"):
+def setPlayerRole(player_id, role_id, admin_id, password):
     print("Setting player",player_id, "to role id", role_id )
     socketIO.emit('admin_set_role', {
         "player_id": player_id,
@@ -95,6 +99,13 @@ def setPlayerRole(player_id, role_id, admin_id = 1, password="pass"):
         "admin_id": admin_id,
         "password": password
     })
+
+def checkAdmin(admin_id, password):
+    if admin_id is not None and password is not None:
+        return True
+    else:
+        print("Input the admin and password for this function")
+        return False
 
 if __name__ == '__main__':
     app.config['SQLALCHEMY_DATABASE_URI'] = DATABASE
@@ -108,6 +119,8 @@ if __name__ == '__main__':
     vote_id = options.vote_id
     player_id = options.player_id
     role_id = options.role_id
+    admin_id = options.admin_id
+    password = options.password
     if options.setup:
         print("Creating Database...")
         db.create_all()
@@ -131,13 +144,15 @@ if __name__ == '__main__':
                     for i in range(add_set - 1):
                         joinUser(game_id, join_user + 1 + i)
         if player_id is not None:
-            if role_id is not None:
-                setPlayerRole(player_id, role_id)
             if vote_id is not None:
                 votePlayer(player_id, vote_id, role_id)
                 if add_set is not None:
                     for i in range(add_set - 1):
                         votePlayer(player_id + 1 + i, vote_id, role_id)
+            else:
+                if role_id is not None:
+                    if checkAdmin(admin_id, password):
+                        setPlayerRole(player_id, role_id, admin_id, password)
 
         socketIO.wait(seconds=1)
         socketIO.on('disconnect', on_disconnect)
