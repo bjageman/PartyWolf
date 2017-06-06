@@ -15,6 +15,7 @@ import RouteButton from '../../toolkit/RouteButton'
 class VillagerVote extends Component {
 
   componentDidUpdate(prevProps, prevState){
+      console.log("VILLAGER VOTE")
       redirection(this.props)
   }
 

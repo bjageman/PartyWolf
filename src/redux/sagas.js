@@ -28,24 +28,28 @@ function connect() {
 
 //Handle anything the server returns
 function subscribe(socket) {
-  return eventChannel(emit => {
-    socket.on('user_login_success', ({ user }) => {
-      emit(loginSuccess({ user }));
+  try{
+    return eventChannel(emit => {
+      socket.on('user_login_success', ({ user }) => {
+        emit(loginSuccess({ user }));
+      });
+      socket.on('get_user_success', ({ user }) => {
+        emit(getUserSuccess({ user }));
+      });
+      socket.on('vote_final', ({ results, game }) => {
+        emit(voteFinished({ results, game }));
+      });
+      socket.on('game_updated', ({ game, votes, winner }) => {
+        emit(gameUpdated({ game, votes, winner }));
+      });
+      socket.on('disconnect', e => {
+        // TODO: handle
+      });
+      return () => {};
     });
-    socket.on('get_user_success', ({ user }) => {
-      emit(getUserSuccess({ user }));
-    });
-    socket.on('vote_final', ({ results, game }) => {
-      emit(voteFinished({ results, game }));
-    });
-    socket.on('game_updated', ({ game, votes, winner }) => {
-      emit(gameUpdated({ game, votes, winner }));
-    });
-    socket.on('disconnect', e => {
-      // TODO: handle
-    });
-    return () => {};
-  });
+  }catch(err){
+    console.log("reading ERROR: " + err.message)
+  }
 }
 
 function* readSockets(socket) {
@@ -56,7 +60,7 @@ function* readSockets(socket) {
       yield put(action);
     }
   }catch(err){
-    console.log("readSockets ERROR: " + err)
+    console.log("readSockets ERROR: " + err.message)
   }
 
 }
@@ -104,13 +108,18 @@ function* setVoteEmit(socket) {
 }
 
 function* handleIO(socket) {
-  yield fork(readSockets, socket);
-  yield fork(getGamesEmit, socket);
-  yield fork(createGameEmit, socket);
-  yield fork(quitGameEmit, socket);
-  yield fork(addPlayerEmit, socket);
-  yield fork(assignRolesEmit, socket);
-  yield fork(setVoteEmit, socket);
+  try{
+
+    yield fork(readSockets, socket);
+    yield fork(getGamesEmit, socket);
+    yield fork(createGameEmit, socket);
+    yield fork(quitGameEmit, socket);
+    yield fork(addPlayerEmit, socket);
+    yield fork(assignRolesEmit, socket);
+    yield fork(setVoteEmit, socket);
+  }catch(err){
+    console.log("readSockets ERROR: " + err.message)
+  }
 }
 
 function* flow() {
@@ -123,7 +132,6 @@ function* flow() {
     let action = yield take(`${logout}`);
     yield cancel(task);
     socket.emit('logout');
-    //Actions['home']()
   }
 }
 
@@ -137,7 +145,6 @@ function* registerUser() {
           if (verifyData(response)) {
               redirect = "home"
               registerSuccess(response.data)
-              //Actions['home']()
             }
           }catch(err){
             console.log("ERROR: " + err.message)

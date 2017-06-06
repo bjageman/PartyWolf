@@ -13,10 +13,6 @@ import RouteButton from '../../toolkit/RouteButton'
 
 class SpecialVote extends Component {
 
-  componentDidUpdate(prevProps, prevState){
-      redirection(this.props)
-  }
-
   render() {
     const players = this.props.game ? this.props.game.players : []
     const role = this.props.user.player.role

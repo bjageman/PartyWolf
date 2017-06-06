@@ -15,10 +15,6 @@ class PreviousTurnResults extends Component {
   }
 
 
-  componentDidUpdate(prevProps, prevState){
-      redirection(this.props)
-  }
-
   render() {
     const results = this.props.votes_result
     const dead_players = this.props.game.players.filter(function(player){return player.alive == false;})
