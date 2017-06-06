@@ -10,6 +10,7 @@ class User(db.Model):
     last_name = db.Column(db.String(32))
     email = db.Column(db.String(64))
     gender = db.Column(db.String(32))
+    admin = db.Column(db.Boolean,default=False)
     def hash_password(self, password):
         self.password_hash = pwd_context.hash(password)
 

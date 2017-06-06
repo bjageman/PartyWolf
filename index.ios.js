@@ -5,6 +5,6 @@ import {
   Text,
   View
 } from 'react-native';
-import WereWolf from './src/index'
+import WereWolf from './src/native/index'
 
 AppRegistry.registerComponent('WereWolf', () => WereWolf);
