@@ -3,14 +3,13 @@ import { createReducer } from 'redux-act';
 import {
   register, registerSuccess,
   login, loginSuccess, logout,
-  addPlayer, removePlayer, joinGameSuccess,
-  getUser, getUserSuccess,
+  addPlayer, removePlayer,
   getGames, getGamesSuccess,
-  createGame, createGameSuccess,
-  addPlayerSuccess, assignRoles, assignRolesSuccess,
+  createGame,
+  assignRoles,
   startGame, removeUser,
-  setVote, setVoteSuccess, voteFinished,
-  gameFinished, quitGame, quitGameSuccess,
+  setVote, voteFinished,
+  gameFinished, quitGame,
   gameUpdated
 } from './actions';
 
@@ -36,12 +35,6 @@ const user = createReducer({
   },
   [logout]: (state, payload) => {
     return { ...state, data: null };
-  },
-  [getUser]: (state, payload) => {
-    return { ...state, user_id: payload.user_id, game_id: payload.game_id };
-  },
-  [getUserSuccess]: (state, payload) => {
-    return { ...state, data: payload.user };
   },
 }, initial.user);
 

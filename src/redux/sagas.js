@@ -6,7 +6,7 @@ import {
   login, loginSuccess, logout,
   addPlayer, removePlayer,
   getUser,
-  getGames,
+  getGames, getGamesSuccess,
   createGame,
   assignRoles,
   setVote, voteFinished, gameFinished,
@@ -33,11 +33,9 @@ function subscribe(socket) {
       socket.on('user_login_success', ({ user }) => {
         emit(loginSuccess({ user }));
       });
-      socket.on('get_user_success', ({ user }) => {
-        emit(getUserSuccess({ user }));
-      });
-      socket.on('vote_final', ({ results, game }) => {
-        emit(voteFinished({ results, game }));
+
+      socket.on('get_games_success', ({ games }) => {
+        emit(getGamesSuccess({ games }));
       });
       socket.on('game_updated', ({ game, votes, winner }) => {
         emit(gameUpdated({ game, votes, winner }));

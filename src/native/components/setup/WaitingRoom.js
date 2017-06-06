@@ -35,6 +35,7 @@ class WaitingRoom extends Component {
 
   render() {
     const players = this.props.game ? this.props.game.players : []
+    const user = this.props.user || null
     return (
       <View style={styles.outerContainer}>
         <Text h3>Waiting For Players...</Text>
@@ -42,11 +43,13 @@ class WaitingRoom extends Component {
         <PlayerList
             players = {players}
             />
+        { user.player.is_creator ?
         <Button
             title="Start Game"
             backgroundColor="green"
             onPress={this.handleSubmit}
             />
+        : <Text>NOT CREATOR</Text> }
       </View>
     )
   }

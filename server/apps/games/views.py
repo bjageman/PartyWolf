@@ -37,11 +37,19 @@ def get_games(data):
         "games": parse_games(games),
     })
 
+def close_users_open_games(user):
+    games = Game.query.filter_by(closed = False).filter_by(creator = user).all()
+    for game in games:
+        game.closed = True
+        db.session.add(game)
+    db.session.commit()
+    return len(games)
 
 @socketio.on('create_game')
 def create_game(data):
     user_id = data['user_id']
     creator = User.query.get(user_id)
+    close_users_open_games(creator)
     if creator is not None:
         public = True
         if 'public' in data:
@@ -108,13 +116,17 @@ def set_vote(data):
 @socketio.on('quit_player')
 def quit_player(data):
     player = Player.query.get(data['player_id'])
+    print("Quitting: ", player.user.username)
     game = player.game
     join_room(game.code)
     if player.user == game.creator and game.closed is not True:
         delete_game(game)
     else:
-        player.alive = False
-        db.session.add(player)
+        if game.closed is True:
+            player.alive = False
+            db.session.add(player)
+        else:
+            db.session.delete(game)
         db.session.commit()
         winner = determine_winner(game)
         send_game_update(game, {"quitter": parse_player(player)})

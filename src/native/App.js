@@ -38,9 +38,11 @@ class App extends Component {
     cancelGame(){
         console.log("Exiting game")
         if (this.props.user.player != null) {
+            console.log("THERE IS A PLAYER TO DELETE")
             store.dispatch(quitGame({
                 "player_id": this.props.user.player.id
             }))
+            console.log("DISPATCHED QUIT")
         }
 
         Actions.home({type:"reset"})
@@ -55,8 +57,8 @@ class App extends Component {
             <Scene key="login" component={Login} title="Login" />
             <Scene key="registration" component={Registration} title="Registration" />
             <Scene key="createGame" component={CreateGame} title="Create Game" />
-            <Scene key="joinGame" component={JoinGame} title="Join Game"  />
-            <Scene key="waitingRoom" component={WaitingRoom} title="Waiting For Players" onBackAndroid={() => this.cancelGame()} onBack={() => this.cancelGame()}  />
+            <Scene key="joinGame" component={JoinGame} title="Join Game" onBack={() => this.cancelGame()} />
+            <Scene key="waitingRoom" component={WaitingRoom} title="Waiting For Players" onBack={() => this.cancelGame()}  />
             <Scene key="roleAssign" component={RoleAssign} title="Your Role"  />
             <Scene key="menu" tabs={true} style={{backgroundColor: "white"}} >
                 <Scene key="villagerVote" component={VillagerVote} title="Vote on Culprit" iname="home" icon={TabIcon} rightTitle="Quit" onRight={() => this.cancelGame()} />

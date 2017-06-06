@@ -14,6 +14,7 @@ class Debug extends Component {
       <View>
           <Text>ID: {this.props.game.id} Code:{this.props.game.code}</Text>
           <Text>User: {this.props.user.username} {this.props.user.player.id} {this.props.user.player.role ? this.props.user.player.role.name : null}</Text>
+
       </View>
     )
     }else{
