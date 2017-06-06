@@ -4,12 +4,12 @@ import { Text } from 'react-native-elements'
 import { connect } from 'react-redux';
 import { mapStateToProps, mapDispatchToProps } from '../../../redux/utils'
 
-DEBUG = true
+import { myConfig } from '../../../../config.js';
 
 class Debug extends Component {
 
   render() {
-    if (DEBUG == true && this.props.game){
+    if (myConfig.DEBUG == true && this.props.game){
     return (
       <View>
           <Text>ID: {this.props.game.id} Code:{this.props.game.code}</Text>

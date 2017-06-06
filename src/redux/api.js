@@ -1,6 +1,7 @@
 import axios from 'axios';
+import { myConfig } from '../../config.js';
 
-url = "http://10.0.2.2:5000"
+url = myConfig.API_URL
 
 var axiosRequest = axios.create({
   baseURL: url,

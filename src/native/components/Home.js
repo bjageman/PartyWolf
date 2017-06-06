@@ -8,7 +8,7 @@ import { connect } from 'react-redux';
 import { mapStateToProps, mapDispatchToProps } from '../../redux/utils'
 import { Actions } from 'react-native-router-flux';
 
-import Config from 'react-native-config'
+import { myConfig } from '../../../config.js';
 
 //Custom components
 import RouteButton from './toolkit/RouteButton'
@@ -21,7 +21,7 @@ class PlaceHolderTitle extends Component {
   }
 
   renderDebug(){
-      if (this.props.user != null){
+      if (this.props.user != null && myConfig.DEBUG){
           return(
               <View>
                   <Text>{this.props.user.username}</Text>
@@ -42,6 +42,7 @@ class PlaceHolderTitle extends Component {
         return (
           <View style={styles.outerContainer}>
             <Text style={styles.introHeader} h3>Werewolf</Text>
+            <Text>Version: {myConfig.VERSION}</Text>
             {this.renderDebug()}
             <RouteButton
                 title="Create Game"
@@ -64,7 +65,7 @@ class PlaceHolderTitle extends Component {
         return (
           <View style={styles.outerContainer}>
             <Text style={styles.introHeader} h3>Werewolf</Text>
-            <Text>VERSION: {Config.VERSION}</Text>
+            <Text>VERSION: {myConfig.VERSION}</Text>
             <RouteButton
                 title="Login"
                 backgroundColor="green"

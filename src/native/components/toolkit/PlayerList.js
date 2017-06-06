@@ -6,7 +6,7 @@ import { connect } from 'react-redux';
 import { mapStateToProps, mapDispatchToProps } from '../../../redux/utils';
 
 //Set Configuration
-DEBUG = true
+import { myConfig } from '../../../../config.js';
 
 class PlayerList extends Component {
   constructor(props){
@@ -32,7 +32,7 @@ class PlayerList extends Component {
   }
 
   renderDebug(player){
-      if (DEBUG == true) {
+      if (myConfig.DEBUG == true) {
           return(
             <View>
               <Text>ID: {player.id} / {player.alive ? 'ALIVE' : 'DEAD'}</Text>
