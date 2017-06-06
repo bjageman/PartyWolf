@@ -1,24 +1,35 @@
+ENVIRONMENT="debug"
 
-//Debug Version
-// export const myConfig = {
-//   API_URL: 'http://10.0.2.2:5000',
-//   VERSION: 'debug',
-//   DEBUG: true,
-//
-// };
+function getConfig() {
+  switch (ENVIRONMENT) {
+  case "debug":
+    return {
+      API_URL: 'http://10.0.2.2:5000',
+      VERSION: 'debug',
+      DEBUG: true,
+    };
+    break;
+  case "demo":
+    return {
+      API_URL: 'http://10.1.10.207:5000',
+      VERSION: 'demo',
+      DEBUG: false,
+    };
+    break;
+  case "production":
+    return {
+      API_URL: 'http://werewolf-site.com:5000',
+      VERSION: 'production',
+      DEBUG: false,
+    };
+    break;
+  default:
+    return {
+      API_URL: 'http://10.0.2.2:5000',
+      VERSION: 'debug',
+      DEBUG: true,
+    };
+  }
+}
 
-//Demo (run with local wifi)
-export const myConfig = {
-  API_URL: 'http://192.168.1.111:5000',
-  VERSION: 'demo',
-  DEBUG: false,
-
-};
-
-//Production
-// export const myConfig = {
-//   API_URL: 'http://10.0.2.2:5000',
-//   VERSION: 'production',
-//   DEBUG: false,
-//
-// };
+export const myConfig = getConfig();

@@ -1,4 +1,4 @@
-from flask_socketio import SocketIO, emit, send, join_room, leave_room, \
+from flask_socketio import emit, send, join_room, leave_room, \
     close_room, rooms, disconnect
 from flask import Flask
 

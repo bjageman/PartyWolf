@@ -24,14 +24,12 @@ socketio = SocketIO(app, async_mode=async_mode)
 
 from .database import *
 from .users import users
-from .chat import chat
 from .games import games
 
 #JWT System
 
 jwt = JWT(app,authenticate, identity)
 
-app.register_blueprint(chat, url_prefix='/chat')
 app.register_blueprint(users, url_prefix='/users')
 app.register_blueprint(games, url_prefix='/games')
 

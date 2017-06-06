@@ -1,3 +1,6 @@
+
+from flask_socketio import emit, join_room, close_room
+
 from apps.games.models import Game, Player, Role, Vote
 from apps.users.models import User
 from apps.parsers import *
@@ -136,9 +139,11 @@ def handle_results(results):
 def delete_game(game):
     game_id = game.id
     game_code = game.code
+    join_room(game_code)
     db.session.delete(game)
     db.session.commit()
     emit('delete_game_success',
     {
         "deleted": game_id,
     }, room=game_code)
+    close_room(game_code)

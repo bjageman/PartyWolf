@@ -11,11 +11,12 @@ import {
   assignRoles,
   setVote, voteFinished, gameFinished,
   quitGame, quitGameSuccess,
-  gameUpdated
+  gameUpdated, gameDeleted
 } from './actions';
 import { postDataApi, fetchDataApi, verifyData } from './api'
+import { myConfig } from '../../config.js';
 
-url = "http://10.0.2.2:5000"
+url = myConfig.API_URL
 
 function connect() {
   const socket = io(url);
@@ -39,6 +40,9 @@ function subscribe(socket) {
       });
       socket.on('game_updated', ({ game, votes, winner }) => {
         emit(gameUpdated({ game, votes, winner }));
+      });
+      socket.on('game_deleted', ({ game_id }) => {
+        emit(gameDeleted({ game_id }));
       });
       socket.on('disconnect', e => {
         // TODO: handle

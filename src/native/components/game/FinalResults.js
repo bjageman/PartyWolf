@@ -14,6 +14,12 @@ class FinalResults extends Component {
       super(props);
   }
 
+  componentDidUpdate(prevProps, prevState){
+      if (this.props.game == null) {
+          Actions['home']({type: 'reset'})
+      }
+  }
+
   render() {
     const winner = this.props.winner || ""
     return (
@@ -25,7 +31,7 @@ class FinalResults extends Component {
         />
         <Button
             title="Start a new game"
-            onPress={() => Actions.home()}
+            onPress={() => this.props.gameCompleted()}
             />
       </View>
     )

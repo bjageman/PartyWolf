@@ -10,7 +10,7 @@ import {
   startGame, removeUser,
   setVote, voteFinished,
   gameFinished, quitGame,
-  gameUpdated
+  gameUpdated, gameDeleted, gameCompleted
 } from './actions';
 
 const initial = {
@@ -57,15 +57,18 @@ const game = createReducer({
   [setVote]: (state, payload) => {
     return { ...state, voter_id: payload.voter_id, choice_id: payload.choice_id };
   },
-  [voteFinished]: (state, payload) => {
-    return { ...state, votes_result: payload.results, data: payload.game  };
-  },
   [quitGame]: (state, payload) => {
     return { ...state, data: null, winner: null, votes_result: null, player_id: payload.player_id}
   },
   [gameUpdated]: (state, payload) => {
     return { ...state, data: payload.game, votes_result: payload.votes, winner: payload.winner  };
   },
+  [gameDeleted]: (state, payload) => {
+    return { ...state, data: null, winner: null, votes_result: null, game_id: payload.game_id}
+  },
+  [gameCompleted]: (state, payload) => {
+    return { ...state, data: null, winner: null, votes_result: null,}
+  }
 }, initial.game);
 
 
