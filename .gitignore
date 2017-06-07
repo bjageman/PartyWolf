@@ -1,6 +1,7 @@
 *.pyc
 quickstart.sh
 __pycache__
+*.log
 
 # OSX
 #

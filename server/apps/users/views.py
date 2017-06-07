@@ -1,9 +1,11 @@
 from flask_socketio import SocketIO, emit, send, join_room, leave_room, \
     close_room, rooms, disconnect
-from flask import Flask
+from flask import Flask, request, make_response, jsonify, abort
 
 from random import shuffle, SystemRandom
 import string
+
+from . import users
 
 from apps.users.models import User, authenticate
 from apps.database import *
@@ -25,7 +27,6 @@ def get_user(data):
     if 'game_id' in data:
         game = Game.query.get(data['game_id'])
         player = get_users_player(user, game)
-    print(player)
     if user is not None:
         emit('get_user_success',{
             "user": parse_user(user, player),
@@ -42,7 +43,6 @@ def login(data):
     password = data['password']
     user = authenticate(username, password)
     if user is not None:
-        print("LOGIN PASS")
         emit('user_login_success',{
             "user": parse_user(user),
         })
@@ -51,21 +51,32 @@ def login(data):
             "error": None,
         })
 
-@socketio.on('register')
-def register(data):
-    print("REGISTERING")
-    username = data['username']
-    password = data['password']
-    if User.query.filter_by(username = username).first() is None:
-        user = User(username = username)
-        user.hash_password(password)
-        db.session.add(user)
-        db.session.commit()
-        print("Registration success!")
-        emit('user_registration_success',{
-            "user": parse_user(user),
-        })
-    else:
-        emit('user_registration_fail',{
-            "error": None,
-        })
+@users.route('', methods=['POST'])
+def register_user():
+    try:
+        data = request.get_json()
+        username = data['username']
+        password = data['password']
+    except (AttributeError, KeyError):
+        abort(400)
+    if User.query.filter_by(username = username).first() is not None:
+        abort(400)
+    user = User(username = username)
+    user.hash_password(password)
+    db.session.add(user)
+    db.session.commit()
+    return jsonify({ 'username': user.username })
+
+#Todo: Transfer to separate file
+
+@users.errorhandler(404)
+def not_found(error):
+    return make_response(jsonify({'error': 'Not found'}), 404)
+
+@users.errorhandler(401)
+def unauthorized(error):
+    return make_response(jsonify({'error': 'Unauthorized access'}), 401)
+
+@users.errorhandler(400)
+def bad_request(error):
+    return make_response(jsonify({'error': 'Bad Request'}), 400)

@@ -4,13 +4,17 @@ import json
 
 from apps import app, db, socketio
 from apps.users.models import User
-from apps.games.models import Game, Player, Role, History
+from apps.games.models import Game, Player, Role, Vote
 
-from apps.config import DATABASE
+from apps.config import DATABASE_TEST
 
 from flask_socketio import SocketIO, SocketIOTestClient
 
-roles = [{"name":"Werewolf", "team":"W"}, {"name":"Villager", "team":"V"}, {"name":"Seer", "team":"V"}]
+roles = [
+    {"name":"Werewolf", "avatar": "https://placekitten.com/g/300/400", "evil":True},
+    {"name":"Villager", "avatar": "http://www.smashbros.com/images/og/murabito.jpg", "evil":False},
+    {"name":"Seer", "avatar": "https://legendsofwindemere.files.wordpress.com/2014/02/the_fortune_teller_by_jerry8448-d378fed.jpg", "evil":False}
+]
 
 class TestingBase(unittest.TestCase):
     def setAuthToken(self, username, password):
@@ -24,16 +28,20 @@ class TestingBase(unittest.TestCase):
         game = Game(code="TESTCODE")
         self.db.session.add(game)
         for i in roles:
-            role = Role(name=i['name'], team=i['team'])
+            role = Role(name=i['name'], avatar=i['avatar'], evil=i['evil'])
             self.db.session.add(role)
         self.db.session.commit()
         for i in range(15):
             user = User(username="TestUser" + str(i))
             user.hash_password("password")
+            if i == 0:
+                user.admin = True
             self.db.session.add(user)
-            if i < 2:
+            if i < 2: #Werewolves
                 role = Role.query.get(1)
-            else:
+            elif i == 3: #Seer
+                role = Role.query.get(3)
+            else: #Villagers
                 role = Role.query.get(2)
             if i < 10:
                 player = Player(game=game, user=user, role=role)
@@ -54,17 +62,13 @@ class TestingBase(unittest.TestCase):
     def tearDown(self):
         self.socketio.disconnect()
         self.db.session.expunge_all()
+        self.db.session.flush()
         self.db.session.remove()
         self.db.session.close()
         self.db.drop_all()
 
 
 class WWTesting(TestingBase):
-    def log_history(self, game, turn, players):
-        history = History(game=game, turn=turn)
-        for player in players:
-            player.history = history
-        db.session.commit()
 
     def kill_players_by_id(self, game, playerids = [], turn = 0):
         players = []
@@ -73,7 +77,6 @@ class WWTesting(TestingBase):
             players.append(player)
             player.alive = False
         db.session.commit()
-        self.log_history(game, turn, players)
 
     def kill_player_by_username(self, username, turn = 0):
         user = User.query.filter_by(username=username).first()
@@ -84,7 +87,6 @@ class WWTesting(TestingBase):
         player.alive = False
         db.session.commit()
         assert game.players.join(Player.user, aliased=True).filter_by(username=username).first().alive is not True
-        self.log_history(game, turn, [player])
 
     def player_count(self):
         game = Game.query.get(1)
