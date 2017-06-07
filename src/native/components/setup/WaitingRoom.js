@@ -23,8 +23,8 @@ class WaitingRoom extends Component {
   componentDidUpdate(prevProps, prevState){
       if (this.props.game == null) {
           console.log("Game was deleted")
-          //Alert.alert("Current game was deleted")
-          //Actions['joinGame']({type:'reset'})
+          Alert.alert("Current game was deleted")
+          Actions['home']({type:'reset'})
       }else if (this.props.user.player.role != null) {
           console.log("Go TO roleAssign")
           Actions['roleAssign']({type: 'reset'})

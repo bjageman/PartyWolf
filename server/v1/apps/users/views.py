@@ -7,16 +7,16 @@ import string
 
 from . import users
 
-from apps.users.models import User, authenticate
-from apps.database import *
+from .models import User, authenticate
+from ..database import *
 
-from apps import socketio, db
-from apps.games.models import Game
+from v1.apps import socketio, db
+from v1.apps.games.models import Game
 
-from apps.parsers import parse_user, parse_player
+from v1.apps.parsers import parse_user, parse_player
 
 #Error handling
-from apps.errors import *
+from v1.apps.errors import *
 from .errors import *
 
 def get_users_player(user, game):

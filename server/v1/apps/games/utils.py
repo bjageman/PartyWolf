@@ -1,10 +1,10 @@
 
 from flask_socketio import emit, join_room, close_room
 
-from apps.games.models import Game, Player, Role, Vote
-from apps.users.models import User
-from apps.parsers import *
-from apps.database import *
+from v1.apps.games.models import Game, Player, Role, Vote
+from v1.apps.users.models import User
+from v1.apps.parsers import *
+from v1.apps.database import *
 
 from random import shuffle, SystemRandom
 from collections import Counter

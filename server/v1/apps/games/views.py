@@ -5,16 +5,16 @@ from flask import Flask
 from collections import Counter
 
 from . import games
-from apps.games.models import Game, Player, Role, Vote
-from apps.users.models import User
-from apps.parsers import *
-from apps.database import *
+from v1.apps.games.models import Game, Player, Role, Vote
+from v1.apps.users.models import User
+from v1.apps.parsers import *
+from v1.apps.database import *
 
-from apps import socketio, db
+from v1.apps import socketio, db
 
 from .utils import *
 
-from apps.errors import *
+from v1.apps.errors import *
 
 def send_game_update(game, data = {}):
     data['game'] = parse_game(game)
