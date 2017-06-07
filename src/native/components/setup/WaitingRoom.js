@@ -2,7 +2,8 @@ import React, { Component } from 'react';
 import {
   View,
   StyleSheet,
-  BackAndroid
+  BackAndroid,
+  Alert
 } from 'react-native'
 import { Text, Button, List } from 'react-native-elements'
 import { connect } from 'react-redux';
@@ -20,7 +21,11 @@ class WaitingRoom extends Component {
   }
 
   componentDidUpdate(prevProps, prevState){
-      if (this.props.user.player.role != null) {
+      if (this.props.game == null) {
+          console.log("Game was deleted")
+          //Alert.alert("Current game was deleted")
+          //Actions['joinGame']({type:'reset'})
+      }else if (this.props.user.player.role != null) {
           console.log("Go TO roleAssign")
           Actions['roleAssign']({type: 'reset'})
       }
@@ -36,22 +41,28 @@ class WaitingRoom extends Component {
   render() {
     const players = this.props.game ? this.props.game.players : []
     const user = this.props.user || null
-    return (
-      <View style={styles.outerContainer}>
-        <Text h3>Waiting For Players...</Text>
-        <Debug />
-        <PlayerList
-            players = {players}
-            />
-        { user.player.is_creator ?
-        <Button
-            title="Start Game"
-            backgroundColor="green"
-            onPress={this.handleSubmit}
-            />
-        : <Text>NOT CREATOR</Text> }
-      </View>
-    )
+    if (user.player && this.props.game){
+        return (
+          <View style={styles.outerContainer}>
+            <Text h3>Waiting For Players...</Text>
+            <Debug />
+            <PlayerList
+                players = {players}
+                />
+            { user.player.is_creator ?
+            <Button
+                title="Start Game"
+                backgroundColor="green"
+                onPress={this.handleSubmit}
+                />
+            : null }
+          </View>
+        )
+    }else{
+        return(
+            <View style={styles.outerContainer}><Text h4>No Game Here</Text></View>
+        )
+    }
   }
 }
 

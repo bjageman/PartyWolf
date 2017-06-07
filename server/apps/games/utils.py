@@ -139,10 +139,9 @@ def handle_results(results):
 def delete_game(game):
     game_id = game.id
     game_code = game.code
-    join_room(game_code)
     db.session.delete(game)
     db.session.commit()
-    emit('delete_game_success',
+    emit('game_deleted',
     {
         "deleted": game_id,
     }, room=game_code)

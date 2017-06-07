@@ -5,6 +5,7 @@ import { FormLabel, FormInput, FormValidationMessage, CheckBox, Button, Text } f
 import { connect } from 'react-redux';
 import { mapStateToProps, mapDispatchToProps } from '../../../../redux/utils';
 
+import Loading from '../../toolkit/Loading'
 
 class LoginInput extends Component {
   constructor(props){
@@ -18,11 +19,14 @@ class LoginInput extends Component {
 
   handleSubmit(e){
       e.preventDefault();
-      console.log("Submitting login: " + this.state.username)
-      this.props.login({
-          username: this.state.username,
-          password: this.state.password
-      })
+      if (this.state.username.length == 0 || this.state.password == 0){
+          this.props.getError({"error": "Please input username and/or password"})
+      }else{
+          this.props.login({
+              username: this.state.username,
+              password: this.state.password
+          })
+      }
   }
 
 
@@ -49,6 +53,7 @@ class LoginInput extends Component {
           backgroundColor="green"
           onPress={this.handleSubmit}
           />
+      <Loading />
     </View>
     )
   }

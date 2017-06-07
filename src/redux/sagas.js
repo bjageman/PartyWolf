@@ -11,7 +11,8 @@ import {
   assignRoles,
   setVote, voteFinished, gameFinished,
   quitGame, quitGameSuccess,
-  gameUpdated, gameDeleted
+  gameUpdated, gameDeleted,
+  getError
 } from './actions';
 import { postDataApi, fetchDataApi, verifyData } from './api'
 import { myConfig } from '../../config.js';
@@ -34,7 +35,6 @@ function subscribe(socket) {
       socket.on('user_login_success', ({ user }) => {
         emit(loginSuccess({ user }));
       });
-
       socket.on('get_games_success', ({ games }) => {
         emit(getGamesSuccess({ games }));
       });
@@ -43,6 +43,9 @@ function subscribe(socket) {
       });
       socket.on('game_deleted', ({ game_id }) => {
         emit(gameDeleted({ game_id }));
+      });
+      socket.on('send_error', ({ error }) => {
+        emit(getError({ error }));
       });
       socket.on('disconnect', e => {
         // TODO: handle
@@ -111,8 +114,8 @@ function* setVoteEmit(socket) {
 
 function* handleIO(socket) {
   try{
-
     yield fork(readSockets, socket);
+    yield fork(loginUser, socket);
     yield fork(getGamesEmit, socket);
     yield fork(createGameEmit, socket);
     yield fork(quitGameEmit, socket);
@@ -126,9 +129,9 @@ function* handleIO(socket) {
 
 function* flow() {
   while (true) {
-    let { payload } = yield take(`${login}`);
+    //let { payload } = yield take(`${login}`);
     const socket = yield call(connect);
-    socket.emit('login', { username: payload.username, password: payload.password });
+    //socket.emit('login', { username: payload.username, password: payload.password });
     const task = yield fork(handleIO, socket);
 
     let action = yield take(`${logout}`);
@@ -137,19 +140,31 @@ function* flow() {
   }
 }
 
+function* loginUser(socket) {
+  while (true) {
+    const { payload } = yield take(`${login}`);
+    console.log("PAYLOAD:",payload)
+    socket.emit('login', { username: payload.username, password: payload.password });
+  }
+}
+
 function* registerUser() {
     while (true) {
         try{
           let { payload } = yield take(`${register}`);
           let data = {"username": payload.username, "password": payload.password }
-          console.log(data)
           const response = yield call(postDataApi, 'users', data);
           if (verifyData(response)) {
-              redirect = "home"
-              registerSuccess(response.data)
+              console.log(response.data.username + " successfully registered!")
+              yield put(registerSuccess(response.data))
+            }else{
+              error = response.data.error
+              console.log(error)
+              yield put(getError({ error }))
             }
-          }catch(err){
-            console.log("ERROR: " + err.message)
+          }catch(error){
+            console.log(error.message)
+            yield put(getError({ "error": error.message }))
           }
     }
 }

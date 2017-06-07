@@ -1,3 +1,4 @@
+
 ENVIRONMENT="debug"
 
 function getConfig() {
@@ -11,7 +12,7 @@ function getConfig() {
     break;
   case "demo":
     return {
-      API_URL: 'http://10.1.10.207:5000',
+      API_URL: 'http://192.168.1.111:5000',
       VERSION: 'demo',
       DEBUG: false,
     };

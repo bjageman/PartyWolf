@@ -15,41 +15,30 @@ from apps.games.models import Game
 
 from apps.parsers import parse_user, parse_player
 
+#Error handling
+from apps.errors import *
+from .errors import *
+
 def get_users_player(user, game):
     for player in game.players:
         if player.user.id == user.id:
             return player
 
-@socketio.on('get_user')
-def get_user(data):
-    user = User.query.get(data['user_id'])
-    player = None
-    if 'game_id' in data:
-        game = Game.query.get(data['game_id'])
-        player = get_users_player(user, game)
-    if user is not None:
-        emit('get_user_success',{
-            "user": parse_user(user, player),
-        })
-    else:
-        emit('get_user_fail',{
-            "error": None,
-        })
-
-
 @socketio.on('login')
 def login(data):
-    username = data['username']
-    password = data['password']
+    try:
+        username = data['username']
+        password = data['password']
+    except (AttributeError, KeyError):
+        emit_error("Bad Request")
     user = authenticate(username, password)
+    print("USER:", user)
     if user is not None:
         emit('user_login_success',{
             "user": parse_user(user),
         })
     else:
-        emit('user_login_fail',{
-            "error": None,
-        })
+        emit_error("Incorrect Username/Password")
 
 @users.route('', methods=['POST'])
 def register_user():
@@ -68,15 +57,3 @@ def register_user():
     return jsonify({ 'username': user.username })
 
 #Todo: Transfer to separate file
-
-@users.errorhandler(404)
-def not_found(error):
-    return make_response(jsonify({'error': 'Not found'}), 404)
-
-@users.errorhandler(401)
-def unauthorized(error):
-    return make_response(jsonify({'error': 'Unauthorized access'}), 401)
-
-@users.errorhandler(400)
-def bad_request(error):
-    return make_response(jsonify({'error': 'Bad Request'}), 400)
