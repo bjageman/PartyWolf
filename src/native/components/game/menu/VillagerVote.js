@@ -7,6 +7,7 @@ import { Text, Button } from 'react-native-elements'
 import { connect } from 'react-redux';
 import { mapStateToProps, mapDispatchToProps } from '../../../../redux/utils'
 import { redirection } from './utils'
+import Status from './Status'
 import PlayerList from '../../toolkit/PlayerList'
 import RouteButton from '../../toolkit/RouteButton'
 
@@ -25,7 +26,7 @@ class VillagerVote extends Component {
 
     return (
       <View style={styles.outerContainer}>
-        <Text h4>Vote on the culprit! {this.props.game.current_turn}</Text>
+        <Status />
         <PlayerList
             players={players}
             aliveOnly={true}

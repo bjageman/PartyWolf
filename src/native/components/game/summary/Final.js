@@ -6,13 +6,12 @@ import {
 } from 'react-native'
 import { Text, Button } from 'react-native-elements'
 import { connect } from 'react-redux';
-import { mapStateToProps, mapDispatchToProps } from '../../../redux/utils'
+import { mapStateToProps, mapDispatchToProps } from '../../../../redux/utils'
 import { Actions } from 'react-native-router-flux';
 
-class FinalResults extends Component {
-  constructor(props){
-      super(props);
-  }
+import  ResultTable  from './ResultTable'
+
+class SummaryFinal extends Component {
 
   componentDidUpdate(prevProps, prevState){
       if (this.props.game == null) {
@@ -25,10 +24,7 @@ class FinalResults extends Component {
     return (
       <View style={styles.outerContainer}>
         <Text h3>{winner} wins!</Text>
-        <Image
-          style={{width: 300, height: 400}}
-          source={{uri: 'https://placekitten.com/g/300/400'}}
-        />
+        <ResultTable />
         <Button
             title="Start a new game"
             onPress={() => this.props.gameCompleted()}
@@ -40,11 +36,10 @@ class FinalResults extends Component {
 
 const styles = StyleSheet.create({
   outerContainer: {
+    marginTop: 50,
     flex: 1,
-    alignItems: 'center',
-    justifyContent: 'center',
   }
 })
 
 
-export default connect(mapStateToProps, mapDispatchToProps)(FinalResults);
+export default connect(mapStateToProps, mapDispatchToProps)(SummaryFinal);
