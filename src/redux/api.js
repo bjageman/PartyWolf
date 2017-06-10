@@ -1,7 +1,7 @@
 import axios from 'axios';
 import { myConfig } from '../../config.js';
 
-url = myConfig.API_URL
+url = myConfig.API_URL + "/api/v" + myConfig.API_VERSION
 
 var axiosRequest = axios.create({
   baseURL: url,

@@ -1,7 +1,8 @@
 import React, { Component } from 'react';
 import {
   View,
-  StyleSheet
+  StyleSheet,
+  Alert
 } from 'react-native'
 import { Text, Button } from 'react-native-elements'
 import { connect } from 'react-redux';
@@ -10,7 +11,7 @@ import { Actions } from 'react-native-router-flux';
 
 import LoginInput from './input/LoginInput'
 import RouteButton from '../toolkit/RouteButton'
-
+import ErrorHandling from '../toolkit/ErrorHandling'
 
 class Login extends Component {
   constructor(props){
@@ -29,6 +30,7 @@ class Login extends Component {
     const username = this.props.username || ""
     return (
       <View style={styles.outerContainer}>
+        <ErrorHandling />
         <Text h3>Login Page</Text>
         <LoginInput />
         <RouteButton

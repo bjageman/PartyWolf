@@ -2,11 +2,11 @@ import sys
 import requests, json
 from optparse import OptionParser
 
-from apps import app, db, socketio
-from apps.users.models import User
-from apps.games.models import Game, Player, Role, Vote
+from v1.apps import app, db, socketio
+from v1.apps.users.models import User
+from v1.apps.games.models import Game, Player, Role, Vote
 
-from apps.config import DATABASE
+from v1.apps.config import DATABASE
 
 from socketIO_client import SocketIO
 
@@ -67,7 +67,7 @@ def on_connect():
 
 def registerPlayer(username, password = "password"):
     payload = {'username':username, 'password': password}
-    r = requests.post('http://localhost:5000/users', json=payload)
+    r = requests.post('http://localhost:5000/api/v1/users', json=payload)
     print(r.text)
 
 def joinUser(game_id, user_id):

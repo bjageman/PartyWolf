@@ -1,6 +1,6 @@
 from flask_script import Manager, Server
 
-from apps import app, socketio
+from v1.apps import app, socketio
 
 # manager = Manager(app)
 #

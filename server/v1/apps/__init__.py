@@ -4,7 +4,6 @@ from flask_sqlalchemy import SQLAlchemy
 from flask_socketio import SocketIO
 from datetime import timedelta
 
-import apps.config
 from . import config
 
 app = Flask(__name__)
@@ -30,8 +29,8 @@ from .games import games
 
 jwt = JWT(app,authenticate, identity)
 
-app.register_blueprint(users, url_prefix='/users')
-app.register_blueprint(games, url_prefix='/games')
+app.register_blueprint(users, url_prefix='/api/v1/users')
+app.register_blueprint(games, url_prefix='/api/v1/games')
 
 @app.after_request
 def add_headers(response):

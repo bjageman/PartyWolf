@@ -5,19 +5,19 @@ from flask import Flask
 from collections import Counter
 
 from . import games
-from apps.games.models import Game, Player, Role, Vote
-from apps.users.models import User
-from apps.parsers import *
-from apps.database import *
+from v1.apps.games.models import Game, Player, Role, Vote
+from v1.apps.users.models import User
+from v1.apps.parsers import *
+from v1.apps.database import *
 
-from apps import socketio, db
+from v1.apps import socketio, db
 
 from .utils import *
 
+from v1.apps.errors import *
 
 def send_game_update(game, data = {}):
     data['game'] = parse_game(game)
-    join_room(game.code)
     emit('game_updated', data, room=game.code)
 
 @socketio.on('connect')
@@ -57,6 +57,7 @@ def create_game(data):
         game = Game(code=randomCode(), creator=creator, public=public, current_turn=1)
         db.session.add(game)
         create_player(game, creator)
+        join_room(game.code)
         send_game_update(game)
 
 @socketio.on('add_player')
@@ -71,6 +72,7 @@ def add_player(data):
         join_room(game.code)
         if user_exists is not True:
             create_player(game, user)
+        join_room(game.code)
         send_game_update(game)
 
 @socketio.on('assign_roles')
@@ -118,24 +120,24 @@ def quit_player(data):
     player = Player.query.get(data['player_id'])
     print("Quitting: ", player.user.username)
     game = player.game
-    join_room(game.code)
-    if player.user == game.creator and game.closed is not True:
-        delete_game(game)
+    leave_room(game.code)
+    if game.closed is True:
+        player.alive = False
+        db.session.add(player)
     else:
-        if game.closed is True:
-            player.alive = False
-            db.session.add(player)
+        if player.user == game.creator:
+            delete_game(game)
         else:
-            db.session.delete(game)
-        db.session.commit()
-        winner = determine_winner(game)
-        send_game_update(game, {"quitter": parse_player(player)})
-        if winner is not None:
-            send_game_update(game, {"winner": winner})
+            db.session.delete(player)
+    db.session.commit()
+    winner = determine_winner(game)
+    send_game_update(game, {"quitter": parse_player(player)})
+    if winner is not None:
+        send_game_update(game, {"winner": winner})
 
 @socketio.on_error()        # Handles the default namespace
 def error_handler(e):
-    emit('error', {'error': e})
+    emit('send_error', {'error': e})
 
 
 ###
