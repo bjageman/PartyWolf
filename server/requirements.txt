@@ -18,3 +18,5 @@ gevent
 scrypt
 
 mysqlclient
+werkzeug
+click
