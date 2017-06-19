@@ -2,14 +2,9 @@ import { combineReducers } from 'redux';
 import { createReducer } from 'redux-act';
 import {
   register, registerSuccess,
-  login, loginSuccess, logout,
-  addPlayer, removePlayer,
-  getGames, getGamesSuccess,
-  createGame,
-  assignRoles,
-  startGame, removeUser,
-  setVote, voteFinished,
-  gameFinished, quitGame,
+  login, loginSuccess, logout, addPlayer,
+  getGames, getGamesSuccess, createGame,
+  assignRoles, setVote, quitGame,
   gameUpdated, gameDeleted, gameCompleted,
   getError
 } from './actions';

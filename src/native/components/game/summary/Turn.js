@@ -9,7 +9,7 @@ import { connect } from 'react-redux';
 import { mapStateToProps, mapDispatchToProps } from '../../../../redux/utils'
 import { Actions } from 'react-native-router-flux';
 
-import { ResultTable } from './ResultTable'
+import ResultTable from './ResultTable'
 
 class SummaryTurn extends Component {
   constructor(props){
@@ -22,9 +22,10 @@ class SummaryTurn extends Component {
         const dead_players = this.props.game.players.filter(function(player){return player.alive == false;})
         return (
             <View>
+            <ResultTable />
             <Button
               title="Continue..."
-              onPress={() => Actions.menu({title: "Next Turn"})}
+              onPress={() => Actions.menu({title: "Next Turn", type:"reset"})}
               />
             </View>
         )

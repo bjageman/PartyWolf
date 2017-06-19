@@ -18,6 +18,17 @@ roles = [
     {"name":"Seer", "avatar": "https://legendsofwindemere.files.wordpress.com/2014/02/the_fortune_teller_by_jerry8448-d378fed.jpg", "evil":False}
 ]
 
+config = {
+    "debug":{
+        'url':"0.0.0.0",
+    },
+	"production":{
+        'url':"neuro.ddnsking.com:5000",
+	},
+
+}
+version = "production"
+
 parser = OptionParser()
 parser.add_option("-a", "--admin", dest="admin_id", type="int",
                   help="set the admin ID", metavar="ADMIN_ID")
@@ -67,7 +78,7 @@ def on_connect():
 
 def registerPlayer(username, password = "password"):
     payload = {'username':username, 'password': password}
-    r = requests.post('http://localhost:5000/api/v1/users', json=payload)
+    r = requests.post("http://" + config[version]['url'] + '/api/v1/users', json=payload)
     print(r.text)
 
 def joinUser(game_id, user_id):
@@ -133,7 +144,7 @@ if __name__ == '__main__':
         print(len(roles), "roles successfully created")
 
     #Run socket commands
-    with SocketIO('0.0.0.0', 5000) as socketIO:
+    with SocketIO(config[version]['url'], 5000) as socketIO:
         socketIO.on('connect', on_connect)
         if register_user is not None:
             registerPlayer(register_user)

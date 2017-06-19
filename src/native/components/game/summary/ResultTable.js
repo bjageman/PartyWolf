@@ -17,14 +17,14 @@ class PlayerSummary extends Component {
                 <Grid>
                 <Row>
                     <Col><Text>Username</Text></Col>
-                    <Col><Text>Role</Text></Col>
+                    {this.props.showRole ? <Col><Text>Role</Text></Col> : null }
                     <Col><Text>Turn Died</Text></Col>
                 </Row>
                 <Divider style={{ backgroundColor: 'blue' }} />
                 {players.map((player, i) => (
                     <Row key={i}>
                         <Col><Text>{player.user.username}</Text></Col>
-                        <Col><Text>{player.role.name}</Text></Col>
+                        {this.props.showRole ? <Col><Text>{player.role.name}</Text></Col> : null }
                         <Col><Text> 0 </Text></Col>
                     </Row>
                      )
@@ -45,7 +45,9 @@ class ResultTable extends Component {
           <ScrollView>
               <PlayerSummary
                   title="Death Count"
-                  players={dead_players} />
+                  players={dead_players}
+                  showRole
+                  />
               <PlayerSummary
                   title="Survivors"
                   players={living_players} />

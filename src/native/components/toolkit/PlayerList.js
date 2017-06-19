@@ -6,7 +6,7 @@ import { connect } from 'react-redux';
 import { mapStateToProps, mapDispatchToProps } from '../../../redux/utils';
 
 //Set Configuration
-import { myConfig } from '../../../../config.js';
+import myConfig from '../../../config.js';
 
 class PlayerList extends Component {
   constructor(props){

@@ -20,7 +20,7 @@ export function mapStateToProps(state) {
     if (player != null) {
       props.user.player = player
       props.user.player.creator = false
-      if (props.user.id == props.game.creator.id){
+      if (props.user.id === props.game.creator.id){
         props.user.player.is_creator = true
       }
     }

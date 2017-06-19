@@ -1,7 +1,7 @@
 import axios from 'axios';
-import { myConfig } from '../../config.js';
+import myConfig from '../config.js';
 
-url = myConfig.API_URL + "/api/v" + myConfig.API_VERSION
+var url = myConfig.API_URL + "/api/v" + myConfig.API_VERSION
 
 var axiosRequest = axios.create({
   baseURL: url,
@@ -12,7 +12,7 @@ var axiosRequest = axios.create({
 });
 
 export function verifyData(response){
-  if (response.status == 200){
+  if (response.status === 200){
       return true
   }else{
       return false
