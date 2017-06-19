@@ -4,7 +4,7 @@ import { Text } from 'react-native-elements'
 import { connect } from 'react-redux';
 import { mapStateToProps, mapDispatchToProps } from '../../../redux/utils'
 
-import { myConfig } from '../../../../config.js';
+import myConfig from '../../../config.js';
 
 class Debug extends Component {
 

@@ -9,15 +9,16 @@ import {
   getGames, getGamesSuccess,
   createGame,
   assignRoles,
-  setVote, voteFinished, gameFinished,
+  setVote, gameFinished,
   quitGame, quitGameSuccess,
   gameUpdated, gameDeleted,
   getError
 } from './actions';
 import { postDataApi, fetchDataApi, verifyData } from './api'
-import { myConfig } from '../../config.js';
+import myConfig from '../config.js';
 
-url = myConfig.API_URL
+console.log(myConfig)
+var url = myConfig.API_URL
 
 function connect() {
   const socket = io(url);
@@ -158,7 +159,7 @@ function* registerUser() {
               console.log(response.data.username + " successfully registered!")
               yield put(registerSuccess(response.data))
             }else{
-              error = response.data.error
+              var error = response.data.error
               console.log(error)
               yield put(getError({ error }))
             }

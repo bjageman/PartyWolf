@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { View, StyleSheet } from 'react-native'
+import { View, StyleSheet, TextInput } from 'react-native'
 import { FormLabel, FormInput, FormValidationMessage, CheckBox, Button, Text } from 'react-native-elements'
 
 import { connect } from 'react-redux';
@@ -7,6 +7,17 @@ import { mapStateToProps, mapDispatchToProps } from '../../../../redux/utils';
 
 import Loading from '../../toolkit/Loading'
 
+import { findNodeHandle } from 'react-native'
+import TextInputState from 'react-native/lib/TextInputState'
+
+
+export function focusTextInput(node) {
+  try {
+    TextInputState.focusTextInput(findNodeHandle(node))
+  } catch(e) {
+    console.log("Couldn't focus text input: ", e.message)
+  }
+}
 class LoginInput extends Component {
   constructor(props){
       super(props);
@@ -14,6 +25,7 @@ class LoginInput extends Component {
       this.state ={
           username:"",
           password:"",
+          passwordInputFocus: false,
       }
   }
 
@@ -34,18 +46,22 @@ class LoginInput extends Component {
     return (
     <View>
       <FormLabel>Username</FormLabel>
-      <FormInput
+      <TextInput
           name='username'
           onChangeText={(username) => this.setState({username})}
           value={this.state.username}
+          autoFocus
+          onSubmitEditing={() => focusTextInput(this.refs.inputPass)}
           />
       <FormValidationMessage>required</FormValidationMessage>
       <FormLabel>Password</FormLabel>
-      <FormInput
+      <TextInput
+          ref='inputPass'
           name='password'
           secureTextEntry
           onChangeText={(password) => this.setState({password})}
           value={this.state.password}
+          onSubmitEditing={this.handleSubmit}
           />
       <FormValidationMessage>required</FormValidationMessage>
       <Button

@@ -25,7 +25,6 @@ class Registration extends Component {
   }
 
   render() {
-    const username = this.props.username || ""
     return (
       <View style={styles.outerContainer}>
         <ErrorHandling />

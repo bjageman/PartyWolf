@@ -8,12 +8,12 @@ import { connect } from 'react-redux';
 import { mapStateToProps, mapDispatchToProps } from '../../redux/utils'
 import { Actions } from 'react-native-router-flux';
 
-import { myConfig } from '../../../config.js';
+import myConfig from '../../config.js';
 
 //Custom components
 import RouteButton from './toolkit/RouteButton'
 
-class PlaceHolderTitle extends Component {
+class Home extends Component {
   constructor(props){
       super(props);
       this.renderDebug = this.renderDebug.bind(this)
@@ -96,4 +96,4 @@ const styles = StyleSheet.create({
 })
 
 
-export default connect(mapStateToProps, mapDispatchToProps)(PlaceHolderTitle);
+export default connect(mapStateToProps, mapDispatchToProps)(Home);

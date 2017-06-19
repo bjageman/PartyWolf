@@ -1,10 +1,4 @@
 import React, { Component } from 'react';
-import {
-  View,
-  ScrollView,
-  StyleSheet
-} from 'react-native'
-import { Text, Button, Card, Grid, Col, Row, Divider } from 'react-native-elements'
 import { connect } from 'react-redux';
 import { mapStateToProps, mapDispatchToProps } from '../../../../redux/utils'
 
@@ -13,25 +7,28 @@ class PlayerSummary extends Component {
         const title = this.props.title || "Player Summary"
         const players = this.props.players || []
         return (
-            <Card title={title}>
-                <Grid>
-                <Row>
-                    <Col><Text>Username</Text></Col>
-                    {this.props.showRole ? <Col><Text>Role</Text></Col> : null }
-                    <Col><Text>Turn Died</Text></Col>
-                </Row>
-                <Divider style={{ backgroundColor: 'blue' }} />
-                {players.map((player, i) => (
-                    <Row key={i}>
-                        <Col><Text>{player.user.username}</Text></Col>
-                        {this.props.showRole ? <Col><Text>{player.role.name}</Text></Col> : null }
-                        <Col><Text> 0 </Text></Col>
-                    </Row>
-                     )
-                  )
-                }
-                </Grid>
-            </Card>
+            <div>
+              <table className="table">
+                <thead>
+                    <tr>
+                        <th>Username</th>
+                        {this.props.showRole ? <th>Role</th> : null }
+                        <th>Turn Died</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {players.map((player, i) => (
+                        <tr key={i}>
+                            <td>{player.user.username}</td>
+                            {this.props.showRole ? <td>{player.role.name}</td> : null }
+                            <td>0</td>
+                        </tr>
+                         )
+                      )
+                    }
+                </tbody>
+              </table>
+            </div>
         )
     }
 }
@@ -42,7 +39,7 @@ class ResultTable extends Component {
       const dead_players = this.props.game && this.props.game.players.filter(function(player){return player.alive == false;}) || []
       const living_players = this.props.game && this.props.game.players.filter(function(player){return player.alive == true;}) || []
       return (
-          <ScrollView>
+          <div>
               <PlayerSummary
                   title="Death Count"
                   players={dead_players}
@@ -51,7 +48,7 @@ class ResultTable extends Component {
               <PlayerSummary
                   title="Survivors"
                   players={living_players} />
-          </ScrollView>
+          </div>
       )
   }
 }
