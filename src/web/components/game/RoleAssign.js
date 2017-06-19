@@ -6,14 +6,10 @@ import { mapStateToProps, mapDispatchToProps } from '../../../redux/utils'
 import Debug from '../toolkit/Debug'
 
 class RoleAssign extends Component {
-  constructor(props){
-      super(props);
-  }
-
   render() {
     const user = this.props.user || null
-    const player = user != null && user.player || null
-    const role = player != null && player.role || null
+    const player = user != null && user.player
+    const role = player != null && player.role
     if ( role == null ){
         return(
             <div>
@@ -27,8 +23,8 @@ class RoleAssign extends Component {
             <p h4>You are a...</p>
             <Debug />
             <img
-              style={{width: 300, height: 400}}
-              source={{uri: role.avatar }}
+              alt="role"
+              src={role.avatar}
             />
         <p h3>{role.name}!</p>
             <Link to='/game/menu/villagers'>

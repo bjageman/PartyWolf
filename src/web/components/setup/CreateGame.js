@@ -7,10 +7,6 @@ import Container from '../toolkit/bootstrap/Container'
 import CreateGameInput from './create/CreateGameInput'
 
 class CreateGame extends Component {
-  constructor(props){
-      super(props);
-  }
-
   render() {
     var code = this.props.game ? this.props.game.code : null
     if (this.props.game != null){

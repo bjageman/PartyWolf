@@ -10,11 +10,11 @@ class SpecialVote extends Component {
     const players = this.props.game ? this.props.game.players : []
     const role = this.props.user.player.role
     const seer_sight = this.props.votes_result && this.props.votes_result.Seer ? this.props.votes_result.Seer : null
-    if (role.name != "Villager"){
+    if (role.name !== "Villager"){
         return (
           <div>
             <p h4>{role.name} Vote!</p>
-            {role.name == "Seer" && seer_sight != null ? <p>SIGHT: {seer_sight.user.username} is a {seer_sight.role.name}</p>: null}
+            {role.name === "Seer" && seer_sight !== null ? <p>SIGHT: {seer_sight.user.username} is a {seer_sight.role.name}</p>: null}
             <PlayerList
                 players={players}
                 aliveOnly={true}

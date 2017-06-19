@@ -10,8 +10,6 @@ class VillagerVote extends Component {
 
   render() {
     const players = this.props.game ? this.props.game.players : []
-    const username = this.props.username || ""
-
     return (
       <div >
         <Status />

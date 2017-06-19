@@ -35,7 +35,7 @@ class JoinGame extends Component {
             <input
                 class="btn btn-primary"
                 type="submit"
-                title = "Refresh"
+                value="Refresh"
                 onClick = {this.getGamesListing}
                 />
             <GameList

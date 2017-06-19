@@ -5,13 +5,9 @@ import { mapStateToProps, mapDispatchToProps } from '../../../../redux/utils'
 import ResultTable from './ResultTable'
 
 class SummaryTurn extends Component {
-  constructor(props){
-      super(props);
-  }
 
   render() {
-    if (this.props.game != null){
-        const dead_players = this.props.game.players.filter(function(player){return player.alive == false;})
+    if (this.props.game !== null){
         return (
             <div>
             <ResultTable />

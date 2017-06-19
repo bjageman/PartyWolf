@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
+import { Redirect } from 'react-router-dom'
 import { mapStateToProps, mapDispatchToProps } from '../../../redux/utils'
 
 class GameList extends Component {
@@ -27,6 +28,14 @@ class GameList extends Component {
     render(){
         var games = this.props.games ? this.props.games : []
         console.log(games)
+        if (this.props.user == null){
+            return(
+                <Redirect to={{
+                    pathname: '/',
+                    state: { from: this.props.location }
+                }}/>
+            )
+        }else{
         return(
             <div>
                 <p>{this.props.user.username}</p>
@@ -48,7 +57,7 @@ class GameList extends Component {
                     games.map((game, i) => (
                       <tr key={game.id} >
                         <td>{game.id}</td>
-                        <td>game.creator.username</td>
+                        <td>{game.creator.username}</td>
                         <td>{this.renderDebug(game)}</td>
                         <td><input class="btn btn-success" type="submit" value="join" onClick={() => this.handleClick(game)} /></td>
                       </tr>
@@ -57,6 +66,7 @@ class GameList extends Component {
               </table>
             </div>
         )
+        }
     }
 }
 

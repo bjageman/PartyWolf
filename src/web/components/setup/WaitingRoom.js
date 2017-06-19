@@ -23,7 +23,15 @@ class WaitingRoom extends Component {
   render() {
     const players = this.props.game ? this.props.game.players : []
     const user = this.props.user || null
-     if (this.props.user.player.role != null) {
+    if (this.props.user == null){
+        return(
+            <Redirect to={{
+                pathname: '/',
+                state: { from: this.props.location }
+            }}/>
+        )
+    }
+     if (this.props.user.player != null && this.props.user.player.role != null) {
         console.log("Go To roleAssign")
         return (
             <Redirect to={{
@@ -52,10 +60,10 @@ class WaitingRoom extends Component {
         )
     }else{
         return(
-            <div>
-                <p h4>Unauthorized Access</p>
-                <Link to='/'>Home</Link>
-            </div>
+            <Redirect to={{
+                pathname: '/',
+                state: { from: this.props.location }
+            }}/>
         )
     }
   }

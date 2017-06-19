@@ -7,23 +7,19 @@ import Login from './users/Login'
 import Container from './toolkit/bootstrap/Container'
 
 class Home extends React.Component {
-    constructor(props){
-        super(props)
-    }
-
     render(){
         return(
             <Container>
                 <h1>Werewolf</h1>
                 <h4>The Party Game</h4>
                 {this.props.user ?
-                    <div>
-                        <Link to='/game/create'>
+                    <div className="btn-group" role="group">
+                        <Link to='/game/create'><button type="button" className="btn btn-default">
                             Create Game
-                        </Link>
-                        <Link to='/games'>
+                        </button></Link>
+                        <Link to='/games'><button  type="button" className="btn btn-default">
                             Join Game
-                        </Link>
+                        </button></Link>
                     </div>  : <div>
                     <Login />
                     <Link to='/register'>

@@ -8,7 +8,7 @@ class Status extends Component {
     if (this.props.game && this.props.user.player){
         const user = this.props.user
         const game = this.props.game
-        const living_players = game.players.filter(function(player){return player.alive == true });
+        const living_players = game.players.filter(function(player){return player.alive === true });
         const current_turn = this.props.game.current_turn
         return (
           <div>

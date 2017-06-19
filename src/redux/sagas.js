@@ -4,17 +4,16 @@ import { fork, take, call, put, cancel } from 'redux-saga/effects';
 import {
   register, registerSuccess,
   login, loginSuccess, logout,
-  addPlayer, removePlayer,
-  getUser,
+  addPlayer,
   getGames, getGamesSuccess,
   createGame,
   assignRoles,
-  setVote, gameFinished,
-  quitGame, quitGameSuccess,
+  setVote,
+  quitGame,
   gameUpdated, gameDeleted,
   getError
 } from './actions';
-import { postDataApi, fetchDataApi, verifyData } from './api'
+import { postDataApi, verifyData } from './api'
 import myConfig from '../config.js';
 
 console.log(myConfig)
@@ -134,7 +133,6 @@ function* flow() {
     const socket = yield call(connect);
     //socket.emit('login', { username: payload.username, password: payload.password });
     const task = yield fork(handleIO, socket);
-
     let action = yield take(`${logout}`);
     yield cancel(task);
     socket.emit('logout');

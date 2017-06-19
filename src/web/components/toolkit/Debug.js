@@ -7,7 +7,7 @@ import myConfig from '../../../config.js';
 class Debug extends Component {
 
   render() {
-    if (myConfig.DEBUG == true && this.props.game){
+    if (myConfig.DEBUG === true && this.props.game){
     return (
       <div id="debug">
           <p>ID: {this.props.game.id} Code:{this.props.game.code}</p>
@@ -16,7 +16,7 @@ class Debug extends Component {
       </div>
     )
     }else{
-        return(<div id="debug">herpderp</div>)
+        return(<div id="debug"></div>)
     }
   }
 }

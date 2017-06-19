@@ -32,11 +32,11 @@ class PlayerList extends Component {
   }
 
   renderDebug(player){
-      if (myConfig.DEBUG == true) {
+      if (myConfig.DEBUG === true) {
           return(
             <div>
               ID: {player.id} / {player.alive ? 'ALIVE' : 'DEAD'}
-              {player.role && player.role.name+ "( " + player.role.id + " ) / " + player.role.avatar } / { player.role && player.role.evil ? "EVIL" : "GOOD" } / 
+              {player.role && player.role.name+ "( " + player.role.id + " ) / " + player.role.avatar } / { player.role && player.role.evil ? "EVIL" : "GOOD" } /
               {player.votes.default} / {player.votes.Werewolf} / {player.votes.Seer}
             </div>
           )
@@ -59,8 +59,9 @@ class PlayerList extends Component {
         <thead>
           <tr>
               <th>Username</th>
+              { voting ? <th>Votes</th> : null }
               {myConfig.DEBUG ? <th>DEBUG</th> : null }
-              {voting ? <th>Vote</th> : null}
+              {voting ? <th>Choose</th> : null}
           </tr>
         </thead>
         <tbody>
@@ -68,6 +69,7 @@ class PlayerList extends Component {
           players.map((player, i) => (
             <tr key={i} >
                 <th>{player.user.username}</th>
+                { voting ? <td>{ player.votes[this.props.voteType]}</td> : null }
                 { myConfig.DEBUG ? <td>{this.renderDebug(player)}</td> : null }
                 {voting ? <td><input type="submit" value="VOTE" onClick={() => this.handleVote(player, role_id)} /></td> : <td></td> }
             </tr>
