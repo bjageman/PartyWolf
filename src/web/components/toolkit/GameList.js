@@ -38,8 +38,7 @@ class GameList extends Component {
         }else{
         return(
             <div>
-                <p>{this.props.user.username}</p>
-                <table>
+                <table className="table">
                     <thead>
                         <tr>
                             <th>ID #</th>
