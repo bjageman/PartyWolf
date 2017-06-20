@@ -24,7 +24,7 @@ class JoinGame extends Component {
     if (this.props.game != null){
         return(
             <Redirect to={{
-                pathname: '/game/id/' + this.props.game.id,
+                pathname: '/create/id/' + this.props.game.id,
                 state: { from: this.props.location }
             }}/>
         );
