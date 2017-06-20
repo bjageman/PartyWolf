@@ -49,26 +49,34 @@ class Login extends React.Component {
         }else{
             return(
                 <div>
-                {this.props.newUser}
+                <h2>Register Here</h2>
                     <form>
+                        <div className="form-group">
                         <input type="text"
+                            className="form-control"
                             name="username"
                             placeholder="username"
                             value={this.state.username}
                             onChange={this.handleChange}
                             />
+                        </div>
+                        <div className="form-group">
                         <input type="password"
+                            className="form-control"
                             name="password"
                             placeholder="password"
                             value={this.state.password}
                             onChange={this.handleChange}
                             />
+                        </div>
+                        <div className="form-group">
                         <input
-                            className="btn btn-primary button"
+                            className="btn btn-danger btn-lg btn-block"
                             type="submit"
-                            value="SUBMIT"
+                            value="Register"
                             onClick={this.handleSubmit}
                             />
+                        </div>
                     </form>
                     {this.renderDebug()}
                 </div>
