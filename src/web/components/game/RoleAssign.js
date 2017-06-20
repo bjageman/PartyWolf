@@ -27,6 +27,9 @@ class RoleAssign extends Component {
                   alt="role"
                   src={role.avatar}
                 />
+            <br />
+            {" "}
+            <button type="button" className="btn btn-default btn-lg">Next</button>
             </Link>
         </div>
         )

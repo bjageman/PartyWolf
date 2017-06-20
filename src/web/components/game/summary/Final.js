@@ -12,9 +12,12 @@ class SummaryFinal extends Component {
       <div>
         <h3>{winner} wins!</h3>
         <ResultTable />
-        <Link to='/'><button type="button" className="btn btn-default">
+        <button
+            onClick={() => this.props.gameCompleted()}
+            type="button"
+            className="btn btn-default">
             Home
-        </button></Link>
+        </button>
       </div>
     )
   }

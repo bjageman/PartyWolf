@@ -14,7 +14,7 @@ class Home extends React.Component {
                 <h4>The Party Game</h4>
             {this.props.user ?
                 <div className="form-group" role="group">
-                    <Link to='/game/create'><button type="button" className="btn btn-primary btn-lg btn-block">
+                    <Link to='/create'><button type="button" className="btn btn-primary btn-lg btn-block">
                         Create Game
                     </button></Link>
                     <br />
