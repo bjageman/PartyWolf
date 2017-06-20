@@ -45,15 +45,14 @@ class Menu extends Component {
           <div >
               <ul className="nav nav-tabs" role="tablist">
                 <li role="presentation" className={ pathName === `${this.props.match.url}/villagers` ? "active" : null } >
-                    <Link to={`${this.props.match.url}/villagers`}>Villager Votes</Link>
+                    <Link to={`${this.props.match.url}/villagers`}>Villagers</Link>
                 </li>
                 <li role="presentation" className={ pathName === `${this.props.match.url}/specials` ? "active" : null }>
-                    <Link to={`${this.props.match.url}/specials`}>Special Vote</Link>
+                    <Link to={`${this.props.match.url}/specials`}>Special</Link>
                 </li>
                 <li role="presentation" className={ pathName === `${this.props.match.url}/status` ? "active" : null }>
                     <Link to={`${this.props.match.url}/status`}>Status</Link>
                 </li>
-                <li role="presentation"><a onClick={() => this.cancelGame()}>Quit</a></li>
               </ul>
                 <div role="tabpanel" className="tab-pane active" id="home">
                     <Route path={`${this.props.match.url}/villagers`} component={VillagerVote}/>

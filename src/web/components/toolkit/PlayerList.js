@@ -54,7 +54,6 @@ class PlayerList extends Component {
     const voting = this.props.voting || false
     const role_id = this.props.role ? this.props.role.id : null
     return (
-      <Container>
       <table className="table">
         <thead>
           <tr>
@@ -77,7 +76,6 @@ class PlayerList extends Component {
         }
         </tbody>
     </table>
-      </Container>
     )
   }
 }

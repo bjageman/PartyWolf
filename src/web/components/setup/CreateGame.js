@@ -3,7 +3,6 @@ import { connect } from 'react-redux';
 import { Link, Redirect } from 'react-router-dom'
 
 import { mapStateToProps, mapDispatchToProps } from '../../../redux/utils'
-import Container from '../toolkit/bootstrap/Container'
 import CreateGameInput from './create/CreateGameInput'
 
 class CreateGame extends Component {
@@ -19,20 +18,18 @@ class CreateGame extends Component {
     }
     if (this.props.user != null){
         return (
-          <Container>
-            <p>Create Game</p>
-            <p>{this.props.user.username}</p>
-            <p>CODE: {code}</p>
+          <div>
+            <p>Are you sure you want to create a game?</p>
             <CreateGameInput />
-          </Container>
+          </div>
     )}else{
         return(
-        <Container>
+        <div>
             <p h2>You must be logged in</p>
             <Link to='/'>
                 Login
             </Link>
-        </Container>
+        </div>
     )}
   }
 }

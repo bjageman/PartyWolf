@@ -36,30 +36,36 @@ class CreateGameInput extends Component {
 
   render() {
     return (
-        <div>
-          <p>{this.props.user.username} {this.props.user.id}</p>
+        <form>
+        <div className='form-group'>
             <label>Game Name</label>
             <input
                 type='text'
+                className='form-control'
                 name='gameName'
                 onChange={(event) => this.setState({[event.target.name]:event.target.value})}
                 value={this.state.gameName}
                 />
-            <label>required</label>
-            <input
-                type="checkbox"
-                title='Make Private'
-                onClick={() => this.setState({public: !this.state.public})}
-                checked={!this.state.public}
-                />
+            <div className="checkbox">
+            <label>
+              <input
+                  type="checkbox"
+                  title='Make Private'
+                  onClick={() => this.setState({public: !this.state.public})}
+                  checked={!this.state.public}
+                  /> Private Server
+            </label>
+            </div>
             <input
                 type="submit"
+                className="btn btn-primary btn-lg btn-block"
                 value="Create"
                 backgroundColor="green"
                 onClick={this.handleSubmit}
                 />
-                    </div>
-                )
+        </div>
+        </form>
+        )
     }
 }
 

@@ -1,5 +1,6 @@
 import React from 'react'
 import { connect } from 'react-redux'
+import { Link } from 'react-router-dom'
 
 import { mapStateToProps, mapDispatchToProps } from '../../../redux/utils'
 
@@ -41,24 +42,37 @@ class Login extends React.Component {
         return(
             <div>
                 <form>
-                    <input type="text"
-                        name="username"
-                        placeholder="username"
-                        value={this.state.username}
-                        onChange={this.handleChange}
-                        />
-                    <input type="password"
-                        name="password"
-                        placeholder="password"
-                        value={this.state.password}
-                        onChange={this.handleChange}
-                        />
-                    <input
-                        className="btn btn-primary button"
-                        type="submit"
-                        value="SUBMIT"
-                        onClick={this.handleSubmit}
-                        />
+                    <div className="form-group">
+                        <input type="text"
+                            className="form-control"
+                            name="username"
+                            placeholder="username"
+                            value={this.state.username}
+                            onChange={this.handleChange}
+                            />
+                    </div>
+                    <div className="form-group">
+                        <input type="password"
+                            className="form-control"
+                            name="password"
+                            placeholder="password"
+                            value={this.state.password}
+                            onChange={this.handleChange}
+                            />
+                    </div>
+                    <div className="form-group">
+                        <input
+                            className="btn btn-success btn-lg btn-block"
+                            type="submit"
+                            value="Login"
+                            onClick={this.handleSubmit}
+                            />
+                        <br />
+                        <Link to='/register'><button type="button" className="btn btn-danger btn-lg btn-block">
+                            Register
+                        </button></Link>
+                    </div>
+
                 </form>
                 {this.renderDebug()}
             </div>

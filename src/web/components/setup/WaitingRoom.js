@@ -45,17 +45,17 @@ class WaitingRoom extends Component {
           <div>
             <h3>Waiting For Players...</h3>
             <Debug />
-            <PlayerList
-                players={players}/>
             { user.player.is_creator ?
             <input
-                className="btn button"
+                className="btn btn-success btn-lg btn-block"
                 type="submit"
                 value="Start Game"
                 backgroundColor="green"
                 onClick={this.handleSubmit}
                 />
             : null }
+            <PlayerList
+                players={players}/>
           </div>
         )
     }else{
