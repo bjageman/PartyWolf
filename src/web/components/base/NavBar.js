@@ -18,6 +18,9 @@ class NavBar extends React.Component {
                     <span className="icon-bar"></span>
                   </button>
                   <Link className="navbar-brand" to="/">{brandName}</Link>
+                  <ul className="nav navbar-nav">
+                      {this.props.user ? <li><a>{this.props.user.username}</a></li> : null}
+                  </ul>
                 </div>
                 <div className="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
                   <ul className="nav navbar-nav navbar-right">
