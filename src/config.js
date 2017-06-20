@@ -1,5 +1,5 @@
 
-var ENVIRONMENT="demo"
+var ENVIRONMENT="production"
 
 function getConfig() {
   switch (ENVIRONMENT) {

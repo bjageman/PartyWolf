@@ -19,22 +19,26 @@ class RoleAssign extends Component {
     }else{
         return (
           <div>
-
-            <p h4>You are a...</p>
-            <Debug />
-            <img
-              alt="role"
-              src={role.avatar}
-            />
-        <p h3>{role.name}!</p>
             <Link to='/game/menu/villagers'>
-                Go To Sleep
+                <h4>You are a...</h4>
+                <h3>{role.name}!</h3>
+                <img
+                  style={imageStyle}
+                  alt="role"
+                  src={role.avatar}
+                />
+            <br />
+            {" "}
+            <button type="button" className="btn btn-default btn-lg">Next</button>
             </Link>
-          </div>
+        </div>
         )
         }
     }
 }
 
+const imageStyle = {
+  height: 180,
+};
 
 export default connect(mapStateToProps, mapDispatchToProps)(RoleAssign);
