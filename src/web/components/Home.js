@@ -12,7 +12,7 @@ class Home extends React.Component {
             <div>
                 <h1>Werewolf</h1>
                 <h4>The Party Game</h4>
-            {this.props.user ?
+                {this.props.user ?
                 <div className="form-group" role="group">
                     <Link to='/create'><button type="button" className="btn btn-primary btn-lg btn-block">
                         Create Game
