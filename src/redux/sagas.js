@@ -133,7 +133,7 @@ function* flow() {
     const socket = yield call(connect);
     //socket.emit('login', { username: payload.username, password: payload.password });
     const task = yield fork(handleIO, socket);
-    yield take(`${logout}`);
+    const action = yield take(`${logout}`);
     yield cancel(task);
     socket.emit('logout');
   }
