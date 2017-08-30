@@ -78,8 +78,10 @@ def add_player(data):
 
 @socketio.on('assign_roles')
 def assign_roles(data):
+    print("assigning roles")
     game = Game.query.get(data['game_id'])
     join_room(game.code)
+    print(game.code, game.closed)
     if game.closed is not True:
         size = len(game.players.all())
         deck = create_deck(size)
