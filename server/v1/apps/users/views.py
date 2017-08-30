@@ -56,4 +56,8 @@ def register_user():
     db.session.commit()
     return jsonify({ 'username': user.username })
 
+@users.route('', methods=['GET'])
+def test_user():
+    return jsonify({'status': 'WORKING'})
+
 #Todo: Transfer to separate file
