@@ -1,5 +1,5 @@
 
-var ENVIRONMENT="local"
+var ENVIRONMENT="production"
 
 function getConfig() {
   switch (ENVIRONMENT) {
@@ -26,7 +26,7 @@ function getConfig() {
     };
   case "production":
     return {
-      API_URL: 'http://neuro.ddnsking.com:5000',
+      API_URL: 'https://werewolf-party-server.herokuapp.com',
       API_VERSION: 1,
       VERSION: 'production',
       DEBUG: false,
