@@ -1,3 +1,4 @@
+import os
 from flask_script import Manager, Server
 
 from v1.apps import app, socketio
