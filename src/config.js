@@ -19,7 +19,7 @@ function getConfig() {
     };
   case "demo":
     return {
-      API_URL: 'https://werewolf-party-server.herokuapp.com',
+      API_URL: 'http://neuro.ddnsking.com:5000',
       API_VERSION: 1,
       VERSION: 'demo',
       DEBUG: true,

@@ -91,7 +91,7 @@ def assign_roles(data):
         db.session.add(game)
         db.session.commit()
         game.closed = True
-        send_game_update(game)
+    send_game_update(game)
 
 @socketio.on('set_vote')
 def set_vote(data):
