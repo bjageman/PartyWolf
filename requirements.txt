@@ -22,3 +22,4 @@ werkzeug
 click
 requests
 socketIO-client
+psycopg2
