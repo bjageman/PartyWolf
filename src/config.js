@@ -1,16 +1,16 @@
 
-var ENVIRONMENT="production"
+var ENVIRONMENT="local"
 
 function getConfig() {
   switch (ENVIRONMENT) {
-  case "debug":
+  case "native":
     return {
       API_URL: 'http://10.0.2.2:5000',
       API_VERSION: 1,
       VERSION: 'debug',
       DEBUG: true,
     };
-  case "debug-web":
+  case "local":
     return {
       API_URL: 'http://0.0.0.0:5000',
       API_VERSION: 1,

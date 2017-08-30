@@ -4,10 +4,6 @@ import { Redirect } from 'react-router-dom'
 import { mapStateToProps, mapDispatchToProps } from '../../../redux/utils'
 
 class Security extends Component {
-   constructor(props) {
-    super(props);
-  }
-
   render() {
     if (this.props.game == null) {
         return (

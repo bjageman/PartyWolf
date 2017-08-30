@@ -24,8 +24,8 @@ class NavBar extends React.Component {
                 </div>
                 <div className="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
                   <ul className="nav navbar-nav navbar-right">
-                    {this.props.user && this.props.user.player == null ? <li onClick={() => this.props.logout()}><a href="#">Logout</a></li> : null}
-                    {this.props.user && this.props.user.player ? <li onClick={() => this.props.quitGame({"player_id": this.props.user.player.id})}><a href="#">Quit</a></li> : null}
+                    {this.props.user && this.props.user.player == null ? <li onClick={() => this.props.logout()}><a>Logout</a></li> : null}
+                    {this.props.user && this.props.user.player ? <li onClick={() => this.props.quitGame({"player_id": this.props.user.player.id})}><a>Quit</a></li> : null}
                   </ul>
                 </div>
             </div>

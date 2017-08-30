@@ -7,7 +7,6 @@ import CreateGameInput from './create/CreateGameInput'
 
 class CreateGame extends Component {
   render() {
-    var code = this.props.game ? this.props.game.code : null
     if (this.props.game != null){
         return(
             <Redirect to={{

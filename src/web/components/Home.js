@@ -4,7 +4,6 @@ import { Link } from 'react-router-dom'
 import { mapStateToProps, mapDispatchToProps } from '../../redux/utils'
 
 import Login from './users/Login'
-import Container from './toolkit/bootstrap/Container'
 
 class Home extends React.Component {
     render(){

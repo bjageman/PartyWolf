@@ -3,8 +3,6 @@ import { connect } from 'react-redux';
 import { Link } from 'react-router-dom'
 import { mapStateToProps, mapDispatchToProps } from '../../../redux/utils'
 
-import Debug from '../toolkit/Debug'
-
 class RoleAssign extends Component {
   render() {
     const user = this.props.user || null

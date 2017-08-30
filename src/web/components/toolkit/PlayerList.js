@@ -6,8 +6,6 @@ import { mapStateToProps, mapDispatchToProps } from '../../../redux/utils';
 //Set Configuration
 import myConfig from '../../../config.js';
 
-import Container from './bootstrap/Container'
-
 class PlayerList extends Component {
   constructor(props){
       super(props);
