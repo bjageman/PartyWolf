@@ -18,6 +18,7 @@ from v1.apps.errors import *
 
 def send_game_update(game, data = {}):
     data['game'] = parse_game(game)
+    print(data)
     emit('game_updated', data, room=game.code)
 
 @socketio.on('connect')
