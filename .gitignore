@@ -3,6 +3,7 @@ quickstart.sh
 */__pycache__/*
 */__tests__/*
 *.log
+env.sh
 
 # OSX
 #

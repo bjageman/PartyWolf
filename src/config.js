@@ -1,5 +1,5 @@
 
-var ENVIRONMENT="production"
+var ENVIRONMENT="demo"
 
 function getConfig() {
   switch (ENVIRONMENT) {
@@ -19,10 +19,10 @@ function getConfig() {
     };
   case "demo":
     return {
-      API_URL: 'http://192.168.1.111:5000',
+      API_URL: 'https://werewolf-party-server.herokuapp.com',
       API_VERSION: 1,
       VERSION: 'demo',
-      DEBUG: false,
+      DEBUG: true,
     };
   case "production":
     return {
