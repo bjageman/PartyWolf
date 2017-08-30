@@ -4,8 +4,8 @@
 # Players -> Users
 # Game -> History
 
-from apps import db
-from apps.users.models import User
+from v1.apps import db
+from v1.apps.users.models import User
 
 class Game(db.Model):
     __tablename__ = 'game'

@@ -1,4 +1,4 @@
-from apps import db
+from v1.apps import db
 from passlib.apps import custom_app_context as pwd_context
 
 class User(db.Model):

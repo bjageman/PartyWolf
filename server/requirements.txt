@@ -18,3 +18,7 @@ gevent
 scrypt
 
 mysqlclient
+werkzeug
+click
+requests
+socketIO-client

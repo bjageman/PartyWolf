@@ -19,4 +19,5 @@ function configureStore(initialState){
   return store;
 }
 
-export default store = configureStore()
+const store = configureStore()
+export default store

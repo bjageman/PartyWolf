@@ -8,18 +8,18 @@ import { mapStateToProps, mapDispatchToProps } from '../redux/utils'
 import store from '../redux/store';
 import { quitGame } from '../redux/actions';
 
-import { default as Home } from './components/Home'
-import { default as Login } from './components/users/Login'
-import { default as Registration } from './components/users/Registration'
-import { default as CreateGame } from './components/setup/CreateGame'
-import { default as JoinGame } from './components/setup/JoinGame'
-import { default as WaitingRoom } from './components/setup/WaitingRoom'
-import { default as VillagerVote } from './components/game/menu/VillagerVote'
-import { default as SpecialVote } from './components/game/menu/SpecialVote'
-import { default as PreviousTurnResults } from './components/game/menu/PreviousTurnResults'
-import { default as RoleAssign } from './components/game/RoleAssign'
-import { default as TurnResults } from './components/game/TurnResults'
-import { default as FinalResults } from './components/game/FinalResults'
+import Home from './components/Home'
+import Login from './components/users/Login'
+import Registration from './components/users/Registration'
+import CreateGame from './components/setup/CreateGame'
+import JoinGame from './components/setup/JoinGame'
+import WaitingRoom from './components/setup/WaitingRoom'
+import VillagerVote from './components/game/menu/VillagerVote'
+import SpecialVote from './components/game/menu/SpecialVote'
+import PreviousTurnResults from './components/game/menu/PreviousTurnResults'
+import RoleAssign from './components/game/RoleAssign'
+import SummaryTurn from './components/game/summary/Turn'
+import SummaryFinal from './components/game/summary/Final'
 
 const TabText = ({ selected, title}) => {
     return (
@@ -62,11 +62,11 @@ class App extends Component {
             <Scene key="roleAssign" component={RoleAssign} title="Your Role"  />
             <Scene key="menu" tabs={true} style={{backgroundColor: "white"}} >
                 <Scene key="villagerVote" component={VillagerVote} title="Vote on Culprit" iname="home" icon={TabIcon} rightTitle="Quit" onRight={() => this.cancelGame()} />
-                <Scene key="specialVote" component={SpecialVote} title="Vote on 'Culprit'" iname="stars" icon={TabIcon} rightTitle="Quit" onRight={() => this.cancelGame()} />
+                <Scene key="specialVote" component={SpecialVote} title="Special Vote" iname="stars" icon={TabIcon} rightTitle="Quit" onRight={() => this.cancelGame()} />
                 <Scene key="previousTurnResults" component={PreviousTurnResults} title="Death Toll" iname="sentiment-very-dissatisfied" icon={TabIcon} rightTitle="Quit" onRight={() => this.cancelGame()} />
             </Scene>
-            <Scene key="turnResults" component={TurnResults} title="Results"/>
-            <Scene key="finalResults" component={FinalResults} title="Game Over!"/>
+            <Scene key="turnResults" component={SummaryTurn} title="Results"/>
+            <Scene key="finalResults" component={SummaryFinal} title="Game Over!"/>
         </Scene>
       </Router>
     )
