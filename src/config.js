@@ -1,5 +1,5 @@
 
-var ENVIRONMENT="demo"
+var ENVIRONMENT="local"
 
 function getConfig() {
   switch (ENVIRONMENT) {
@@ -22,7 +22,8 @@ function getConfig() {
       API_URL: 'http://neuro.ddnsking.com:5000',
       API_VERSION: 1,
       VERSION: 'demo',
-      DEBUG: true,
+      DEBUG: false
+      ,
     };
   case "production":
     return {
