@@ -22,6 +22,7 @@ export function subscribe(socket) {
     return eventChannel(emit => {
       socket.on('user_login_success', ({ user }) => {
         emit(actions.loginSuccess({ user }))
+        emit(push("/"))
       })
       socket.on('get_games_success', ({ games }) => {
         emit(actions.getGamesSuccess({ games }))
@@ -36,12 +37,19 @@ export function subscribe(socket) {
       })
       socket.on('game_updated', ({ game, votes, winner }) => {
         emit(actions.gameUpdated({ game, votes, winner }))
+        if (winner){
+            emit(push("/game/results"))
+        }
       })
       socket.on('game_deleted', ({ game_id }) => {
         emit(actions.gameDeleted({ game_id }))
+        emit(push("/"))
       })
       socket.on('send_error', ({ error }) => {
         emit(actions.error({ error }))
+      })
+      socket.on('quit_success', () => {
+        emit(push("/"))
       })
       socket.on('disconnect', e => {
         // TODO: handle

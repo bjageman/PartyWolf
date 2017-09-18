@@ -98,7 +98,7 @@ def set_vote(data):
     choice = Player.query.get(data['choice_id'])
     try:
         role = Role.query.get(data['role_id'])
-    except KeyError:
+    except:
         role = None
     game = voter.game
     turn = game.current_turn
@@ -136,6 +136,7 @@ def quit_player(data):
     send_game_update(game, {"quitter": parse_player(player)})
     if winner is not None:
         send_game_update(game, {"winner": winner})
+    emit('quit_success')
 
 @socketio.on_error()        # Handles the default namespace
 def error_handler(e):

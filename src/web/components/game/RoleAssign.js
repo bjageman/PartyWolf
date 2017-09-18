@@ -1,42 +1,40 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { Link } from 'react-router-dom'
-import { mapStateToProps, mapDispatchToProps } from '../../../redux/utils'
+import { mapStateToProps, mapDispatchToProps } from 'redux/utils'
+
+import {Card, CardContent, CardMedia, Text, Button} from 'bjageman-react-toolkit'
 
 class RoleAssign extends Component {
   render() {
     const user = this.props.user || null
     const player = user != null && user.player
     const role = player != null && player.role
-    if ( role == null ){
-        return(
-            <div>
-                <p>Errored</p>
-            </div>
-        )
-    }else{
-        return (
-          <div>
-            <Link to='/game/menu/villagers'>
-                <h4>You are a...</h4>
-                <h3>{role.name}!</h3>
-                <img
-                  style={imageStyle}
-                  alt="role"
-                  src={role.avatar}
-                />
-            <br />
-            {" "}
-            <button type="button" className="btn btn-default btn-lg">Next</button>
-            </Link>
-        </div>
-        )
-        }
+    return (
+
+        <Card>
+        <CardContent>
+        <Text h4>You are a...</Text>
+        <Text h3>{role.name}</Text>
+        <Link to='/game/menu/villagers'><Button raised>Next</Button></Link>
+        </CardContent>
+        <CardMedia>
+        <img
+          style={imageStyle}
+          alt="role"
+          src={role.avatar}
+        />
+        </CardMedia>
+        </Card>
+
+
+    )
     }
 }
 
 const imageStyle = {
-  height: 180,
+  maxHeight: 180,
+  width: "100%"
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(RoleAssign);

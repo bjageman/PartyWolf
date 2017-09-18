@@ -1,84 +1,93 @@
-import React, { Component } from 'react';
-import { connect } from 'react-redux';
+import React, { Component } from 'react'
+import { connect } from 'react-redux'
 
-import { mapStateToProps, mapDispatchToProps } from '../../../redux/utils';
+import { mapStateToProps, mapDispatchToProps } from 'redux/utils'
+import { ListSelect, ListSelectItem, Avatar, Icon, Button, Text } from 'bjageman-react-toolkit'
+import myConfig from 'config.js'
 
-//Set Configuration
-import myConfig from '../../../config.js';
+class PlayerListItem extends React.Component {
+    render(){
+        const player = this.props.player
+        const voting = this.props.voting
+        const votes = this.props.votes
+        const role_id = this.props.role_id
+        const avatar = "http://eadb.org/wp-content/uploads/2015/08/profile-placeholder.jpg"
+        return(
+            <div onClick={voting ? () => this.props.handleVote(player, role_id) : null} style={styles.container}>
+                <div style={{flex: 1, padding:"10px"}}>
+                { this.props.selected ?
+                    <Icon name="check" avatar />
+                    :
+                    <Avatar image={avatar} name={player.user.username} />
+                }
+                </div>
+                <div style={{flex: 2}}>
+                <Text h3>{player.user.username}</Text>
+                </div>
+                { voting && votes > 0?
+                    <div style={{flex: 1}}>
+                        <div style={styles.marker}>{votes}</div>
+                    </div>
+                 : null }
+
+            </div>
+        )
+    }
+}
+
 
 class PlayerList extends Component {
-  constructor(props){
-      super(props);
-      this.handleVote = this.handleVote.bind(this)
-  }
-
-  handleVote(player, role_id){
-      console.log(player)
-      if (role_id != null){
-          this.props.setVote({
-              voter_id: this.props.user.player.id,
-              choice_id: player.id,
-              role_id: role_id,
-          })
-      }else{
-            this.props.setVote({
-                voter_id: this.props.user.player.id,
-                choice_id: player.id,
-            })
-      }
-
-  }
-
-  renderDebug(player){
-      if (myConfig.DEBUG === true) {
-          return(
-            <div>
-              ID: {player.id} / {player.alive ? 'ALIVE' : 'DEAD'}
-              {player.role && player.role.name+ "( " + player.role.id + " ) / " + player.role.avatar } / { player.role && player.role.evil ? "EVIL" : "GOOD" } /
-              {player.votes.default} / {player.votes.Werewolf} / {player.votes.Seer}
-            </div>
-          )
-      }else{
-          return(
-            <div>
-            </div>
-          )
-      }
-
-  }
-
+    constructor(props){
+        super(props)
+        this.handleVote = this.handleVote.bind(this)
+    }
+    handleVote(player, role_id){
+        this.props.setVote({
+            voter_id: this.props.user.player.id,
+            choice_id: player.id,
+            role_id: role_id ? role_id : null,
+        })
+    }
   render() {
-    const players = this.props.aliveOnly && this.props.game != null ? this.props.game.players.filter(function(player){return player.alive;}) :this.props.players
+    const players = this.props.aliveOnly && this.props.game != null ? this.props.game.players.filter(function(player){return player.alive}) :this.props.players
     const voting = this.props.voting || false
+    const voteType = this.props.voteType
     const role_id = this.props.role ? this.props.role.id : null
     return (
-      <table className="table">
-        <thead>
-          <tr>
-              <th>Username</th>
-              { voting ? <th>Votes</th> : null }
-              {myConfig.DEBUG ? <th>DEBUG</th> : null }
-              {voting ? <th>Choose</th> : null}
-          </tr>
-        </thead>
-        <tbody>
-        {
-          players.map((player, i) => (
-            <tr key={i} >
-                <th>{player.user.username}</th>
-                { voting ? <td>{ player.votes[this.props.voteType]}</td> : null }
-                { myConfig.DEBUG ? <td>{this.renderDebug(player)}</td> : null }
-                {voting ? <td><input type="submit" value="VOTE" onClick={() => this.handleVote(player, role_id)} /></td> : <td></td> }
-            </tr>
-          ))
-        }
-        </tbody>
-    </table>
+    <ListSelect getIndex={(i) => this.setState({ listValue: i })}>
+      {
+        players.map((player, i) => (
+        <ListSelectItem key={i} >
+            <PlayerListItem handleVote={this.handleVote} voting = {voting} player={player} votes={player.votes[voteType]} role_id = {role_id} />
+        </ListSelectItem>
+      ))
+      }
+    </ListSelect>
+
     )
   }
 }
 
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps
-)(PlayerList)
+const styles = {
+    container: {
+        display: "flex",
+        justifyContent: "center",
+        alignItems: "center",
+        width: "100%",
+    },
+    marker: {
+        backgroundColor: "gray",
+        color: "white",
+        height: "25px",
+        width: "25px",
+        borderRadius: "30px",
+        textAlign: "center",
+        top: "50%",
+        paddingTop:"5px",
+        paddingLeft: "5px",
+        paddingRight: "5px"
+    }
+}
+
+
+export default connect(mapStateToProps, mapDispatchToProps)(PlayerList)

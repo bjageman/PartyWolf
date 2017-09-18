@@ -8,38 +8,14 @@ import SpecialVote from './SpecialVote'
 import TurnSummary from '../summary/Turn'
 
 class Menu extends Component {
-
   cancelGame(){
-      console.log("Exiting game")
       if (this.props.user.player !== null) {
-          console.log("THERE IS A PLAYER TO DELETE")
-          this.props.quitGame({
-              "player_id": this.props.user.player.id
-          })
-          console.log("DISPATCHED QUIT")
+          this.props.quitGame({ "player_id": this.props.user.player.id })
       }
-
-      return(
-          <Redirect to={{
-              pathname: '/',
-              state: { from: this.props.location }
-          }}/>
-      )
-
   }
 
-
   render() {
-
     if (this.props.game != null) {
-        if (this.props.winner != null){
-            return(
-                <Redirect to={{
-                    pathname: '/game/results',
-                    state: { from: this.props.location }
-                }}/>
-            )
-        }
         const pathName = this.props.location.pathname
         return (
           <div >
@@ -61,14 +37,7 @@ class Menu extends Component {
                 </div>
           </div>
         )
-    }else{
-        return (
-            <Redirect to={{
-                pathname: '/',
-                state: { from: this.props.location }
-            }}/>
-        )
-    }
+    }else{ return ( <Redirect to={{ pathname: '/', state: { from: this.props.location } }}/> ) }
   }
 }
 

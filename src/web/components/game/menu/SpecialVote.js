@@ -1,8 +1,8 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { mapStateToProps, mapDispatchToProps } from '../../../../redux/utils'
+import { mapStateToProps, mapDispatchToProps } from 'redux/utils'
 
-import PlayerList from '../../toolkit/PlayerList'
+import PlayerList from 'web/components/toolkit/PlayerList'
 
 class SpecialVote extends Component {
 
