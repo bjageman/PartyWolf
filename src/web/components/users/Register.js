@@ -1,8 +1,8 @@
 import React from 'react'
-import { Redirect } from 'react-router-dom'
+import { Link } from 'react-router-dom'
 import { connect } from 'react-redux'
-
-import { mapStateToProps, mapDispatchToProps } from '../../../redux/utils'
+import { mapStateToProps, mapDispatchToProps } from 'redux/utils'
+import { TextInput, Button, CardContent } from 'bjageman-react-toolkit'
 
 
 class Login extends React.Component {
@@ -39,49 +39,31 @@ class Login extends React.Component {
     }
 
     render(){
-        if (this.props.newUser != null) {
-            return(
-                <Redirect to={{
-                    pathname: '/',
-                    state: { from: this.props.location }
-                }}/>
-            )
-        }else{
-            return(
-                <div>
-                <h2>Register Here</h2>
-                    <form>
-                        <div className="form-group">
-                        <input type="text"
-                            className="form-control"
-                            name="username"
-                            placeholder="username"
-                            value={this.state.username}
-                            onChange={this.handleChange}
-                            />
-                        </div>
-                        <div className="form-group">
-                        <input type="password"
-                            className="form-control"
-                            name="password"
-                            placeholder="password"
-                            value={this.state.password}
-                            onChange={this.handleChange}
-                            />
-                        </div>
-                        <div className="form-group">
-                        <input
-                            className="btn btn-danger btn-lg btn-block"
-                            type="submit"
-                            value="Register"
-                            onClick={this.handleSubmit}
-                            />
-                        </div>
-                    </form>
-                    {this.renderDebug()}
-                </div>
-            )
-        }
+        return(
+            <CardContent>
+            <h2>Register Here</h2>
+                    <TextInput
+                        name="username"
+                        label="username"
+                        value={this.state.username}
+                        onChange={this.handleChange}
+                        />
+                    <TextInput
+                        type="password"
+                        name="password"
+                        label="password"
+                        value={this.state.password}
+                        onChange={this.handleChange}
+                        />
+                    <Button raised onClick={this.handleSubmit}>
+                        Register
+                    </Button>
+                    <Link to='/'>
+                        <Button>Login</Button>
+                    </Link>
+                {this.renderDebug()}
+            </CardContent>
+        )
     }
 }
 

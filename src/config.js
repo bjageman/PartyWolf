@@ -15,7 +15,7 @@ function getConfig() {
       API_URL: 'http://0.0.0.0:5000',
       API_VERSION: 1,
       VERSION: 'debug',
-      DEBUG: true,
+      DEBUG: false,
     };
   case "demo":
     return {

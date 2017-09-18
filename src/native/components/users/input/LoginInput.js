@@ -32,7 +32,7 @@ class LoginInput extends Component {
   handleSubmit(e){
       e.preventDefault();
       if (this.state.username.length == 0 || this.state.password == 0){
-          this.props.getError({"error": "Please input username and/or password"})
+          this.props.error({"error": "Please input username and/or password"})
       }else{
           this.props.login({
               username: this.state.username,

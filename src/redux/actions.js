@@ -25,4 +25,4 @@ export const gameUpdated = createAction('the server sent an update for the curre
 export const gameDeleted = createAction('the game was deleted and players should be booted to lobby')
 export const gameCompleted = createAction('the game has completed and current data should be wiped.')
 
-export const getError = createAction('received an error message from the server')
+export const error = createAction('received an error message from the server')

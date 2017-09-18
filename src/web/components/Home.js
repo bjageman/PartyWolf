@@ -1,29 +1,34 @@
 import React from 'react'
 import { connect } from 'react-redux'
 import { Link } from 'react-router-dom'
-import { mapStateToProps, mapDispatchToProps } from '../../redux/utils'
+import { mapStateToProps, mapDispatchToProps } from 'redux/utils'
 
+import { Button, Grid, Card, CardContent } from 'bjageman-react-toolkit'
 import Login from './users/Login'
 
 class Home extends React.Component {
     render(){
         return(
-            <div>
+        <Grid>
+            <Card>
+                <CardContent>
                 <h1>Werewolf</h1>
                 <h4>The Party Game</h4>
+                </CardContent>
                 {this.props.user ?
-                <div className="form-group" role="group">
-                    <Link to='/create'><button type="button" className="btn btn-primary btn-lg btn-block">
-                        Create Game
-                    </button></Link>
-                    <br />
-                    <Link to='/games'><button  type="button" className="btn btn-warning btn-lg btn-block">
-                        Join Game
-                    </button></Link>
-                </div>  : <div>
-                <Login />
-                </div>}
-            </div>
+                    <CardContent>
+                        <Link to='/create'>
+                            <Button raised>Create Game</Button>
+                        </Link>
+                        <Link to='/games'>
+                            <Button raised>Join Game</Button>
+                        </Link>
+                    </CardContent>
+                :
+                    <Login />
+                }
+            </Card>
+        </Grid>
 
         )
     }

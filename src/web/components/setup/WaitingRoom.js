@@ -30,15 +30,6 @@ class WaitingRoom extends Component {
             }}/>
         )
     }
-     if (this.props.user.player != null && this.props.user.player.role != null) {
-        console.log("Go To roleAssign")
-        return (
-            <Redirect to={{
-                pathname: '/game/assignment/',
-                state: { from: this.props.location }
-            }}/>
-        )
-    }
     if (user != null && user.player && this.props.game){
         return (
           <div>

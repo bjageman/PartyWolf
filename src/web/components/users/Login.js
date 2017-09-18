@@ -4,6 +4,7 @@ import { Link } from 'react-router-dom'
 
 import { mapStateToProps, mapDispatchToProps } from '../../../redux/utils'
 
+import { TextInput, Button, CardContent } from 'bjageman-react-toolkit'
 
 class Login extends React.Component {
     constructor(props){
@@ -40,43 +41,30 @@ class Login extends React.Component {
 
     render(){
         return(
-            <div>
-                <form>
-                    <div className="form-group">
-                        <input type="text"
-                            className="form-control"
-                            name="username"
-                            placeholder="username"
-                            value={this.state.username}
-                            onChange={this.handleChange}
-                            />
-                    </div>
-                    <div className="form-group">
-                        <input type="password"
-                            className="form-control"
-                            name="password"
-                            placeholder="password"
-                            value={this.state.password}
-                            onChange={this.handleChange}
-                            />
-                    </div>
-                    <div className="form-group">
-                        <input
-                            className="btn btn-success btn-lg btn-block"
-                            type="submit"
-                            value="Login"
-                            onClick={this.handleSubmit}
-                            />
-                        <br />
-                        <Link to='/register'><button type="button" className="btn btn-danger btn-lg btn-block">
-                            Register
-                        </button></Link>
-                    </div>
+            <CardContent>
+                <TextInput
+                    name="username"
+                    label="username"
+                    placeholder="username"
+                    value={this.state.username}
+                    onChange={this.handleChange}
+                    />
+                <TextInput
+                    type="password"
+                    name="password"
+                    label="password"
+                    value={this.state.password}
+                    onChange={this.handleChange}
+                    />
+                    <Button raised onClick={this.handleSubmit}>
+                        Login
+                    </Button>
+                    <Link to='/register'>
+                        <Button>Register</Button>
+                    </Link>
 
-                </form>
                 {this.renderDebug()}
-            </div>
-
+            </CardContent>
         )
     }
 }

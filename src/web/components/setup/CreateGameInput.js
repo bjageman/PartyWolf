@@ -1,9 +1,9 @@
-import React, { Component } from 'react';
-import { connect } from 'react-redux';
+import React, { Component } from 'react'
+//redux
+import { connect } from 'react-redux'
+import { mapStateToProps, mapDispatchToProps } from 'redux/utils'
 
-import { mapStateToProps, mapDispatchToProps } from '../../../../redux/utils';
-
-
+import { Button, TextInput, CardContent } from 'bjageman-react-toolkit'
 
 class CreateGameInput extends Component {
   constructor(props){
@@ -36,35 +36,20 @@ class CreateGameInput extends Component {
 
   render() {
     return (
-        <form>
-        <div className='form-group'>
-            <label>Game Name</label>
-            <input
-                type='text'
-                className='form-control'
-                name='gameName'
-                onChange={(event) => this.setState({[event.target.name]:event.target.value})}
-                value={this.state.gameName}
-                />
-            <div className="checkbox">
-            <label>
-              <input
+        <div>
+            <CardContent>
+                <input
                   type="checkbox"
-                  title='Make Private'
                   onClick={() => this.setState({public: !this.state.public})}
                   checked={!this.state.public}
                   /> Private Server
-            </label>
-            </div>
-            <input
-                type="submit"
-                className="btn btn-primary btn-lg btn-block"
-                value="Create"
-                backgroundColor="green"
-                onClick={this.handleSubmit}
-                />
+            </CardContent>
+            <CardContent>
+                <Button raised onClick={this.handleSubmit}>
+                    Create
+                </Button>
+            </CardContent>
         </div>
-        </form>
         )
     }
 }

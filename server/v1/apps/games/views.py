@@ -18,7 +18,6 @@ from v1.apps.errors import *
 
 def send_game_update(game, data = {}):
     data['game'] = parse_game(game)
-    print(data)
     emit('game_updated', data, room=game.code)
 
 @socketio.on('connect')
@@ -59,7 +58,7 @@ def create_game(data):
         db.session.add(game)
         create_player(game, creator)
         join_room(game.code)
-        send_game_update(game)
+        emit('game_created', { "game": parse_game(game) }, room=game.code)
 
 @socketio.on('add_player')
 def add_player(data):
@@ -91,7 +90,7 @@ def assign_roles(data):
         db.session.add(game)
         db.session.commit()
         game.closed = True
-    send_game_update(game)
+    emit('roles_assigned', { "game": parse_game(game) }, room=game.code)
 
 @socketio.on('set_vote')
 def set_vote(data):

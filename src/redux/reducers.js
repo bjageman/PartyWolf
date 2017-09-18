@@ -6,8 +6,9 @@ import {
   getGames, getGamesSuccess, createGame,
   assignRoles, setVote, quitGame,
   gameUpdated, gameDeleted, gameCompleted,
-  getError
+  error
 } from './actions';
+import { routerReducer } from 'react-router-redux'
 
 const initial = {
   user: {
@@ -25,7 +26,7 @@ const user = createReducer({
     return { ...state, newUser: payload.username, fetching:false, error: null };
   },
   [login]: (state, payload) => {
-    return { ...state, username: payload.username, password: payload.password, fetching:true, error: null };
+    return { ...state, username: payload.username, fetching:true, error: null };
   },
   [loginSuccess]: (state, payload) => {
     return { ...state, data: payload.user, fetching:false, error: null };
@@ -33,7 +34,7 @@ const user = createReducer({
   [logout]: (state, payload) => {
     return { ...state, data: null, error: null };
   },
-  [getError]: (state, payload) => {
+  [error]: (state, payload) => {
     return { ...state, fetching:false, error: payload.error, newUser: null };
   },
 }, initial.user);
@@ -76,5 +77,5 @@ const game = createReducer({
 
 
 export default combineReducers(
-  { user, game }
+  { user, game, router: routerReducer }
 );

@@ -1,34 +1,33 @@
 import React, { Component } from 'react';
-import { connect } from 'react-redux';
 import { Link, Redirect } from 'react-router-dom'
 
-import { mapStateToProps, mapDispatchToProps } from '../../../redux/utils'
-import CreateGameInput from './create/CreateGameInput'
+import { connect } from 'react-redux';
+import { mapStateToProps, mapDispatchToProps } from 'redux/utils'
+
+import { Button, Card, CardContent } from 'bjageman-react-toolkit'
+
+import CreateGameInput from './CreateGameInput'
 
 class CreateGame extends Component {
   render() {
-    if (this.props.game != null){
-        return(
-            <Redirect to={{
-                pathname: '/create/id/' + this.props.game.id,
-                state: { from: this.props.location }
-            }}/>
-        );
-    }
     if (this.props.user != null){
         return (
-          <div>
-            <p>Are you sure you want to create a game?</p>
-            <CreateGameInput />
-          </div>
+              <Card>
+                  <CardContent>
+                    <p>Are you sure you want to create a game?</p>
+                    <CreateGameInput />
+                  </CardContent>
+              </Card>
     )}else{
         return(
-        <div>
-            <p h2>You must be logged in</p>
-            <Link to='/'>
-                Login
-            </Link>
-        </div>
+            <Card>
+                <CardContent>
+                    <p>You must be logged in</p>
+                    <Link to='/'>
+                        Login
+                    </Link>
+                </CardContent>
+            </Card>
     )}
   }
 }
