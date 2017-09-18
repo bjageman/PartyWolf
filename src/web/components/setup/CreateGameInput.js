@@ -3,7 +3,7 @@ import React, { Component } from 'react'
 import { connect } from 'react-redux'
 import { mapStateToProps, mapDispatchToProps } from 'redux/utils'
 
-import { Button, TextInput, CardContent } from 'bjageman-react-toolkit'
+import { Button, CardContent } from 'bjageman-react-toolkit'
 
 class CreateGameInput extends Component {
   constructor(props){
@@ -37,13 +37,6 @@ class CreateGameInput extends Component {
   render() {
     return (
         <div>
-            <CardContent>
-                <input
-                  type="checkbox"
-                  onClick={() => this.setState({public: !this.state.public})}
-                  checked={!this.state.public}
-                  /> Private Server
-            </CardContent>
             <CardContent>
                 <Button raised onClick={this.handleSubmit}>
                     Create

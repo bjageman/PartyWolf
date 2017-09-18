@@ -13,11 +13,7 @@ class Security extends Component {
             }}/>
         )
     }else{
-        return(
-            <div id="shell">
-            {this.props.children}
-            </div>
-        )
+        return this.props.children
     }
   }
 }

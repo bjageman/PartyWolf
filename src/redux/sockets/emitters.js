@@ -38,7 +38,7 @@ export function subscribe(socket) {
       socket.on('game_updated', ({ game, votes, winner }) => {
         emit(actions.gameUpdated({ game, votes, winner }))
         if (winner){
-            emit(push("/game/results"))
+            emit(push("/game/result/winner"))
         }
       })
       socket.on('game_deleted', ({ game_id }) => {

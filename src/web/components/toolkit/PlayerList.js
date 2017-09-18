@@ -2,8 +2,7 @@ import React, { Component } from 'react'
 import { connect } from 'react-redux'
 
 import { mapStateToProps, mapDispatchToProps } from 'redux/utils'
-import { ListSelect, ListSelectItem, Avatar, Icon, Button, Text } from 'bjageman-react-toolkit'
-import myConfig from 'config.js'
+import { ListSelect, ListSelectItem, Avatar, Icon, Text } from 'bjageman-react-toolkit'
 
 class PlayerListItem extends React.Component {
     render(){
@@ -40,6 +39,11 @@ class PlayerList extends Component {
     constructor(props){
         super(props)
         this.handleVote = this.handleVote.bind(this)
+        this.state = { listValue: 1 }
+    }
+
+    handleListChange(i){
+       this.setState({ listValue: i })
     }
     handleVote(player, role_id){
         this.props.setVote({
@@ -58,7 +62,13 @@ class PlayerList extends Component {
       {
         players.map((player, i) => (
         <ListSelectItem key={i} >
-            <PlayerListItem handleVote={this.handleVote} voting = {voting} player={player} votes={player.votes[voteType]} role_id = {role_id} />
+            <PlayerListItem
+                selected = {i === this.state.listValue}
+                handleVote = {this.handleVote}
+                voting = {voting}
+                player = {player}
+                votes = {player.votes[voteType]}
+                role_id = {role_id} />
         </ListSelectItem>
       ))
       }

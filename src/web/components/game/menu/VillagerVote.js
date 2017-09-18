@@ -4,10 +4,7 @@ import { mapStateToProps, mapDispatchToProps } from 'redux/utils'
 import Status from './Status'
 import PlayerList from 'web/components/toolkit/PlayerList'
 
-
-
 class VillagerVote extends Component {
-
   render() {
     const players = this.props.game ? this.props.game.players : []
     return (

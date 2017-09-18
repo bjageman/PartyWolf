@@ -1,6 +1,8 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { mapStateToProps, mapDispatchToProps } from '../../../../redux/utils'
+import { mapStateToProps, mapDispatchToProps } from 'redux/utils'
+
+import { Button } from 'bjageman-react-toolkit'
 
 import  ResultTable  from './ResultTable'
 
@@ -11,12 +13,9 @@ class SummaryFinal extends Component {
       <div>
         <h3>{winner} wins!</h3>
         <ResultTable />
-        <button
-            onClick={() => this.props.gameCompleted()}
-            type="button"
-            className="btn btn-default">
+        <Button raised onClick={() => this.props.gameCompleted()} >
             Home
-        </button>
+        </Button>
       </div>
     )
   }

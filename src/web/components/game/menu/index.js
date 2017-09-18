@@ -1,44 +1,49 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { Link, Route, Redirect } from 'react-router-dom'
-import { mapStateToProps, mapDispatchToProps } from '../../../../redux/utils'
+import { mapStateToProps, mapDispatchToProps } from 'redux/utils'
+
+import { Tabs, Tab } from 'bjageman-react-toolkit'
 
 import VillagerVote from './VillagerVote'
 import SpecialVote from './SpecialVote'
 import TurnSummary from '../summary/Turn'
 
 class Menu extends Component {
-  cancelGame(){
-      if (this.props.user.player !== null) {
-          this.props.quitGame({ "player_id": this.props.user.player.id })
-      }
+  constructor(props){
+      super(props)
+      this.handleIndexChange = this.handleIndexChange.bind(this)
+      this.state = { tabValue: 0, listValue: 0, specialListValue: 0 }
+  }
+
+  handleIndexChange(i){
+      this.setState({ tabValue: i })
   }
 
   render() {
-    if (this.props.game != null) {
-        const pathName = this.props.location.pathname
-        return (
-          <div >
-              <ul className="nav nav-tabs" role="tablist">
-                <li role="presentation" className={ pathName === `${this.props.match.url}/villagers` ? "active" : null } >
-                    <Link to={`${this.props.match.url}/villagers`}>Villagers</Link>
-                </li>
-                <li role="presentation" className={ pathName === `${this.props.match.url}/specials` ? "active" : null }>
-                    <Link to={`${this.props.match.url}/specials`}>Special</Link>
-                </li>
-                <li role="presentation" className={ pathName === `${this.props.match.url}/status` ? "active" : null }>
-                    <Link to={`${this.props.match.url}/status`}>Status</Link>
-                </li>
-              </ul>
-                <div role="tabpanel" className="tab-pane active" id="home">
-                    <Route path={`${this.props.match.url}/villagers`} component={VillagerVote}/>
-                    <Route path={`${this.props.match.url}/specials`} component={SpecialVote}/>
-                    <Route path={`${this.props.match.url}/status`} component={TurnSummary}/>
-                </div>
-          </div>
-        )
-    }else{ return ( <Redirect to={{ pathname: '/', state: { from: this.props.location } }}/> ) }
+    const tabValue = this.state.tabValue
+    return(
+    <div style={styles.container}>
+    <Tabs value={tabValue} getIndex={this.handleIndexChange}>
+        <Tab>Villagers</Tab>
+        <Tab>Special</Tab>
+        <Tab>Status</Tab>
+    </Tabs>
+    { tabValue === 0 ? <VillagerVote /> : null }
+    { tabValue === 1 ? <SpecialVote /> :null }
+    { tabValue === 2 ? <TurnSummary /> :null }
+    </div>
+
+    )
   }
+}
+
+const styles = {
+    container: {
+        backgroundColor: "rgba(245,245,245 ,1)",
+        width: "100%",
+        maxWidth: "500px",
+        minHeight: "600px"
+    },
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(Menu);

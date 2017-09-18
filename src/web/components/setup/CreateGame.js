@@ -1,10 +1,10 @@
 import React, { Component } from 'react';
-import { Link, Redirect } from 'react-router-dom'
+import { Link } from 'react-router-dom'
 
 import { connect } from 'react-redux';
 import { mapStateToProps, mapDispatchToProps } from 'redux/utils'
 
-import { Button, Card, CardContent } from 'bjageman-react-toolkit'
+import { Card, CardContent } from 'bjageman-react-toolkit'
 
 import CreateGameInput from './CreateGameInput'
 

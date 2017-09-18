@@ -4,6 +4,8 @@ import { mapStateToProps, mapDispatchToProps } from 'redux/utils'
 
 import PlayerList from 'web/components/toolkit/PlayerList'
 
+import { Card, CardContent, Text } from 'bjageman-react-toolkit'
+
 class SpecialVote extends Component {
 
   render() {
@@ -13,10 +15,15 @@ class SpecialVote extends Component {
     const seer_sight = this.props.votes_result && this.props.votes_result.Seer ? this.props.votes_result.Seer : null
     if (role.name !== "Villager"){
         return (
-          <div>
-            <p h4>{role.name} Vote!</p>
-            {role.name === "Seer" && seer_sight !== null ? <p>SIGHT: {seer_sight.user.username} is a {seer_sight.role.name}</p>: null}
-            {role.name === "Werewolf" ? <p> WereWolves: {werewolves.map((player, i) => ( <div>{player.user.username}</div> )) } </p> : null}
+          <Card>
+            <CardContent>
+            <Text h3>{role.name} Vote!</Text>
+            {role.name === "Seer" && seer_sight !== null ?
+                <Text>SIGHT: {seer_sight.user.username} is a {seer_sight.role.name}</Text>
+            : null}
+            {role.name === "Werewolf" ?
+                <Text> WereWolves: {werewolves.map((player, i) => ( <div>{player.user.username}</div> )) } </Text>
+            : null}
             <PlayerList
                 players={players}
                 aliveOnly={true}
@@ -24,7 +31,8 @@ class SpecialVote extends Component {
                 voteType={role.name}
                 role={role}
                 />
-          </div>
+            </CardContent>
+        </Card>
         )
     }else{
         return(
