@@ -1,8 +1,8 @@
 import React from 'react'
 import { connect } from 'react-redux'
-import { Link } from 'react-router-dom'
+import { Link } from 'web/components/base/Link'
 
-import { mapStateToProps, mapDispatchToProps } from '../../../redux/utils'
+import { mapStateToProps, mapDispatchToProps } from 'redux/utils'
 
 import { TextInput, Button, CardContent } from 'bjageman-react-toolkit'
 

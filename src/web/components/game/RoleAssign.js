@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { Link } from 'react-router-dom'
+import { Link } from 'web/components/base/Link'
 import { mapStateToProps, mapDispatchToProps } from 'redux/utils'
 
 import {Card, CardContent, CardMedia, Text, Button} from 'bjageman-react-toolkit'

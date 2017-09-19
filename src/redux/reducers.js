@@ -1,13 +1,6 @@
 import { combineReducers } from 'redux';
 import { createReducer } from 'redux-act';
-import {
-  register, registerSuccess,
-  login, loginSuccess, logout, addPlayer,
-  getGames, getGamesSuccess, createGame,
-  assignRoles, setVote, quitGame,
-  gameUpdated, gameDeleted, gameCompleted,
-  error
-} from './actions';
+import * as actions from 'redux/actions'
 import { routerReducer } from 'react-router-redux'
 
 const initial = {
@@ -16,66 +9,78 @@ const initial = {
     error: null,
   },
   game:{},
+  response: {
+      error: null,
+      success: null,
+  }
 };
 
 const user = createReducer({
-  [register]: (state, payload) => {
+  [actions.register]: (state, payload) => {
     return { ...state, username: payload.username, password: payload.password, fetching:true, error: null };
   },
-  [registerSuccess]: (state, payload) => {
+  [actions.registerSuccess]: (state, payload) => {
     return { ...state, newUser: payload.username, fetching:false, error: null };
   },
-  [login]: (state, payload) => {
+  [actions.login]: (state, payload) => {
     return { ...state, username: payload.username, fetching:true, error: null };
   },
-  [loginSuccess]: (state, payload) => {
+  [actions.loginSuccess]: (state, payload) => {
     return { ...state, data: payload.user, fetching:false, error: null };
   },
-  [logout]: (state, payload) => {
+  [actions.logout]: (state, payload) => {
     return { ...state, data: null, error: null };
-  },
-  [error]: (state, payload) => {
-    return { ...state, fetching:false, error: payload.error, newUser: null };
   },
 }, initial.user);
 
 const game = createReducer({
-  [getGames]: (state, payload) => {
+  [actions.getGames]: (state, payload) => {
     return { ...state, fetching:true, error: null}
   },
-  [getGamesSuccess]: (state, payload) => {
+  [actions.getGamesSuccess]: (state, payload) => {
     return { ...state, public_listing: payload.games, fetching:false, error: null };
   },
-  [createGame]: (state, payload) => {
+  [actions.createGame]: (state, payload) => {
     return { ...state, user_id: payload.user_id, public: payload.public, fetching:true, error: null };
   },
-  [addPlayer]: (state, payload) => {
+  [actions.addPlayer]: (state, payload) => {
     return { ...state, game_id: payload.game_id, user_id: payload.user_id, fetching:true, error: null };
   },
-  [assignRoles]: (state, payload) => {
+  [actions.assignRoles]: (state, payload) => {
     return { ...state, game_id: payload.game_id, fetching:true, error: null };
   },
-  [setVote]: (state, payload) => {
+  [actions.setVote]: (state, payload) => {
     return { ...state, voter_id: payload.voter_id, choice_id: payload.choice_id, fetching:true, error: null };
   },
-  [quitGame]: (state, payload) => {
+  [actions.quitGame]: (state, payload) => {
     return { ...state, data: null, winner: null, votes_result: null, player_id: payload.player_id}
   },
-  [gameUpdated]: (state, payload) => {
+  [actions.gameUpdated]: (state, payload) => {
     return { ...state, data: payload.game, votes_result: payload.votes, winner: payload.winner, fetching:false, error: null  };
   },
-  [gameDeleted]: (state, payload) => {
+  [actions.gameDeleted]: (state, payload) => {
     return { ...state, data: null, winner: null, votes_result: null, game_id: payload.game_id, fetching:false, error: null}
   },
-  [gameCompleted]: (state, payload) => {
+  [actions.gameCompleted]: (state, payload) => {
     return { ...state, data: null, winner: null, votes_result: null, fetching:false, error: null}
   },
-  [logout]: (state, payload) => {
+  [actions.logout]: (state, payload) => {
     return { ...state, data: null, winner: null, votes_result: null, fetching:false, error: null };
   }
 }, initial.game);
 
+const response = createReducer({
+  [actions.success]: (state, payload) => {
+    return { success: payload.message, loading: false };
+  },
+  [actions.error]: (state, payload) => {
+    return { error: payload.message || "Unknown Error", loading: false };
+  },
+  [actions.clear]: (state, payload) => {
+    return { error: null, success: null };
+  }
+}, initial.response);
 
 export default combineReducers(
-  { user, game, router: routerReducer }
+  { user, game, response, router: routerReducer }
 );

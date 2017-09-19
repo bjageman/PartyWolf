@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { Redirect } from 'react-router-dom'
 import { mapStateToProps, mapDispatchToProps } from '../../../redux/utils'
 
 import GameList from '../toolkit/GameList'
@@ -21,30 +20,21 @@ class JoinGame extends Component {
 
 
   render() {
-    if (this.props.game != null){
-        return(
-            <Redirect to={{
-                pathname: '/create/id/' + this.props.game.id,
-                state: { from: this.props.location }
-            }}/>
-        );
-    }else{
-        return (
-          <div>
-            <h3>Join Game</h3>
-            <input
-                class="btn btn-primary"
-                type="submit"
-                value="Refresh"
-                onClick = {this.getGamesListing}
-                />
-            <GameList
-                games = {this.props.public_listing}
-                />
+    return (
+      <div>
+        <h3>Join Game</h3>
+        <input
+            class="btn btn-primary"
+            type="submit"
+            value="Refresh"
+            onClick = {this.getGamesListing}
+            />
+        <GameList
+            games = {this.props.public_listing}
+            />
 
-          </div>
-        )
-    }
+      </div>
+    )
   }
 }
 

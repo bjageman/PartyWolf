@@ -2,10 +2,11 @@ import axios from 'axios';
 import myConfig from '../config.js';
 
 var url = myConfig.API_URL + "/api/v" + myConfig.API_VERSION
+var timeout = myConfig.TIMEOUT || 10000
 
 var axiosRequest = axios.create({
   baseURL: url,
-  timeout: 2000,
+  timeout: timeout,
   headers: {
       'Content-Type': 'application/json',
   }

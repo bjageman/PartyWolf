@@ -58,7 +58,7 @@ def create_game(data):
         db.session.add(game)
         create_player(game, creator)
         join_room(game.code)
-        emit('game_created', { "game": parse_game(game) }, room=game.code)
+        emit('game_created_success', { "game": parse_game(game) }, room=game.code)
 
 @socketio.on('add_player')
 def add_player(data):
@@ -74,6 +74,7 @@ def add_player(data):
             create_player(game, user)
         join_room(game.code)
         send_game_update(game)
+        emit('game_joined_success', { "game": parse_game(game) })
 
 @socketio.on('assign_roles')
 def assign_roles(data):

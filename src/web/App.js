@@ -7,6 +7,7 @@ import { history } from 'redux/store'
 import { mapStateToProps, mapDispatchToProps } from 'redux/utils'
 
 import NavBar from './components/base/NavBar'
+import Notifications from './components/base/notifications/'
 
 import Home from './components/Home'
 import Register from './components/users/Register'
@@ -22,6 +23,7 @@ import { Grid } from 'bjageman-react-toolkit'
 const App = () => (
   <ConnectedRouter history={history}>
     <div>
+      <Notifications />
       <Route path="/" component={NavBar}/>
       <Grid>
           <Route exact path="/" component={Home}/>
