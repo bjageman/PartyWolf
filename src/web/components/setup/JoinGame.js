@@ -1,8 +1,10 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { mapStateToProps, mapDispatchToProps } from '../../../redux/utils'
+import { mapStateToProps, mapDispatchToProps } from 'redux/utils'
 
-import GameList from '../toolkit/GameList'
+import { Card, CardContent, Button, Text } from 'bjageman-react-toolkit'
+import { Link } from 'web/components/base/Link'
+import GameList from '../utils/GameList'
 
 class JoinGame extends Component {
   constructor(props){
@@ -21,19 +23,16 @@ class JoinGame extends Component {
 
   render() {
     return (
-      <div>
-        <h3>Join Game</h3>
-        <input
-            class="btn btn-primary"
-            type="submit"
-            value="Refresh"
-            onClick = {this.getGamesListing}
-            />
-        <GameList
-            games = {this.props.public_listing}
-            />
-
-      </div>
+        <Card>
+        <CardContent>
+            <Text h2>Join Game</Text>
+            <Button raised onClick = {this.getGamesListing}>
+                Refresh
+            </Button>
+            <Link to="/"><Button>Cancel</Button></Link>
+        </CardContent>
+        <GameList games = {this.props.public_listing} />
+    </Card>
     )
   }
 }

@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { mapStateToProps, mapDispatchToProps } from 'redux/utils'
 
-import PlayerList from 'web/components/toolkit/PlayerList'
+import PlayerList from 'web/components/utils/PlayerList'
 
 import { Card, CardContent, Text } from 'bjageman-react-toolkit'
 

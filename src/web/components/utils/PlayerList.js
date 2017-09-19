@@ -39,7 +39,7 @@ class PlayerList extends Component {
     constructor(props){
         super(props)
         this.handleVote = this.handleVote.bind(this)
-        this.state = { listValue: 1 }
+        this.state = { listValue: -1 }
     }
 
     handleListChange(i){

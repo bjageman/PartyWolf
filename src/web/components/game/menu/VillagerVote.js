@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { mapStateToProps, mapDispatchToProps } from 'redux/utils'
 import Status from './Status'
-import PlayerList from 'web/components/toolkit/PlayerList'
+import PlayerList from 'web/components/utils/PlayerList'
 
 class VillagerVote extends Component {
   render() {

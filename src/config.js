@@ -1,4 +1,4 @@
-var ENVIRONMENT="cafe"
+var ENVIRONMENT="local"
 
 function getConfig() {
   switch (ENVIRONMENT) {

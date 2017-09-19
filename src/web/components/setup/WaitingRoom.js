@@ -4,8 +4,8 @@ import { Redirect } from 'react-router-dom'
 import { mapStateToProps, mapDispatchToProps } from 'redux/utils'
 
 import { Button } from 'bjageman-react-toolkit'
-import Debug from 'web/components/toolkit/Debug'
-import PlayerList from 'web/components/toolkit/PlayerList'
+import Debug from 'web/components/utils/Debug'
+import PlayerList from 'web/components/utils/PlayerList'
 
 class WaitingRoom extends Component {
   constructor(props){

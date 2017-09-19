@@ -3,6 +3,7 @@ import React, { Component } from 'react'
 import { connect } from 'react-redux'
 import { mapStateToProps, mapDispatchToProps } from 'redux/utils'
 
+import { Link } from 'web/components/base/Link'
 import { Button, CardContent } from 'bjageman-react-toolkit'
 
 class CreateGameInput extends Component {
@@ -41,6 +42,7 @@ class CreateGameInput extends Component {
                 <Button raised onClick={this.handleSubmit}>
                     Create
                 </Button>
+                <Link to="/"><Button>Cancel</Button></Link>
             </CardContent>
         </div>
         )

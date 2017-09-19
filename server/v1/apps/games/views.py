@@ -127,16 +127,17 @@ def quit_player(data):
     if game.closed is True:
         player.alive = False
         db.session.add(player)
+        winner = determine_winner(game)
+        send_game_update(game, {"quitter": parse_player(player)})
+        if winner is not None:
+            send_game_update(game, {"winner": winner})
     else:
         if player.user == game.creator:
             delete_game(game)
         else:
             db.session.delete(player)
+            send_game_update(game)
     db.session.commit()
-    winner = determine_winner(game)
-    send_game_update(game, {"quitter": parse_player(player)})
-    if winner is not None:
-        send_game_update(game, {"winner": winner})
     emit('quit_success')
 
 @socketio.on_error()        # Handles the default namespace
