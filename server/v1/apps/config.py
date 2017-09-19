@@ -2,7 +2,7 @@ import os
 
 DB_USER = (os.environ.get('DB_USER','root'))
 DB_PASS = (os.environ.get('DB_PASS','password'))
-DB_HOST = (os.environ.get('DB_HOST','host'))
+DB_HOST = (os.environ.get('DB_HOST','localhost'))
 DB_DATABASE = (os.environ.get('DB_DATABASE','database'))
 DB_TEST = (os.environ.get('DB_TEST','test'))
 DB_TYPE = (os.environ.get('DB_TYPE','mysql'))
