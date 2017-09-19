@@ -1,33 +1,29 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { mapStateToProps, mapDispatchToProps } from '../../../../redux/utils'
+import { mapStateToProps, mapDispatchToProps } from 'redux/utils'
+
+import { Table, TableRow } from 'bjageman-react-toolkit'
+
 
 class PlayerSummary extends Component {
     render() {
         const players = this.props.players || []
         return (
-            <div>
-              <table className="table">
-                <thead>
-                    <tr>
-                        <th>Username</th>
-                        {this.props.showRole ? <th>Role</th> : null }
-                        {this.props.showDied ? <th>Turn Died</th> : null }
-                    </tr>
-                </thead>
-                <tbody>
-                    {players.map((player, i) => (
-                        <tr key={i}>
-                            <td>{player.user.username}</td>
-                            {this.props.showRole ? <td>{player.role.name}</td> : null }
-                            {this.props.showDied ? <td>0</td> : null }
-                        </tr>
-                         )
-                      )
-                    }
-                </tbody>
-              </table>
-            </div>
+            <Table headers = {[
+                        "Username",
+                        this.props.showRole ? "Role": null,
+                        this.props.showDied ? "Turn Died" : null,
+                    ]}>
+            {players.map((player, i) => (
+                <TableRow key={i}
+                    rows ={[
+                        player.user.username,
+                        this.props.showRole ? player.role.name : null,
+                        this.props.showDied ? "?" : null,
+                     ]}
+                />
+            ))}
+            </Table>
         )
     }
 }
