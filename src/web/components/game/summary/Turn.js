@@ -13,7 +13,7 @@ class SummaryTurn extends Component {
     return (
         <div>
             <Link to="/game/menu">
-                <Button raise>Continue</Button>
+                <Button raised>Continue</Button>
             </Link>
             <ResultTable />
         </div>

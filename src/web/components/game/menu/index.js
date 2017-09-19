@@ -2,11 +2,11 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { mapStateToProps, mapDispatchToProps } from 'redux/utils'
 
-import { Tabs, Tab } from 'bjageman-react-toolkit'
+import { Tabs, Tab, Text } from 'bjageman-react-toolkit'
 
 import VillagerVote from './VillagerVote'
 import SpecialVote from './SpecialVote'
-import TurnSummary from '../summary/Turn'
+import ResultTable from '../summary/ResultTable'
 
 class Menu extends Component {
   constructor(props){
@@ -21,16 +21,26 @@ class Menu extends Component {
 
   render() {
     const tabValue = this.state.tabValue
+    const alive = this.props.user.player.alive
     return(
     <div style={styles.container}>
-    <Tabs value={tabValue} getIndex={this.handleIndexChange}>
-        <Tab>Villagers</Tab>
-        <Tab>Special</Tab>
-        <Tab>Status</Tab>
-    </Tabs>
-    { tabValue === 0 ? <VillagerVote /> : null }
-    { tabValue === 1 ? <SpecialVote /> :null }
-    { tabValue === 2 ? <TurnSummary /> :null }
+    { alive ?
+        <div>
+        <Tabs value={tabValue} getIndex={this.handleIndexChange}>
+            <Tab>Villagers</Tab>
+            <Tab>Special</Tab>
+            <Tab>Status</Tab>
+        </Tabs>
+        { tabValue === 0 ? <VillagerVote /> : null }
+        { tabValue === 1 ? <SpecialVote /> :null }
+        { tabValue === 2 ? <ResultTable /> :null }
+        </div>
+    :
+    <div>
+        <Text h3>Sorry! You're DEAD! Stay quiet while the others vote</Text>
+        <ResultTable />
+    </div>
+    }
     </div>
 
     )

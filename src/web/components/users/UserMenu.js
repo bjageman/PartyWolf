@@ -9,7 +9,7 @@ class UserMenu extends React.Component {
     render() {
         const user = this.props.user
         return (
-            <Menu title={<Icon name="person" />}>
+            <Menu title={<div><Icon name="person" />{user.username}</div>}>
                 {user.player ?
                     <MenuItem
                         onClick={() => this.props.quitGame({"player_id": user.player.id})}>
