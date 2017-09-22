@@ -49,10 +49,10 @@ You'll need to set up a database in order to get the server running properly. Cu
 
 | Variable | Default |Description |
 | ------------- |:---|:-------------|
-|DB_USER|root|database: username|
-|DB_PASS|password|database: password|
-|DB_HOST|localhost|database: hostname|
-|DB_DATABASE|database|database: name of the database|
-|DB_TEST|test|database: name of the test database|
-|DB_TYPE|mysql|database: the type of DB(mysql, postgres, sqlite)|
-|DB_PORT|3306|database: The database port|
+|DB_USER|root|database username|
+|DB_PASS|password|database password|
+|DB_HOST|localhost|database hostname|
+|DB_DATABASE|database|name of the database|
+|DB_TEST|test|name of the test database|
+|DB_TYPE|mysql|the type of DB(mysql, postgres, sqlite)|
+|DB_PORT|3306|The database port|
