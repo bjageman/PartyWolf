@@ -7,6 +7,9 @@ import { Button } from 'bjageman-react-toolkit'
 import Debug from 'web/components/utils/Debug'
 import PlayerList from 'web/components/utils/PlayerList'
 
+import myConfig from 'config.js'
+let PLAYERMIN = myConfig.PLAYERMIN || 0
+
 class WaitingRoom extends Component {
   constructor(props){
       super(props);
@@ -23,12 +26,13 @@ class WaitingRoom extends Component {
   render() {
     const players = this.props.game ? this.props.game.players : []
     const user = this.props.user || null
+    console.log(players.length, PLAYERMIN)
     if (user != null && user.player && this.props.game){
         return (
           <div>
             <h3>Waiting For Players...</h3>
             <Debug />
-            { user.player.is_creator ?
+            { user.player.is_creator && players.length >= PLAYERMIN ?
             <Button raised onClick={this.handleSubmit}>
                 Start Game
             </Button>

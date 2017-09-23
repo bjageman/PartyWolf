@@ -15,13 +15,16 @@ def randomCode(size=10):
 
 def create_deck(deck_size):
     if deck_size < 6:
-        num_ww = 1
+        werewolf_count = 1
+    elif deck_size < 16:
+        werewolf_count = 2
     else:
-        num_ww = 2
+        werewolf_count = 3
+    seer_count = 1
     villager = Role.query.filter_by(name="Villager").first()
     werewolf = Role.query.filter_by(name="Werewolf").first()
     seer = Role.query.filter_by(name="Seer").first()
-    deck = [villager] * (deck_size - 3) + [werewolf] * 2 + [seer] * 1
+    deck = [villager] * (deck_size - (werewolf_count + seer_count)) + [werewolf] * werewolf_count + [seer] * seer_count
     shuffle(deck)
     return deck
 

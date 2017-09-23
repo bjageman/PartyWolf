@@ -29,11 +29,11 @@ export function subscribe(socket) {
       })
       socket.on('game_created_success', ({ game }) => {
         emit(actions.gameUpdated({ game }))
-        emit(push("/create/" + game.id))
+        emit(push("/create/waiting"))
       })
       socket.on('game_joined_success', ({ game }) => {
         emit(actions.gameUpdated({ game }))
-        emit(push("/create/" + game.id))
+        emit(push("/create/waiting"))
       })
       socket.on('roles_assigned', ({ game }) => {
         emit(actions.gameUpdated({ game }))

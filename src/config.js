@@ -1,4 +1,4 @@
-var ENVIRONMENT="production"
+var ENVIRONMENT="local"
 
 function getConfig() {
   switch (ENVIRONMENT) {

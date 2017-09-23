@@ -30,7 +30,7 @@ const App = () => (
           <Route path="/register" component={Register}/>
           <Route path="/games" component={JoinGame}/>
           <Route exact path="/create" component={CreateGame}/>
-          <Route path="/create/:id" component={WaitingRoom}/>
+          <Route path="/create/waiting" component={WaitingRoom}/>
           <Route path="/game/" component={GameRouter} />
       </Grid>
     </div>
