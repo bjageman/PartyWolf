@@ -1,20 +1,7 @@
-import io from 'socket.io-client'
 import { eventChannel } from 'redux-saga'
 import { take } from 'redux-saga/effects'
 import * as actions from 'redux/actions'
 import { push } from 'react-router-redux'
-
-import myConfig from 'config.js'
-var url = myConfig.API_URL
-
-export function connect() {
-  const socket = io(url)
-  return new Promise(resolve => {
-    socket.on('connect', () => {
-      resolve(socket)
-    })
-  })
-}
 
 //Handle anything the server returns
 export function subscribe(socket) {

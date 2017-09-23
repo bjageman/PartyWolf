@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { Redirect } from 'react-router-dom'
-import { mapStateToProps, mapDispatchToProps } from '../../../redux/utils'
+import { mapStateToProps, mapDispatchToProps } from 'redux/utils'
 
 class Security extends Component {
   render() {

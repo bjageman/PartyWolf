@@ -1,6 +1,6 @@
 {
-  "name": "WereWolf",
-  "version": "0.9.0",
+  "name": "werewolf",
+  "version": "0.9.5",
   "private": true,
   "scripts": {
     "native": "node node_modules/react-native/local-cli/cli.js start",
@@ -43,5 +43,20 @@
   },
   "jest": {
     "preset": "react-native"
-  }
+  },
+  "description": "A cellphone-friendly party app based on the popular game \"Werewolf\". Each player logs in and votes over their phone so that no other players can see.",
+  "main": "index.android.js",
+  "repository": {
+    "type": "git",
+    "url": "git+https://bjageman@github.com/bjageman/Werewolf-Party.git"
+  },
+  "keywords": [
+    "Werewolf"
+  ],
+  "author": "Braden Jageman <bjageman@gmail.com> (http://github.com/bjageman)",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/bjageman/Werewolf-Party/issues"
+  },
+  "homepage": "https://github.com/bjageman/Werewolf-Party#readme"
 }

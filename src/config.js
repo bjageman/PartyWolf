@@ -17,7 +17,7 @@ function getConfig() {
       API_VERSION: 1,
       VERSION: 'debug',
       DEBUG: false,
-      PLAYERMIN: 0,
+      PLAYERMIN: 2,
       TIMEOUT: 10000,
     };
   case "demo":

@@ -1,8 +1,21 @@
+import io from 'socket.io-client'
 import { fork, take, call, put, cancel } from 'redux-saga/effects'
 import * as actions from 'redux/actions'
 import { loginUser } from 'redux/users'
-import { connect, subscribe, getGamesEmit, createGameEmit,
+import { subscribe, getGamesEmit, createGameEmit,
     quitGameEmit, addPlayerEmit, assignRolesEmit, setVoteEmit } from './emitters'
+
+import myConfig from 'config.js'
+var url = myConfig.API_URL
+
+export function connect() {
+  const socket = io(url)
+  return new Promise(resolve => {
+    socket.on('connect', () => {
+      resolve(socket)
+    })
+  })
+}
 
 
 function* readSockets(socket) {
