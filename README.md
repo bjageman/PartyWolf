@@ -1,4 +1,4 @@
-# PartyWolf
+# Werewolf - Smartphone edition
 
 A cellphone-friendly party app based on the popular game "Werewolf". Each player logs in and votes over their phone so that no other players can see.
 
